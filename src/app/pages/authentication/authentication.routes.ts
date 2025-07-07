@@ -1,35 +1,20 @@
 import { Routes } from '@angular/router';
 
-import { AppBoxedForgotPasswordComponent } from './boxed-forgot-password/boxed-forgot-password.component';
-import { AppBoxedTwoStepsComponent } from './boxed-two-steps/boxed-two-steps.component';
-import { AppErrorComponent } from './error/error.component';
-import { AppMaintenanceComponent } from './maintenance/maintenance.component';
 import { AppSideForgotPasswordComponent } from './side-forgot-password/side-forgot-password.component';
 import { AppSideLoginComponent } from './side-login/side-login.component';
 import { AppSideRegisterComponent } from './side-register/side-register.component';
-import { AppSideTwoStepsComponent } from './side-two-steps/side-two-steps.component';
+import { ActivateAccountComponent } from './activate-account/activate-account.component';
 
 export const AuthenticationRoutes: Routes = [
   {
     path: '',
     children: [
-      {
-        path: 'boxed-forgot-pwd',
-        component: AppBoxedForgotPasswordComponent,
-      },
 
       {
-        path: 'boxed-two-steps',
-        component: AppBoxedTwoStepsComponent,
+        path: 'activate/:token',
+        component: ActivateAccountComponent,
       },
-      {
-        path: 'error',
-        component: AppErrorComponent,
-      },
-      {
-        path: 'maintenance',
-        component: AppMaintenanceComponent,
-      },
+
       {
         path: 'side-forgot-pwd',
         component: AppSideForgotPasswordComponent,
@@ -38,14 +23,17 @@ export const AuthenticationRoutes: Routes = [
         path: 'login',
         component: AppSideLoginComponent,
       },
+
       {
         path: 'side-register',
         component: AppSideRegisterComponent,
       },
       {
-        path: 'side-two-steps',
-        component: AppSideTwoStepsComponent,
+        path: 'activate/:token',
+        loadComponent: () => import('./activate-account/activate-account.component').then(m => m.ActivateAccountComponent)
       },
+
+
     ],
   },
 ];

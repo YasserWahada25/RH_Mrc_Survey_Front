@@ -3,15 +3,44 @@ import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 
 export const routes: Routes = [
+  // Routes sans layout (auth, landing page)
+  {
+    path: '',
+    component: BlankComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'authentication/side-login',
+        pathMatch: 'full',
+      },
+      {
+        path: 'authentication/side-login',
+        loadComponent: () =>
+          import('./pages/authentication/side-login/side-login.component').then(
+            m => m.AppSideLoginComponent
+          )
+      },
+      {
+        path: 'authentication',
+        loadChildren: () =>
+          import('./pages/authentication/authentication.routes').then(
+            (m) => m.AuthenticationRoutes
+          ),
+      },
+      {
+        path: 'landingpage',
+        loadChildren: () =>
+          import('./pages/theme-pages/landingpage/landingpage.routes').then(
+            (m) => m.LandingPageRoutes
+          ),
+      },
+    ],
+  },
+
   {
     path: '',
     component: FullComponent,
     children: [
-      {
-        path: '',
-        redirectTo: '/dashboards/dashboard1',
-        pathMatch: 'full',
-      },
       {
         path: 'starter',
         loadChildren: () =>
@@ -72,26 +101,7 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: '',
-    component: BlankComponent,
-    children: [
-      {
-        path: 'authentication',
-        loadChildren: () =>
-          import('./pages/authentication/authentication.routes').then(
-            (m) => m.AuthenticationRoutes
-          ),
-      },
-      {
-        path: 'landingpage',
-        loadChildren: () =>
-          import('./pages/theme-pages/landingpage/landingpage.routes').then(
-            (m) => m.LandingPageRoutes
-          ),
-      },
-    ],
-  },
+
   {
     path: '**',
     redirectTo: 'authentication/error',
