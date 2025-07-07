@@ -1,0 +1,72 @@
+<div class="blank-layout-container justify-content-center">
+  <div class="position-relative row w-100 h-100">
+    <div class="col-lg-7 col-xl-8 bg-gredient p-0">
+      <div class="p-32 h-100 d-flex flex-column">
+        @if(options.theme === 'light') {
+          <a [routerLink]="['/dashboards/dashboard1']">
+            <img src="./assets/images/logos/dark-logo.svg" class="align-middle m-4" alt="logo" style="width: 180px;"/>
+          </a>
+        } @if(options.theme === 'dark') {
+          <a [routerLink]="['/dashboards/dashboard1']">
+            <img src="./assets/images/logos/light-logo.svg" class="align-middle m-4" alt="logo" style="width: 180px;"/>
+          </a>
+        }
+
+        <div class="align-items-center justify-content-center flex-grow-1 d-none d-lg-flex">
+          <img src="/assets/images/backgrounds/login-bg.svg" alt="login" style="max-width: 600px; width: 100%;"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5 col-xl-4 p-0 d-flex">
+      <div class="p-40 d-flex flex-column justify-content-center w-100" style="height: 100%;">
+        <div class="w-100">
+          <div class="mx-auto" style="max-width: 420px;">
+            <h2 class="f-w-700 f-s-32 m-0">Welcome back</h2>
+            <span class="f-s-16 d-block mat-body-1 m-t-8 text-secondary">Login to your RH MRC SURVEY Dashboard</span>
+
+            <div class="or-border m-t-32 f-s-14">or sign in with email</div>
+
+            <form class="m-t-32" [formGroup]="form" (ngSubmit)="submit()">
+              <!-- Username -->
+              <mat-label class="mat-subtitle-2 f-s-16 f-w-600 m-b-16 d-block">Username</mat-label>
+              <mat-form-field appearance="outline" class="w-100 expanded-field" color="primary">
+                <input matInput formControlName="uname" class="f-s-16" placeholder="Enter your username"/>
+                <mat-error *ngIf="f['uname'].touched && f['uname'].invalid" class="f-s-14">
+                  {{f['uname'].errors?.['required'] ? 'Username is required' : 'Minimum 6 characters required'}}
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Password -->
+              <mat-label class="mat-subtitle-2 f-s-16 f-w-600 m-b-16 d-block">Password</mat-label>
+              <mat-form-field appearance="outline" class="w-100 expanded-field" color="primary">
+                <input matInput type="password" formControlName="password" class="f-s-16" placeholder="Enter your password"/>
+                <mat-error *ngIf="f['password'].touched && f['password'].invalid" class="f-s-14">
+                  Password is required
+                </mat-error>
+              </mat-form-field>
+
+              <div class="d-flex align-items-center m-b-24">
+                <mat-checkbox color="primary" class="f-s-14">Remember this device</mat-checkbox>
+                <a [routerLink]="['/authentication/side-forgot-pwd']" class="text-primary f-s-14 text-decoration-none m-l-auto">
+                  Forgot Password?
+                </a>
+              </div>
+
+              <button mat-flat-button color="primary" class="w-100 expanded-button" [disabled]="!form.valid">
+                <span class="f-s-16">Sign In</span>
+              </button>
+            </form>
+
+            <span class="d-block f-w-500 f-s-14 m-t-32 text-center text-secondary">
+              Don't have an account?
+              <a [routerLink]="['/authentication/side-register']" class="text-primary text-decoration-none f-w-600">
+                Create account
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

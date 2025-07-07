@@ -1,0 +1,106 @@
+/* Structure principale */
+:host, .blank-layout-container, .position-relative {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Champs de formulaire agrandis */
+.expanded-field .mat-form-field-wrapper {
+  padding-bottom: 1em;
+}
+
+.expanded-field .mat-form-field-flex {
+  padding: 0.75em 1em !important;
+  min-height: 56px !important;
+  align-items: center;
+}
+
+.expanded-field .mat-form-field-infix {
+  padding: 0.5em 0 !important;
+  border-top: 0;
+}
+
+.expanded-field .mat-input-element {
+  height: 24px !important;
+  line-height: 24px;
+}
+
+.expanded-field .mat-form-field-label-wrapper {
+  top: -1.5em;
+}
+
+.expanded-field .mat-form-field-outline {
+  top: 0 !important;
+}
+
+.expanded-field .mat-form-field-outline-start,
+.expanded-field .mat-form-field-outline-gap,
+.expanded-field .mat-form-field-outline-end {
+  min-height: 56px !important;
+}
+
+/* Boutons agrandis */
+.expanded-button {
+  line-height: 48px !important;
+  min-height: 48px !important;
+  padding: 0 24px !important;
+  border-radius: 8px !important;
+}
+
+/* Checkbox */
+.mat-checkbox .mat-checkbox-layout {
+  white-space: nowrap;
+}
+
+.mat-checkbox .mat-checkbox-inner-container {
+  height: 20px !important;
+  width: 20px !important;
+}
+
+/* Textes */
+.f-s-14 { font-size: 14px !important; line-height: 1.5; }
+.f-s-16 { font-size: 16px !important; line-height: 1.5; }
+.f-s-18 { font-size: 18px !important; }
+.f-s-32 { font-size: 32px !important; }
+
+/* Espacements */
+.m-t-8 { margin-top: 8px !important; }
+.m-t-16 { margin-top: 16px !important; }
+.m-t-24 { margin-top: 24px !important; }
+.m-t-32 { margin-top: 32px !important; }
+.m-b-16 { margin-bottom: 16px !important; }
+.m-b-24 { margin-bottom: 24px !important; }
+.m-4 { margin: 16px !important; }
+.p-32 { padding: 32px !important; }
+.p-40 { padding: 40px !important; }
+
+/* Séparateur */
+.or-border {
+  font-size: 14px !important;
+  margin: 24px 0;
+  padding: 0 16px;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* Couleurs */
+.text-secondary {
+  color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .p-40 {
+    padding: 24px !important;
+  }
+  
+  .expanded-field .mat-form-field-flex {
+    min-height: 48px !important;
+  }
+  
+  .expanded-button {
+    line-height: 42px !important;
+    min-height: 42px !important;
+  }
+}
