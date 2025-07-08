@@ -1,18 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
 export interface Formulaire {
   _id: string;
   titre: string;
-  description: string;
+  description?: string;
   type: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class FormulaireService {
   private url = `${environment.apiUrl}/formulaires`;
+
   constructor(private http: HttpClient) {}
-  create(data: Partial<Formulaire>) {
+
+  /** Récupère tous les formulaires */
+  getAll(): Observable<Formulaire[]> {
+    return this.http.get<Formulaire[]>(this.url);
+  }
+
+  /** Crée un nouveau formulaire */
+  create(data: Partial<Formulaire>): Observable<Formulaire> {
     return this.http.post<Formulaire>(this.url, data);
+  }
+
+  /** (Optionnel) Récupérer un formulaire par ID */
+  getById(id: string): Observable<Formulaire> {
+    return this.http.get<Formulaire>(`${this.url}/${id}`);
+  }
+
+  /** (Optionnel) Mettre à jour un formulaire existant */
+  update(id: string, data: Partial<Formulaire>): Observable<Formulaire> {
+    return this.http.put<Formulaire>(`${this.url}/${id}`, data);
+  }
+
+  /** (Optionnel) Supprimer un formulaire */
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
   }
 }

@@ -14,11 +14,12 @@ import { AppTodoComponent } from './todo/todo.component';
 import { AppPermissionComponent } from './permission/permission.component';
 import { AppTaskboardComponent } from './taskboard/taskboard.component';
 import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-import { AppTicketlistComponent } from './ticketlist/ticketlist.component';
 import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
 import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
 import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { FormulaireListComponent } from './formulairelist/formulairelist.component';
+
 
 export const AppsRoutes: Routes = [
   {
@@ -117,15 +118,16 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'tickets',
-        component: AppTicketlistComponent,
+        component: FormulaireListComponent,
         data: {
-          title: 'Tickets',
+          title: 'Formulaires',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Tickets' },
+            { title: 'Formulaires' },
           ],
         },
       },
+
       {
         path: 'contacts',
         component: AppContactComponent,

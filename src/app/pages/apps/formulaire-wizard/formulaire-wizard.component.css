@@ -1,0 +1,34 @@
+.wizard-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.section-block, .question-block {
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.section-header, .question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-col {
+  width: 80px;
+  text-align: center;
+}
+
+.action-col {
+  width: 40px;
+}
+
+.row-cell {
+  margin: 8px 0;
+}
+
+.add-opt {
+  margin-top: 8px;
+}

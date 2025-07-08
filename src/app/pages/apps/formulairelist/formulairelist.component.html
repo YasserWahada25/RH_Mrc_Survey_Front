@@ -1,0 +1,61 @@
+<!-- src/app/pages/apps/formulairelist/formulairelist.component.html -->
+
+<div class="header-row">
+  <h2>Mes formulaires</h2>
+  <button mat-flat-button color="primary" (click)="openWizard()">
+    <mat-icon>playlist_add</mat-icon>
+    Nouveau form
+
+ne rien faire ulaire 
+  </button>
+</div>
+
+<div class="table-responsive">
+  <table mat-table [dataSource]="forms" class="styled-table">
+
+    <!-- N° -->
+    <ng-container matColumnDef="num">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell        *matCellDef="let f; let i = index">{{ i+1 }}</td>
+    </ng-container>
+
+    <!-- Titre -->
+    <ng-container matColumnDef="titre">
+      <th mat-header-cell *matHeaderCellDef>Titre</th>
+      <td mat-cell        *matCellDef="let f">{{ f.titre }}</td>
+    </ng-container>
+
+    <!-- Date -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+      <td mat-cell        *matCellDef="let f" class="text-center">
+        {{ f.createdAt | date:'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- Status (pour l’exemple, on remplace par un badge) -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell        *matCellDef="let f">
+        <span class="badge-active">Active</span>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="actions-header">
+        Actions
+
+      </th>
+      <td mat-cell        *matCellDef="let f" class="action-cell">
+        <button mat-icon-button color="warn" matTooltip="Supprimer"><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button color="accent" matTooltip="Éditer"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="primary" matTooltip="Dupliquer"><mat-icon>content_copy</mat-icon></button>
+        <button mat-icon-button color="primary" matTooltip="Voir"><mat-icon>visibility</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row        *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
