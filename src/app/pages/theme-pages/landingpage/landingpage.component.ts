@@ -196,7 +196,7 @@ export class AppLandingpageComponent {
     {
       id: 6,
       imgSrc: '/assets/images/landingpage/apps/app-employee.jpg',
-      name: 'Employee',
+      name: 'Employe',
       url: 'https://modernize-angular-main.netlify.app/apps/employee',
     },
     {
