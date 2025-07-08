@@ -60,31 +60,35 @@ export class AppHorizontalHeaderComponent {
     icon: '/assets/images/flag/icon-flag-fr.svg',
   };
 
-  public languages: any[] = [
-        {
-      language: 'Français',
-      code: 'fr',
-      icon: '/assets/images/flag/icon-flag-fr.svg',
-    },
-    {
-      
-      language: 'English',
-      code: 'en',
-      type: 'US',
-      icon: '/assets/images/flag/icon-flag-en.svg',
-    },
-    {
-      language: 'Español',
-      code: 'es',
-      icon: '/assets/images/flag/icon-flag-es.svg',
-    },
+ public languages: any[] = [
+  {
+    language: 'Français',
+    code: 'fr',
+    icon: '/assets/images/flag/icon-flag-fr.svg',
+  },
+  {
+    language: 'English',
+    code: 'en',
+    type: 'US',
+    icon: '/assets/images/flag/icon-flag-en.svg',
+  },
+  {
+    language: 'Español',
+    code: 'es',
+    icon: '/assets/images/flag/flag-for-spain-svgrepo-com.svg',
+  },
+  {
+    language: 'German',
+    code: 'de',
+    icon: '/assets/images/flag/flag-for-germany-svgrepo-com.svg',
+  },
+  {
+    language: 'العربية',
+    code: 'ar',
+    icon: '/assets/images/flag/flag-for-tunisia.svg', 
+  },
+];
 
-    {
-      language: 'German',
-      code: 'de',
-      icon: '/assets/images/flag/icon-flag-de.svg',
-    },
-  ];
 
   constructor(
     private vsidenav: CoreService,

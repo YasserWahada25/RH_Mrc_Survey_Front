@@ -98,9 +98,42 @@
   "Menu 1": "Menu 1",
   "Menu 2": "Menu 2",
   "Disabled": "Disabled",
-  "WELCOME":"Welcome to MRC SURVEY RH",
+  "WELCOME": "Welcome to MRC SURVEY RH",
   "YOUR_ADMIN_DASHBOARD": "Your Admin Dashboard",
-  "OR_SIGN_UP_WITH": "or sign up with"
+  "OR_SIGN_UP_WITH": "or sign up with",
+  
+  "LOGIN": {
+    "TITLE": "Login",
+    "SUBTITLE": "Login to your account",
+    "OR_EMAIL": "or login with email",
+    "REMEMBER": "Remember me",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "NO_ACCOUNT": "Don't have an account?",
+    "PLACEHOLDER_EMAIL": "Enter your email",
+    "PLACEHOLDER_PASSWORD": "Enter your password"
+  },
 
+  "REGISTER": {
+    "TITLE": "Create Account",
+    "SUBTITLE": "Sign up to get started"
+  },
 
+  "FORM": {
+    "NOM": "Name",
+    "REQUIRED_NOM": "Name is required",
+    "MIN_LENGTH_NOM": "Minimum 6 characters",
+    "SOCIETE": "Company",
+    "TELEPHONE": "Phone",
+    "EMAIL": "Email",
+    "REQUIRED_EMAIL": "Email is required",
+    "INVALID_EMAIL": "Invalid email",
+    "MOT_DE_PASSE": "Password",
+    "REQUIRED_MDP": "Password is required",
+    "SIGN_UP": "Sign Up",
+    "SIGN_IN": "Sign In",
+    "ALREADY_ACCOUNT": "Already have an account?",
+    "OR_SIGNUP_WITH": "or sign up with",
+    "PLACEHOLDER_EMAIL": "Enter your email",
+    "PLACEHOLDER_PASSWORD": "Enter your password"
+  }
 }

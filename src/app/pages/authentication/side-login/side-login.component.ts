@@ -4,13 +4,14 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { AuthService } from 'src/app/services/authentification.service';
-import { CommonModule } from '@angular/common'; // ✅ Import obligatoire pour *ngIf et autres directives Angular
+import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-side-login',
   standalone: true,
   // ✅ Ajoute CommonModule ici :
-  imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule,TranslateModule],
   templateUrl: './side-login.component.html',
   styleUrls: ['./side-login.component.css'],
 })

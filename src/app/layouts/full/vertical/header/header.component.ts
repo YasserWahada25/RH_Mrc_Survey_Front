@@ -90,14 +90,19 @@ export class HeaderComponent {
     {
       language: 'Español',
       code: 'es',
-      icon: '/assets/images/flag/icon-flag-es.svg',
+      icon: '/assets/images/flag/flag-for-spain-svgrepo-com.svg',
     },
    
     {
       language: 'German',
       code: 'de',
-      icon: '/assets/images/flag/icon-flag-de.svg',
+      icon: '/assets/images/flag/flag-for-germany-svgrepo-com.svg',
     },
+    {
+    language: 'العربية',
+    code: 'ar',
+     icon: '/assets/images/flag/flag-for-tunisia.svg', 
+  },
   ];
 
   constructor(

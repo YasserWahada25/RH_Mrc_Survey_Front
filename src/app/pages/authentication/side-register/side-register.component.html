@@ -22,97 +22,69 @@
       <div class="p-24 d-flex flex-column justify-content-center w-100" style="height: 100%;">
         <div class="w-100" style="max-height: 100%;">
           <div class="mx-auto" style="max-width: 100%;">
-<h4 class="f-w-700 f-s-20 m-0">{{ 'WELCOME' | translate }}</h4>
-<span class="f-s-12 d-block mat-body-1 m-t-4">{{ 'YOUR_ADMIN_DASHBOARD' | translate }}</span>
-
-
-            <!-- <div class="row m-t-16">
-              <div class="col-12 col-sm-6 mb-2">
-                <button mat-stroked-button class="w-100 compact-button">
-                  <div class="d-flex align-items-center justify-content-center">
-                    <img src="/assets/images/svgs/google-icon.svg" alt="google" width="14" class="m-r-6" />
-                    <span class="f-s-12">Google</span>
-                  </div>
-                </button>
-              </div>
-              <div class="col-12 col-sm-6 mb-2">
-                <button mat-stroked-button class="w-100 compact-button">
-                  <div class="d-flex align-items-center justify-content-center">
-                    <img src="/assets/images/svgs/facebook-icon.svg" alt="facebook" width="14" class="m-r-6" />
-                    <span class="f-s-12">Facebook</span>
-                  </div>
-                </button>
-              </div>
-            </div> -->
-
-           <div class="f-w-700 or-border m-t-20">{{ 'OR_SIGN_UP_WITH' | translate }}</div>
+            <h4 class="f-w-700 f-s-20 m-0">{{ 'WELCOME' | translate }}</h4>
+            <span class="f-s-12 d-block mat-body-1 m-t-4">{{ 'YOUR_ADMIN_DASHBOARD' | translate }}</span>
 
             <form class="m-t-16" [formGroup]="form" (ngSubmit)="submit()">
-
               <!-- Nom -->
-              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">Nom</mat-label>
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.NOM' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput formControlName="nom" class="f-s-12" />
-                @if(f['nom'].touched && f['nom'].invalid) {
-                  <mat-error class="f-s-10">
-                    @if(f['nom'].errors && f['nom'].errors['required']) {
-                      <div>Nom requis</div>
-                    }
-                    @if(f['nom'].errors && f['nom'].errors['minlength']) {
-                      <div>6 caractères minimum</div>
-                    }
-                  </mat-error>
-                }
+                <mat-error *ngIf="f['nom'].touched && f['nom'].invalid" class="f-s-10">
+                  <div *ngIf="f['nom'].errors?.['required']">{{ 'FORM.REQUIRED_NOM' | translate }}</div>
+                  <div *ngIf="f['nom'].errors?.['minlength']">{{ 'FORM.MIN_LENGTH_NOM' | translate }}</div>
+                </mat-error>
               </mat-form-field>
 
               <!-- Société -->
-              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">Société</mat-label>
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.SOCIETE' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput formControlName="nomSociete" class="f-s-12" />
               </mat-form-field>
 
               <!-- Téléphone -->
-              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">Téléphone</mat-label>
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.TELEPHONE' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput formControlName="tel" class="f-s-12" />
               </mat-form-field>
 
               <!-- Email -->
-              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">Email</mat-label>
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.EMAIL' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput type="email" formControlName="email" class="f-s-12" />
-                @if(f['email'].touched && f['email'].invalid) {
-                  <mat-error class="f-s-10">
-                    @if(f['email'].errors && f['email'].errors['required']) {
-                      <div>Email requis</div>
-                    }
-                  </mat-error>
-                }
+                <mat-error *ngIf="f['email'].touched && f['email'].invalid" class="f-s-10">
+                  <div *ngIf="f['email'].errors?.['required']">{{ 'FORM.REQUIRED_EMAIL' | translate }}</div>
+                </mat-error>
               </mat-form-field>
 
-              <!-- Password -->
-              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">Mot de passe</mat-label>
+              <!-- Mot de passe -->
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.MOT_DE_PASSE' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput type="password" formControlName="password" class="f-s-12" />
-                @if(f['password'].touched && f['password'].invalid) {
-                  <mat-error class="f-s-10">
-                    @if(f['password'].errors && f['password'].errors['required']) {
-                      <div>Mot de passe requis</div>
-                    }
-                  </mat-error>
-                }
+                <mat-error *ngIf="f['password'].touched && f['password'].invalid" class="f-s-10">
+                  <div *ngIf="f['password'].errors?.['required']">{{ 'FORM.REQUIRED_MDP' | translate }}</div>
+                </mat-error>
               </mat-form-field>
 
               <button mat-flat-button color="primary" class="w-100 compact-button m-t-8" [disabled]="!form.valid">
-                <span class="f-s-12">Sign Up</span>
+                <span class="f-s-12">{{ 'FORM.SIGN_UP' | translate }}</span>
               </button>
-
             </form>
 
             <span class="d-block f-w-500 f-s-12 m-t-16 text-center">
-              Already have an Account?
+              {{ 'FORM.ALREADY_ACCOUNT' | translate }}
               <a [routerLink]="['/authentication/login']" class="text-decoration-none text-primary f-w-500">
-                Sign In
+                {{ 'FORM.SIGN_IN' | translate }}
               </a>
             </span>
           </div>
