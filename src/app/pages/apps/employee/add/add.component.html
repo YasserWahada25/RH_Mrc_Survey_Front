@@ -1,7 +1,36 @@
-<div class="p-x-24">
-  <p class="f-w-500">Employee Successfully Added.</p>
-  <p>You can find your employee at last of table.</p>
-</div>
-<mat-dialog-actions class="p-x-24 p-b-24">
-  <button mat-flat-button color="primary" mat-dialog-close>Ok</button>
-</mat-dialog-actions>
+<h2 mat-dialog-title>Ajouter un utilisateur</h2>
+<mat-dialog-content style="max-width: 600px">
+  <form #userForm="ngForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nom</mat-label>
+      <input matInput name="nom" [(ngModel)]="local_data.nom" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Email</mat-label>
+      <input matInput name="email" [(ngModel)]="local_data.email" type="email" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput name="mot_de_passe" [(ngModel)]="local_data.mot_de_passe" type="password" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Rôle</mat-label>
+      <mat-select [(ngModel)]="local_data.type" name="type" required>
+        <mat-option value="employe">Employé</mat-option>
+        <mat-option value="rh_admin">RH Admin</mat-option>
+        <mat-option value="responsable">Responsable</mat-option>
+        <mat-option value="owner">Owner</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="d-flex justify-content-end m-t-16">
+      <button mat-flat-button color="primary" [disabled]="!userForm.valid" (click)="createUser()">
+        Ajouter
+      </button>
+      <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">Annuler</button>
+    </div>
+  </form>
+</mat-dialog-content>
