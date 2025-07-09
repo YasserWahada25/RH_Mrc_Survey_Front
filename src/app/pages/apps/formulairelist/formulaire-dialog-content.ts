@@ -19,7 +19,6 @@ import { FormulaireWizardComponent }     from '../formulaire-wizard/formulaire-w
     MatIconModule,
     MatTableModule,
     MatTooltipModule,
-    FormulaireWizardComponent
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css']

@@ -1,61 +1,79 @@
 <!-- src/app/pages/apps/formulairelist/formulairelist.component.html -->
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input
+            matInput
+            placeholder="Rechercher un formulaire"
+            (keyup)="applyFilter($any($event.target).value)"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+        <button mat-flat-button color="primary" (click)="openWizard()">
+          <mat-icon>playlist_add</mat-icon>
+          Nouveau formulaire
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
 
-<div class="header-row">
-  <h2>Mes formulaires</h2>
-  <button mat-flat-button color="primary" (click)="openWizard()">
-    <mat-icon>playlist_add</mat-icon>
-    Nouveau form
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="styled-table w-100">
 
-ne rien faire ulaire 
-  </button>
-</div>
+        <!-- N° -->
+        <ng-container matColumnDef="num">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let f; let i = index">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
 
-<div class="table-responsive">
-  <table mat-table [dataSource]="forms" class="styled-table">
+        <!-- Titre -->
+        <ng-container matColumnDef="titre">
+          <th mat-header-cell *matHeaderCellDef>Titre</th>
+          <td mat-cell *matCellDef="let f">{{ f.titre }}</td>
+        </ng-container>
 
-    <!-- N° -->
-    <ng-container matColumnDef="num">
-      <th mat-header-cell *matHeaderCellDef>#</th>
-      <td mat-cell        *matCellDef="let f; let i = index">{{ i+1 }}</td>
-    </ng-container>
+        <!-- Date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+          <td mat-cell *matCellDef="let f" class="text-center">
+            {{ f.createdAt | date:'dd/MM/yyyy' }}
+          </td>
+        </ng-container>
 
-    <!-- Titre -->
-    <ng-container matColumnDef="titre">
-      <th mat-header-cell *matHeaderCellDef>Titre</th>
-      <td mat-cell        *matCellDef="let f">{{ f.titre }}</td>
-    </ng-container>
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header">
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let f" class="action-cell">
+            <button mat-icon-button color="warn" matTooltip="Supprimer" (click)="delete(f)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" matTooltip="Éditer" (click)="edit(f)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" matTooltip="Dupliquer" (click)="duplicate(f)">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" matTooltip="Voir" (click)="view(f)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-    <!-- Date -->
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
-      <td mat-cell        *matCellDef="let f" class="text-center">
-        {{ f.createdAt | date:'dd/MM/yyyy' }}
-      </td>
-    </ng-container>
-
-    <!-- Status (pour l’exemple, on remplace par un badge) -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell        *matCellDef="let f">
-        <span class="badge-active">Active</span>
-      </td>
-    </ng-container>
-
-    <!-- Actions -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef class="actions-header">
-        Actions
-
-      </th>
-      <td mat-cell        *matCellDef="let f" class="action-cell">
-        <button mat-icon-button color="warn" matTooltip="Supprimer"><mat-icon>delete</mat-icon></button>
-        <button mat-icon-button color="accent" matTooltip="Éditer"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button color="primary" matTooltip="Dupliquer"><mat-icon>content_copy</mat-icon></button>
-        <button mat-icon-button color="primary" matTooltip="Voir"><mat-icon>visibility</mat-icon></button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row        *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</div>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
