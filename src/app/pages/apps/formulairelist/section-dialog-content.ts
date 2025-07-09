@@ -1,3 +1,5 @@
+// src/app/pages/apps/formulairelist/section-dialog-content.ts
+
 import { Component, Inject, Optional } from '@angular/core';
 import {
   MatDialogRef,
@@ -17,12 +19,16 @@ import { SectionService }         from 'src/app/services/section.service';
 import { QuestionService }        from 'src/app/services/question.service';
 import { forkJoin }               from 'rxjs';
 
-interface QuestionData {
+export interface Option {
+  label: string;
+  score: number;
+}
+
+export interface QuestionData {
   texte: string;
-  date: string;
   obligatoire: boolean;
   inputType: string;
-  score: number;
+  options: Option[];
 }
 
 @Component({
@@ -40,15 +46,12 @@ interface QuestionData {
     MatSelectModule
   ],
   templateUrl: './section-dialog-content.html',
+  styleUrls: ['./section-dialog-content.css']
 })
 export class SectionDialogContentComponent {
   localSection = { titre: '' };
   questions: QuestionData[] = [];
-  inputTypes = [
-    'texte','date','liste',
-    'case_a_cocher','bouton_radio',
-    'evaluation','spinner'
-  ];
+  inputTypes = ['texte','liste','case_a_cocher','bouton_radio','evaluation','spinner'];
 
   constructor(
     private dialogRef: MatDialogRef<SectionDialogContentComponent>,
@@ -60,10 +63,9 @@ export class SectionDialogContentComponent {
   addQuestion(): void {
     this.questions.push({
       texte: '',
-      date: new Date().toISOString().slice(0,10),
       obligatoire: false,
       inputType: this.inputTypes[0],
-      score: 0
+      options: []
     });
   }
 
@@ -71,16 +73,30 @@ export class SectionDialogContentComponent {
     this.questions.splice(i, 1);
   }
 
+  addOption(q: QuestionData): void {
+    q.options.push({ label: '', score: 0 });
+  }
+
+  removeOption(q: QuestionData, oi: number): void {
+    q.options.splice(oi, 1);
+  }
+
   finish(): void {
-    this.secSvc.create({
-      titre: this.localSection.titre,
-      formulaire: this.data.formulaireId
-    }).subscribe(section => {
-      const calls = this.questions.map(q =>
-        this.qSvc.create({ ...q, section: section._id })
-      );
-      forkJoin(calls).subscribe(() => this.dialogRef.close());
-    });
+    this.secSvc
+      .create({ titre: this.localSection.titre, formulaire: this.data.formulaireId })
+      .subscribe(section => {
+        const calls = this.questions.map(q =>
+          this.qSvc.create({
+            texte: q.texte,
+            obligatoire: q.obligatoire,
+            inputType: q.inputType,
+            score: 0,
+            options: q.options,
+            section: section._id
+          })
+        );
+        forkJoin(calls).subscribe(() => this.dialogRef.close());
+      });
   }
 
   cancel(): void {
