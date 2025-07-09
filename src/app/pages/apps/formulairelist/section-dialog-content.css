@@ -1,0 +1,44 @@
+/* src/app/pages/apps/formulairelist/section-dialog-content.css */
+
+.section-dialog-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.question-block {
+  position: relative;
+  padding: 16px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.header-cell {
+  font-weight: 600;
+}
+
+.score-cell {
+  width: 100px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.action-cell {
+  width: 40px;
+}
+
+.row-cell {
+  margin: 8px 0;
+}
+
+.add-option-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}

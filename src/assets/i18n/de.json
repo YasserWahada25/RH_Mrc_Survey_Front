@@ -6,9 +6,15 @@
   "Email": "E-Mail",
   "Contacts": "Kontakte",
   "Courses": "Kurse",
+<<<<<<< HEAD
   "Employee": "Mitarbeiter",
   "Notes": "Notizen",
   "Tickets": "Tickets",
+=======
+  "Employee": "Benutzer",
+  "Notes": "Anmerkungen",
+  "Tickets": "Eintrittskarten",
+>>>>>>> b36401afcbe5e7970aea25864092412871dc756e
   "Invoice": "Rechnung",
   "Blog": "Blog",
   "Posts": "Beiträge",

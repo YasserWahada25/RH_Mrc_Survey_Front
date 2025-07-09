@@ -1,0 +1,108 @@
+<!-- src/app/pages/apps/formulairelist/section-dialog-content.html -->
+
+<h2 mat-dialog-title>Création de la section</h2>
+
+<mat-dialog-content class="mat-typography section-dialog-content">
+  <!-- Titre de la section -->
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <input
+      matInput
+      placeholder="Titre de la section"
+      [(ngModel)]="localSection.titre"
+      name="titre"
+      required
+    />
+  </mat-form-field>
+
+  <!-- Bouton Ajouter question -->
+  <div class="mb-3">
+    <button mat-button color="primary" (click)="addQuestion()">
+      <mat-icon>add</mat-icon> Ajouter une question
+    </button>
+  </div>
+
+  <!-- Pour chaque question -->
+  <div *ngFor="let q of questions; let qi = index" class="question-block mat-elevation-z1">
+    <div class="header">
+      <h4>Question {{ qi + 1 }}</h4>
+      <button mat-icon-button color="warn" (click)="removeQuestion(qi)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <!-- Intitulé -->
+    <mat-form-field appearance="outline" class="w-100 mb-2">
+      <input
+        matInput
+        placeholder="Texte de la question"
+        [(ngModel)]="q.texte"
+        name="texte{{qi}}"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Obligatoire -->
+    <mat-checkbox class="mb-2" [(ngModel)]="q.obligatoire" name="oblig{{qi}}">
+      Obligatoire
+    </mat-checkbox>
+
+    <!-- Type -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-select [(ngModel)]="q.inputType" name="type{{qi}}">
+        <mat-option *ngFor="let t of inputTypes" [value]="t">{{ t }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- ------------------------------------------------------------------------------------
+         ZONE PROPOSITIONS & SCORE :
+         On n’affiche que si ce n’est ni 'texte' ni 'date'
+    ------------------------------------------------------------------------------------- -->
+    <ng-container *ngIf="q.inputType !== 'texte' && q.inputType !== 'date'">
+      <!-- En-têtes -->
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1 header-cell">Proposition</div>
+        <div class="score-cell">Score (0–5)</div>
+        <div class="action-cell"></div>
+      </div>
+
+      <!-- Lignes -->
+      <div *ngFor="let opt of q.options; let oi = index" class="d-flex align-items-center row-cell">
+        <mat-form-field appearance="outline" class="flex-grow-1 mr-2">
+          <input
+            matInput
+            placeholder="Texte de la proposition"
+            [(ngModel)]="opt.label"
+            name="optLabel{{qi}}_{{oi}}"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="score-cell mr-2">
+          <input
+            matInput
+            type="number"
+            min="0"
+            max="5"
+            [(ngModel)]="opt.score"
+            name="optScore{{qi}}_{{oi}}"
+          />
+        </mat-form-field>
+        <button mat-icon-button color="warn" (click)="removeOption(q, oi)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- Bouton + aligné à droite -->
+      <div class="add-option-container">
+        <button mat-mini-fab color="primary" (click)="addOption(q)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="pt-2">
+  <button mat-flat-button color="primary" (click)="finish()" [disabled]="!questions.length">
+    Enregistrer
+  </button>
+  <button mat-stroked-button color="warn" (click)="cancel()">Annuler</button>
+</mat-dialog-actions>

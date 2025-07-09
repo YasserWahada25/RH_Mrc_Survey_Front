@@ -10,7 +10,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-side-login',
   standalone: true,
-  // ✅ Ajoute CommonModule ici :
   imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule,TranslateModule],
   templateUrl: './side-login.component.html',
   styleUrls: ['./side-login.component.css'],
@@ -43,7 +42,7 @@ export class AppSideLoginComponent {
 
     if (this.form.valid) {
       const loginData = {
-        email: this.form.value.uname!, // ✅ corriger ici de "login" → "email"
+        email: this.form.value.uname!, 
         password: this.form.value.password!
       };
 
