@@ -1,73 +1,71 @@
-import { Component } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '../../../../material.module';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface Task {
-  name: string;
-  completed: boolean;
-  color: ThemePalette;
-  subtasks?: Task[];
-}
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { QuizService } from 'src/app/services/quiz.service';
+import { Lot } from 'src/app/models/quiz.model';
 
 @Component({
   selector: 'app-checkbox',
   standalone: true,
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './checkbox.component.html',
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatCardModule,
+    MatRadioModule
+  ]
 })
-export class AppCheckboxComponent {
-  //   reactive form
-  toppings = this._formBuilder.group({
-    pepperoni: false,
-    extracheese: false,
-    mushroom: false,
-  });
+export class AppCheckboxComponent implements OnInit {
+  lots: Lot[] = [];
+  answers: { plusIndex: number | null; minusIndex: number | null }[] = [];
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(private quizService: QuizService) {}
 
-  //   config
-  checked = false;
-  indeterminate = false;
-  labelPosition: 'before' | 'after' = 'after';
-  disabled = false;
-
-  //   basic
-  task: Task = {
-    name: 'Indeterminate',
-    completed: false,
-    color: 'primary',
-    subtasks: [
-      { name: 'Primary', completed: false, color: 'primary' },
-      { name: 'Accent', completed: false, color: 'accent' },
-      { name: 'Warn', completed: false, color: 'warn' },
-    ],
-  };
-
-  allComplete: boolean = false;
-
-  updateAllComplete() {
-    this.allComplete =
-      this.task.subtasks != null &&
-      this.task.subtasks.every((t) => t.completed);
+  ngOnInit(): void {
+    this.quizService.getAllLots().subscribe({
+      next: (data: Lot[]) => {
+        this.lots = data;
+        this.answers = this.lots.map(() => ({
+          plusIndex: null,
+          minusIndex: null
+        }));
+      },
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des lots :', err);
+      }
+    });
   }
 
-  someComplete(): boolean {
-    if (this.task.subtasks == null) {
-      return false;
-    }
-    return (
-      this.task.subtasks.filter((t) => t.completed).length > 0 &&
-      !this.allComplete
-    );
+  setPlus(lotIndex: number, questionIndex: number) {
+    this.answers[lotIndex].plusIndex = questionIndex;
   }
 
-  setAll(completed: boolean) {
-    this.allComplete = completed;
-    if (this.task.subtasks == null) {
-      return;
-    }
-    this.task.subtasks.forEach((t) => (t.completed = completed));
+  setMinus(lotIndex: number, questionIndex: number) {
+    this.answers[lotIndex].minusIndex = questionIndex;
+  }
+
+  submitQuiz() {
+    const formattedAnswers = this.lots.map((lot, i) => ({
+      lotId: lot.id,
+      plusIndex: this.answers[i].plusIndex ?? -1,
+      minusIndex: this.answers[i].minusIndex ?? -1
+    }));
+
+    this.quizService.submitAnswers(formattedAnswers).subscribe({
+      next: (res) => {
+        alert('Réponses soumises avec succès');
+        console.log(res);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la soumission :', err);
+        alert('Erreur lors de la soumission du quiz');
+      }
+    });
   }
 }

@@ -20,3 +20,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   exports: [TranslateModule]
 })
 export class TranslationModule {}
+
+
+
+
