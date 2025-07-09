@@ -54,14 +54,20 @@ export class AppHorizontalHeaderComponent {
   showFiller = false;
 
   public selectedLanguage: any = {
-    language: 'English',
-    code: 'en',
-    type: 'US',
-    icon: '/assets/images/flag/icon-flag-en.svg',
+    language: 'Français',
+    code: 'fr',
+    type: 'fr',
+    icon: '/assets/images/flag/icon-flag-fr.svg',
   };
 
   public languages: any[] = [
+        {
+      language: 'Français',
+      code: 'fr',
+      icon: '/assets/images/flag/icon-flag-fr.svg',
+    },
     {
+      
       language: 'English',
       code: 'en',
       type: 'US',
@@ -72,11 +78,7 @@ export class AppHorizontalHeaderComponent {
       code: 'es',
       icon: '/assets/images/flag/icon-flag-es.svg',
     },
-    {
-      language: 'Français',
-      code: 'fr',
-      icon: '/assets/images/flag/icon-flag-fr.svg',
-    },
+
     {
       language: 'German',
       code: 'de',
@@ -89,7 +91,18 @@ export class AppHorizontalHeaderComponent {
     public dialog: MatDialog,
     private translate: TranslateService
   ) {
-    translate.setDefaultLang('en');
+     const savedLang = localStorage.getItem('appLang');
+
+  this.translate.addLangs(['fr', 'en', 'es', 'de']); 
+  this.translate.setDefaultLang('fr'); 
+
+  if (savedLang && ['fr', 'en', 'es', 'de'].includes(savedLang)) {
+    this.translate.use(savedLang);
+    this.selectedLanguage = this.languages.find(l => l.code === savedLang) ?? this.selectedLanguage;
+  } else {
+    this.translate.use('fr'); 
+    this.selectedLanguage = this.languages.find(l => l.code === 'fr') ?? this.selectedLanguage;
+  }
   }
 
   openDialog() {
@@ -103,6 +116,7 @@ export class AppHorizontalHeaderComponent {
   changeLanguage(lang: any): void {
     this.translate.use(lang.code);
     this.selectedLanguage = lang;
+    localStorage.setItem('appLang', lang.code);
   }
 
   notifications: notifications[] = [

@@ -68,14 +68,20 @@ export class HeaderComponent {
   showFiller = false;
 
   public selectedLanguage: any = {
-    language: 'English',
-    code: 'en',
-    type: 'US',
-    icon: '/assets/images/flag/icon-flag-en.svg',
+    language: 'Français',
+    code: 'fr',
+    type: 'fr',
+    icon: '/assets/images/flag/icon-flag-fr.svg',
   };
 
   public languages: any[] = [
+     {
+      language: 'Français',
+      code: 'fr',
+      icon: '/assets/images/flag/icon-flag-fr.svg',
+    },
     {
+      
       language: 'English',
       code: 'en',
       type: 'US',
@@ -86,11 +92,7 @@ export class HeaderComponent {
       code: 'es',
       icon: '/assets/images/flag/icon-flag-es.svg',
     },
-    {
-      language: 'Français',
-      code: 'fr',
-      icon: '/assets/images/flag/icon-flag-fr.svg',
-    },
+   
     {
       language: 'German',
       code: 'de',

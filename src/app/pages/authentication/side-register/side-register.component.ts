@@ -9,13 +9,14 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { CoreService } from 'src/app/services/core.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/services/authentification.service';
 
 
 @Component({
   selector: 'app-side-register',
   standalone: true,
-  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule,TranslateModule],
   templateUrl: './side-register.component.html',
   styleUrls: ['./side-register.component.css'] ,
 
@@ -35,7 +36,7 @@ export class AppSideRegisterComponent {
   constructor(
     private settings: CoreService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   get f() {
