@@ -8,16 +8,7 @@
     </mat-card-header>
 
     <mat-card-content class="mat-typography">
-      <div class="form-header">
-        <div class="form-icon">
-          <mat-icon>description</mat-icon>
-        </div>
-        <div class="form-info">
-          <!-- <p><strong>Créé par:</strong> </p>
-          <p><strong>Date de création:</strong> {{ formData.createdAt | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Questions:</strong> {{ totalQuestions }} | <strong>Sections:</strong> {{ sections.length }}</p> -->
-        </div>
-      </div>
+    
 
       <ng-container *ngFor="let sec of sections; let i = index">
         <!-- Section Title -->
@@ -131,9 +122,7 @@
       <button mat-stroked-button color="basic" (click)="close()">
         <mat-icon>close</mat-icon> Annuler
       </button>
-      <!-- <button mat-flat-button color="primary" (click)="submit()">
-        <mat-icon>send</mat-icon> Soumettre les réponses
-      </button> -->
+
     </mat-card-actions>
   </mat-card>
 </div>
