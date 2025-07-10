@@ -32,6 +32,16 @@ export const AuthenticationRoutes: Routes = [
         path: 'activate/:token',
         loadComponent: () => import('./activate-account/activate-account.component').then(m => m.ActivateAccountComponent)
       },
+ {
+  path: 'side-reinitialiser-le-mot-de-passe',
+  loadComponent: () =>
+    import('./side-reinitialiser-le-mot-de-passe/side-reinitiliser-mot-de-passe')
+      .then((m) => m.AppSideReinitialiserMotDePasseComponent),
+}
+
+
+
+
 
 
     ],
