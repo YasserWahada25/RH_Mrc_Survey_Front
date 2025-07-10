@@ -1,0 +1,355 @@
+.form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* scrollable */
+.dialog-scroll {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding-right: 8px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-header {
+  background: linear-gradient(135deg, #3f51b5 0%, #283593 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+  padding: 24px;
+}
+
+mat-card-title {
+  font-size: 1.8rem !important;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+mat-card-subtitle {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  background-color: #f5f7ff;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px 0 30px;
+  border-left: 4px solid #3f51b5;
+}
+
+.form-icon {
+  background-color: #3f51b5;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.form-icon mat-icon {
+  color: white;
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.form-info p {
+  margin: 5px 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* titre de section */
+.section-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c387e;
+}
+
+.section-counter {
+  background-color: #3f51b5;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+/* chaque question */
+.question-block {
+  margin-bottom: 32px;
+  padding: 20px;
+  background-color: #f9faff;
+  border-radius: 8px;
+  border-left: 3px solid #7986cb;
+  transition: all 0.3s ease;
+}
+
+.question-block:hover {
+  background-color: #f0f3ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.question-title {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: flex-start;
+}
+
+.question-number {
+  display: inline-block;
+  background-color: #3f51b5;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.question-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  padding-left: 44px;
+  font-style: italic;
+}
+
+.response-container {
+  padding: 10px 0;
+}
+
+/* full width pour les inputs */
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  margin-top: 8px;
+}
+
+/* toggle-list (liste de boutons) */
+.toggle-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.toggle-list .mat-button-toggle {
+  border: 1px solid #3f51b5;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.toggle-list .mat-button-toggle:hover {
+  background-color: rgba(63, 81, 181, 0.08);
+  transform: translateY(-2px);
+}
+
+.toggle-list .mat-button-toggle-checked {
+  background-color: #3f51b5 !important;
+  color: white;
+}
+
+/* radio-list vertical */
+.radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.radio-list .mat-radio-button {
+  height: 36px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.radio-list .mat-radio-label-content {
+  font-size: 1rem;
+}
+
+/* checkbox-list vertical */
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.checkbox-list .mat-checkbox {
+  padding: 8px 0;
+}
+
+.checkbox-list .mat-checkbox-label {
+  font-size: 1rem;
+}
+
+/* scale-list 1–5 */
+.scale-container {
+  margin-top: 20px;
+}
+
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 10px;
+  padding: 0 10px;
+}
+
+.scale-list {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+
+.scale-list .mat-radio-button {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #3f51b5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.scale-list .mat-radio-button:hover {
+  background-color: rgba(63, 81, 181, 0.1);
+  transform: scale(1.1);
+}
+
+.scale-list .mat-radio-button.mat-accent.mat-radio-checked {
+  background-color: #3f51b5 !important;
+  color: white;
+  transform: scale(1.1);
+}
+
+.scale-list .mat-radio-label {
+  margin: 0;
+}
+
+.scale-list .mat-radio-label-content {
+  padding: 0;
+  font-weight: bold;
+}
+
+/* séparateur de section */
+.section-divider {
+  margin: 40px 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #3f51b5, transparent);
+}
+
+/* Actions */
+mat-card-actions {
+  padding: 20px;
+  background-color: #f5f7ff;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-card-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  padding: 8px 24px;
+  border-radius: 6px;
+}
+
+/* Type inconnu */
+.unknown-type {
+  background-color: #fff8e1;
+  border: 1px solid #ffd54f;
+  padding: 15px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #5d4037;
+  margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dialog-scroll {
+    max-height: none;
+  }
+  
+  .form-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .form-icon {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .toggle-list {
+    flex-direction: column;
+  }
+  
+  .question-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .question-number {
+    margin-bottom: 10px;
+  }
+  
+  .question-description {
+    padding-left: 0;
+  }
+  
+  mat-card-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  mat-card-actions button {
+    width: 100%;
+  }
+  
+  .scale-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+}

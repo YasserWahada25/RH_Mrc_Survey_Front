@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizard.component';
 import { FormulaireEditComponent, EditDialogData } from '../formulaire-edit/formulaire-edit.component';
+import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/formulaire-view.component';
 
 @Component({
   selector: 'app-formulaire-list',
@@ -99,9 +100,17 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
   }
 
   /** Affiche / navigue vers la vue détaillée (non implémenté) */
-  view(form: Formulaire): void {
-    console.log('View', form);
-  }
+   view(form: Formulaire): void {
+// -    console.log('View', form);
+    this.dialog.open<FormulaireViewComponent, ViewDialogData>(
+      FormulaireViewComponent,
+      {
+        width: '700px',
+        maxHeight: '90vh',
+        data: { formulaireId: form._id! }
+      }
+    );
+   }
 
   /** Supprime un formulaire après confirmation */
   delete(form: Formulaire): void {
