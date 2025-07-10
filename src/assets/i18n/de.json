@@ -6,15 +6,9 @@
   "Email": "E-Mail",
   "Contacts": "Kontakte",
   "Courses": "Kurse",
-<<<<<<< HEAD
   "Employee": "Mitarbeiter",
   "Notes": "Notizen",
   "Tickets": "Tickets",
-=======
-  "Employee": "Benutzer",
-  "Notes": "Anmerkungen",
-  "Tickets": "Eintrittskarten",
->>>>>>> b36401afcbe5e7970aea25864092412871dc756e
   "Invoice": "Rechnung",
   "Blog": "Blog",
   "Posts": "Beiträge",
@@ -123,6 +117,17 @@
     "TITLE": "Konto erstellen",
     "SUBTITLE": "Registrieren Sie sich, um loszulegen"
   },
+  "FORMULAIRE": {
+    "SEARCH_PLACEHOLDER": "Formular suchen",
+    "NEW_FORM": "Neues Formular",
+    "TITLE": "Titel",
+    "DATE": "Datum",
+    "ACTIONS": "Aktionen",
+    "DELETE": "Löschen",
+    "EDIT": "Bearbeiten",
+    "DUPLICATE": "Duplizieren",
+    "VIEW": "Anzeigen"
+  },
 
   "FORM": {
     "NOM": "Name",
@@ -141,5 +146,42 @@
     "OR_SIGNUP_WITH": "oder registrieren Sie sich mit",
     "PLACEHOLDER_EMAIL": "Geben Sie Ihre E-Mail ein",
     "PLACEHOLDER_PASSWORD": "Geben Sie Ihr Passwort ein"
+  },
+  "FORM_DIALOG": {
+    "CREATE_TITLE": "Formular erstellen",
+    "TITLE_PLACEHOLDER": "Formulartitel eingeben",
+    "TITLE_HINT": "Formularname",
+    "DESC_PLACEHOLDER": "Beschreibung eingeben",
+    "DESC_HINT": "Beschreibung (optional)",
+    "NEXT_BUTTON": "Weiter",
+    "CANCEL_BUTTON": "Abbrechen"
+  },
+    "USER_MANAGEMENT": {
+    "SEARCH_PLACEHOLDER": "Suchen",
+    "ADD_USER_BUTTON": "Benutzer hinzufügen",
+    "NAME_COLUMN": "Name",
+    "EMAIL_COLUMN": "E-Mail",
+    "MOBILE_COLUMN": "Mobil",
+    "DATE_OF_JOINING_COLUMN": "Eintrittsdatum",
+    "SALARY_COLUMN": "Gehalt",
+    "PROJECTS_COLUMN": "Projekte",
+    "ACTION_COLUMN": "Aktion",
+    "EDIT_TOOLTIP": "Bearbeiten",
+    "DELETE_TOOLTIP": "Löschen"
+  },
+    "USER_DIALOG": {
+    "ADD_USER_TITLE": "Benutzer hinzufügen",
+    "NAME_LABEL": "Name",
+    "EMAIL_LABEL": "E-Mail",
+    "PASSWORD_LABEL": "Passwort",
+    "ROLE_LABEL": "Rolle",
+    "ROLES": {
+      "EMPLOYEE": "Mitarbeiter",
+      "HR_ADMIN": "HR Admin",
+      "MANAGER": "Manager",
+      "OWNER": "Eigentümer"
+    },
+    "ADD_BUTTON": "Hinzufügen",
+    "CANCEL_BUTTON": "Abbrechen"
   }
 }

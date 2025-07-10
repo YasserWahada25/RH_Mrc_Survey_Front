@@ -97,5 +97,55 @@
   "Menu Level": "Nível do menu",
   "Menu 1": "Menu 1",
   "Menu 2": "Menu 2",
-  "Disabled": "Desabilitada"
+  "Disabled": "Desabilitada",
+
+    "FORMULAIRE": {
+    "SEARCH_PLACEHOLDER": "Buscar formulario",
+    "NEW_FORM": "Nuevo formulario",
+    "TITLE": "Título",
+    "DATE": "Fecha",
+    "ACTIONS": "Acciones",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "DUPLICATE": "Duplicar",
+    "VIEW": "Ver"
+  },
+    "FORM_DIALOG": {
+    "CREATE_TITLE": "Creación de formulario",
+    "TITLE_PLACEHOLDER": "Ingrese el título del formulario",
+    "TITLE_HINT": "Nombre del formulario",
+    "DESC_PLACEHOLDER": "Ingrese la descripción",
+    "DESC_HINT": "Descripción (opcional)",
+    "NEXT_BUTTON": "Siguiente",
+    "CANCEL_BUTTON": "Cancelar"
+  },
+    "USER_MANAGEMENT": {
+    "SEARCH_PLACEHOLDER": "Buscar",
+    "ADD_USER_BUTTON": "Agregar usuario",
+    "NAME_COLUMN": "Nombre",
+    "EMAIL_COLUMN": "Correo electrónico",
+    "MOBILE_COLUMN": "Móvil",
+    "DATE_OF_JOINING_COLUMN": "Fecha de ingreso",
+    "SALARY_COLUMN": "Salario",
+    "PROJECTS_COLUMN": "Proyectos",
+    "ACTION_COLUMN": "Acción",
+    "EDIT_TOOLTIP": "Editar",
+    "DELETE_TOOLTIP": "Eliminar"
+  },
+    "USER_DIALOG": {
+    "ADD_USER_TITLE": "Agregar usuario",
+    "NAME_LABEL": "Nombre",
+    "EMAIL_LABEL": "Correo electrónico",
+    "PASSWORD_LABEL": "Contraseña",
+    "ROLE_LABEL": "Rol",
+    "ROLES": {
+      "EMPLOYEE": "Empleado",
+      "HR_ADMIN": "Admin RH",
+      "MANAGER": "Responsable",
+      "OWNER": "Propietario"
+    },
+    "ADD_BUTTON": "Agregar",
+    "CANCEL_BUTTON": "Cancelar"
+  }
+
 }

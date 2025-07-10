@@ -117,7 +117,17 @@
     "TITLE": "Create Account",
     "SUBTITLE": "Sign up to get started"
   },
-
+ "FORMULAIRE": {
+    "SEARCH_PLACEHOLDER": "Search a form",
+    "NEW_FORM": "New form",
+    "TITLE": "Title",
+    "DATE": "Date",
+    "ACTIONS": "Actions",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "DUPLICATE": "Duplicate",
+    "VIEW": "View"
+  },
   "FORM": {
     "NOM": "Name",
     "REQUIRED_NOM": "Name is required",
@@ -135,5 +145,44 @@
     "OR_SIGNUP_WITH": "or sign up with",
     "PLACEHOLDER_EMAIL": "Enter your email",
     "PLACEHOLDER_PASSWORD": "Enter your password"
+  },
+   "FORM_DIALOG": {
+    "CREATE_TITLE": "Form creation",
+    "TITLE_PLACEHOLDER": "Enter form title",
+    "TITLE_HINT": "Form name",
+    "DESC_PLACEHOLDER": "Enter description",
+    "DESC_HINT": "Description (optional)",
+    "NEXT_BUTTON": "Next",
+    "CANCEL_BUTTON": "Cancel"
+  },
+    "USER_MANAGEMENT": {
+    "SEARCH_PLACEHOLDER": "Search",
+    "ADD_USER_BUTTON": "Add User",
+    "NAME_COLUMN": "Name",
+    "EMAIL_COLUMN": "Email",
+    "MOBILE_COLUMN": "Mobile",
+    "DATE_OF_JOINING_COLUMN": "Date of Joining",
+    "SALARY_COLUMN": "Salary",
+    "PROJECTS_COLUMN": "Projects",
+    "ACTION_COLUMN": "Action",
+    "EDIT_TOOLTIP": "Edit",
+    "DELETE_TOOLTIP": "Delete"
+  },
+  
+  "USER_DIALOG": {
+    "ADD_USER_TITLE": "Add User",
+    "NAME_LABEL": "Name",
+    "EMAIL_LABEL": "Email",
+    "PASSWORD_LABEL": "Password",
+    "ROLE_LABEL": "Role",
+    "ROLES": {
+      "EMPLOYEE": "Employee",
+      "HR_ADMIN": "HR Admin",
+      "MANAGER": "Manager",
+      "OWNER": "Owner"
+    },
+    "ADD_BUTTON": "Add",
+    "CANCEL_BUTTON": "Cancel"
   }
+
 }

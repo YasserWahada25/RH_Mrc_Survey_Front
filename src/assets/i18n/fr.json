@@ -117,7 +117,17 @@
     "TITLE": "Créer un compte",
     "SUBTITLE": "Inscrivez-vous pour commencer"
   },
-
+"FORMULAIRE": {
+    "SEARCH_PLACEHOLDER": "Rechercher un formulaire",
+    "NEW_FORM": "Nouveau formulaire",
+    "TITLE": "Titre",
+    "DATE": "Date",
+    "ACTIONS": "Actions",
+    "DELETE": "Supprimer",
+    "EDIT": "Éditer",
+    "DUPLICATE": "Dupliquer",
+    "VIEW": "Voir"
+  },
   "FORM": {
     "NOM": "Nom",
     "REQUIRED_NOM": "Nom requis",
@@ -135,5 +145,42 @@
     "OR_SIGNUP_WITH": "ou inscrivez-vous avec",
     "PLACEHOLDER_EMAIL": "Entrez votre email",
     "PLACEHOLDER_PASSWORD": "Entrez votre mot de passe"
+  },
+  "FORM_DIALOG": {
+    "CREATE_TITLE": "Création du formulaire",
+    "TITLE_PLACEHOLDER": "Entrez le titre du formulaire",
+    "TITLE_HINT": "Nom du formulaire",
+    "DESC_PLACEHOLDER": "Entrez la description",
+    "DESC_HINT": "Description (facultatif)",
+    "NEXT_BUTTON": "Suivant",
+    "CANCEL_BUTTON": "Annuler"
+  },
+    "USER_MANAGEMENT": {
+    "SEARCH_PLACEHOLDER": "Rechercher",
+    "ADD_USER_BUTTON": "Ajouter un utilisateur",
+    "NAME_COLUMN": "Nom",
+    "EMAIL_COLUMN": "Email",
+    "MOBILE_COLUMN": "Mobile",
+    "DATE_OF_JOINING_COLUMN": "Date d'embauche",
+    "SALARY_COLUMN": "Salaire",
+    "PROJECTS_COLUMN": "Projets",
+    "ACTION_COLUMN": "Action",
+    "EDIT_TOOLTIP": "Modifier",
+    "DELETE_TOOLTIP": "Supprimer"
+  },
+   "USER_DIALOG": {
+    "ADD_USER_TITLE": "Ajouter un utilisateur",
+    "NAME_LABEL": "Nom",
+    "EMAIL_LABEL": "Email",
+    "PASSWORD_LABEL": "Mot de passe",
+    "ROLE_LABEL": "Rôle",
+    "ROLES": {
+      "EMPLOYEE": "Employé",
+      "HR_ADMIN": "RH Admin",
+      "MANAGER": "Responsable",
+      "OWNER": "Owner"
+    },
+    "ADD_BUTTON": "Ajouter",
+    "CANCEL_BUTTON": "Annuler"
   }
 }

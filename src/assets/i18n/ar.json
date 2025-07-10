@@ -135,5 +135,53 @@
     "OR_SIGNUP_WITH": "أو سجل مع",
     "PLACEHOLDER_EMAIL": "أدخل بريدك الإلكتروني",
     "PLACEHOLDER_PASSWORD": "أدخل كلمة المرور"
+  },
+  "FORMULAIRE": {
+    "SEARCH_PLACEHOLDER": "بحث عن نموذج",
+    "NEW_FORM": "نموذج جديد",
+    "TITLE": "العنوان",
+    "DATE": "التاريخ",
+    "ACTIONS": "إجراءات",
+    "DELETE": "حذف",
+    "EDIT": "تعديل",
+    "DUPLICATE": "تكرار",
+    "VIEW": "عرض"
+  },
+    "FORM_DIALOG": {
+    "CREATE_TITLE": "إنشاء النموذج",
+    "TITLE_PLACEHOLDER": "أدخل عنوان النموذج",
+    "TITLE_HINT": "اسم النموذج",
+    "DESC_PLACEHOLDER": "أدخل الوصف",
+    "DESC_HINT": "الوصف (اختياري)",
+    "NEXT_BUTTON": "التالي",
+    "CANCEL_BUTTON": "إلغاء"
+  },
+   "USER_MANAGEMENT": {
+    "SEARCH_PLACEHOLDER": "بحث",
+    "ADD_USER_BUTTON": "إضافة مستخدم",
+    "NAME_COLUMN": "الاسم",
+    "EMAIL_COLUMN": "البريد الإلكتروني",
+    "MOBILE_COLUMN": "الجوال",
+    "DATE_OF_JOINING_COLUMN": "تاريخ الانضمام",
+    "SALARY_COLUMN": "الراتب",
+    "PROJECTS_COLUMN": "المشاريع",
+    "ACTION_COLUMN": "إجراء",
+    "EDIT_TOOLTIP": "تعديل",
+    "DELETE_TOOLTIP": "حذف"
+  },
+   "USER_DIALOG": {
+    "ADD_USER_TITLE": "إضافة مستخدم",
+    "NAME_LABEL": "الاسم",
+    "EMAIL_LABEL": "البريد الإلكتروني",
+    "PASSWORD_LABEL": "كلمة المرور",
+    "ROLE_LABEL": "الدور",
+    "ROLES": {
+      "EMPLOYEE": "موظف",
+      "HR_ADMIN": "مسؤول موارد بشرية",
+      "MANAGER": "مسؤول",
+      "OWNER": "المالك"
+    },
+    "ADD_BUTTON": "إضافة",
+    "CANCEL_BUTTON": "إلغاء"
   }
 }

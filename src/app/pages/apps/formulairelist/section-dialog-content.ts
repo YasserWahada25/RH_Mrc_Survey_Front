@@ -18,6 +18,7 @@ import { MatSelectModule }        from '@angular/material/select';
 import { SectionService }         from 'src/app/services/section.service';
 import { QuestionService }        from 'src/app/services/question.service';
 import { forkJoin }               from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Option {
   label: string;
@@ -43,7 +44,8 @@ export interface QuestionData {
     MatButtonModule,
     MatIconModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslateModule
   ],
   templateUrl: './section-dialog-content.html',
   styleUrls: ['./section-dialog-content.css']
