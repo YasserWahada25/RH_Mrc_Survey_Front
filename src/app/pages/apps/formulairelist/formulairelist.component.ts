@@ -84,6 +84,7 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
       FormulaireEditComponent,
       {
         width: '700px',
+          maxHeight: '90vh', 
         data: { formulaireId: form._id! }
       }
     );

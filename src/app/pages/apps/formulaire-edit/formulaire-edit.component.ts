@@ -18,12 +18,14 @@ import { MatDividerModule }   from '@angular/material/divider';
 import { forkJoin, of }       from 'rxjs';
 import { switchMap, map }     from 'rxjs/operators';
 
+import { SectionService, Section }   from 'src/app/services/section.service';
+import { QuestionService, Question } from 'src/app/services/question.service';
+
 import {
   FormulaireService,
   Formulaire,
 } from 'src/app/services/formulaire.service';
-import { SectionService, Section }   from 'src/app/services/section.service';
-import { QuestionService, Question } from 'src/app/services/question.service';
+
 
 export interface EditDialogData {
   formulaireId: string;
@@ -107,6 +109,37 @@ export class FormulaireEditComponent implements OnInit {
     error: err => console.error('Erreur chargement sections/questions', err)
   });
   }
+
+    /** Appel API pour mettre à jour une section */
+  updateSection(sec: SectionData) {
+    this.secSvc.update(sec._id!, { titre: sec.titre }).subscribe({
+      next: updated => console.log('Section MAJ →', updated),
+      error: err => console.error('Erreur maj section', err)
+    });
+  }
+
+    /** Appel API pour mettre à jour une question */
+  updateQuestion(q: Question) {
+    const payload = {
+      texte: q.texte,
+      obligatoire: q.obligatoire,
+      inputType: q.inputType,
+       options: q.options 
+    };
+    this.qSvc.update(q._id, payload).subscribe({
+      next: updated => console.log('Question MAJ →', updated),
+      error: err => console.error('Erreur maj question', err)
+    });
+  }
+
+  addOption(q: Question) {
+  q.options.push({ label: '', score: 0 });
+}
+
+removeOption(q: Question, idx: number) {
+  q.options.splice(idx, 1);
+  this.updateQuestion(q);  // sauve immédiatement la suppression
+}
 
   /** Enregistre juste le formulaire lui-même */
   save(): void {
