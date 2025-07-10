@@ -11,11 +11,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 
-import {
-  FormulaireService,
-  Formulaire,
-} from 'src/app/services/formulaire.service';
+import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizard.component';
+import { FormulaireEditComponent, EditDialogData } from '../formulaire-edit/formulaire-edit.component';
+import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/formulaire-view.component';
 
 @Component({
   selector: 'app-formulaire-list',
@@ -30,60 +29,92 @@ import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizar
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
-    MatCardModule
+    MatCardModule,
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css'],
 })
 export class FormulaireListComponent implements OnInit, AfterViewInit {
   forms: Formulaire[] = [];
-  displayedColumns = ['num', 'titre', 'date', 'actions'];
+  displayedColumns = ['id', 'titre', 'date', 'action'];
   dataSource = new MatTableDataSource<Formulaire>([]);
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private dialog: MatDialog, private formSvc: FormulaireService) {}
+  constructor(
+    private dialog: MatDialog,
+    private formSvc: FormulaireService
+  ) {}
 
   ngOnInit(): void {
     this.loadForms();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
   private loadForms(): void {
-    this.formSvc.getAll().subscribe((data) => {
+    this.formSvc.getAll().subscribe(data => {
       this.forms = data;
       this.dataSource.data = data;
     });
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  /** Ouvre le wizard pour créer un nouveau formulaire */
   openWizard(): void {
-    const ref = this.dialog.open(FormulaireWizardComponent, {
-      width: '800px',
-      data: { formulaireId: null },
+    const ref = this.dialog.open<FormulaireWizardComponent, { formulaireId: string | null }, boolean>(
+      FormulaireWizardComponent,
+      {
+        width: '800px',
+        data: { formulaireId: null }
+      }
+    );
+    ref.afterClosed().subscribe(saved => {
+      if (saved) this.loadForms();
     });
-    ref.afterClosed().subscribe(() => this.loadForms());
   }
 
+  /** Ouvre le popup d’édition pour le formulaire sélectionné */
   edit(form: Formulaire): void {
-    console.log('Edit', form);
+    const ref = this.dialog.open<FormulaireEditComponent, EditDialogData, boolean>(
+      FormulaireEditComponent,
+      {
+        width: '700px',
+          maxHeight: '90vh', 
+        data: { formulaireId: form._id! }
+      }
+    );
+    ref.afterClosed().subscribe(saved => {
+      if (saved) this.loadForms();
+    });
   }
-  
+
+  /** Duplique un formulaire existant */
   duplicate(form: Formulaire): void {
-    console.log('Duplicate', form);
+    this.formSvc.duplicate(form._id!).subscribe(() => this.loadForms());
   }
-  
-  view(form: Formulaire): void {
-    console.log('View', form);
-  }
-  
+
+  /** Affiche / navigue vers la vue détaillée (non implémenté) */
+   view(form: Formulaire): void {
+// -    console.log('View', form);
+    this.dialog.open<FormulaireViewComponent, ViewDialogData>(
+      FormulaireViewComponent,
+      {
+        width: '700px',
+        maxHeight: '90vh',
+        data: { formulaireId: form._id! }
+      }
+    );
+   }
+
+  /** Supprime un formulaire après confirmation */
   delete(form: Formulaire): void {
-    console.log('Delete', form);
+    if (!confirm(`Supprimer le formulaire « ${form.titre} » ?`)) return;
+    this.formSvc.delete(form._id!).subscribe(() => this.loadForms());
   }
 }

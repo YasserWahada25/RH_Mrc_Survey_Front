@@ -1,0 +1,139 @@
+<div class="form-container">
+  <mat-card class="dialog-scroll">
+    <mat-card-header>
+      <mat-card-title>{{ formData.titre || 'Formulaire sans titre' }}</mat-card-title>
+      <mat-card-subtitle *ngIf="formData.description">
+        {{ formData.description }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mat-typography">
+      <div class="form-header">
+        <div class="form-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+        <div class="form-info">
+          <!-- <p><strong>Créé par:</strong> </p>
+          <p><strong>Date de création:</strong> {{ formData.createdAt | date:'dd/MM/yyyy' }}</p>
+          <p><strong>Questions:</strong> {{ totalQuestions }} | <strong>Sections:</strong> {{ sections.length }}</p> -->
+        </div>
+      </div>
+
+      <ng-container *ngFor="let sec of sections; let i = index">
+        <!-- Section Title -->
+        <div class="section-header">
+          <h2 class="section-title">{{ sec.titre || 'Section sans titre' }}</h2>
+          <div class="section-counter">Section {{ i + 1 }}/{{ sections.length }}</div>
+        </div>
+
+        <!-- Questions -->
+        <section
+          class="question-block"
+          *ngFor="let q of sec.questions; let j = index"
+        >
+          <h3 class="question-title">
+            <span class="question-number">Q{{ j + 1 }}</span>
+            {{ q.texte || 'Question sans texte' }}
+          </h3>
+          <!-- <div *ngIf="q.description" class="question-description">
+            {{ q.description }}
+          </div> -->
+
+          <ng-container [ngSwitch]="q.inputType">
+            <!-- Texte libre -->
+            <mat-form-field
+              *ngSwitchCase="'texte'"
+              appearance="fill"
+              class="full-width"
+            >
+              <mat-label>Votre réponse</mat-label>
+              <textarea matInput [(ngModel)]="answers[q._id]" name="txt-{{q._id}}" rows="3"></textarea>
+            </mat-form-field>
+
+            <!-- Boutons Toggle (liste) -->
+            <div *ngSwitchCase="'liste'" class="response-container">
+              <mat-button-toggle-group
+                [(ngModel)]="answers[q._id]"
+                name="tog-{{q._id}}"
+                class="toggle-list"
+              >
+                <mat-button-toggle
+                  *ngFor="let opt of q.options"
+                  [value]="opt.label"
+                >
+                  {{ opt.label }}
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+
+            <!-- Radios classiques -->
+            <div *ngSwitchCase="'bouton_radio'" class="response-container">
+              <mat-radio-group
+                [(ngModel)]="answers[q._id]"
+                name="rad-{{q._id}}"
+                class="radio-list"
+              >
+                <mat-radio-button
+                  *ngFor="let opt of q.options"
+                  [value]="opt.label"
+                >
+                  {{ opt.label }}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <!-- Case à cocher -->
+            <div *ngSwitchCase="'case_a_cocher'" class="response-container">
+              <div class="checkbox-list">
+                <mat-checkbox
+                  *ngFor="let opt of q.options"
+                  [checked]="answers[q._id]?.includes(opt.label)"
+                  (change)="onCheckboxChange(q._id!, opt.label, $event.checked)"
+                >
+                  {{ opt.label }}
+                </mat-checkbox>
+              </div>
+            </div>
+
+            <!-- Évaluation 1–5 -->
+            <div *ngSwitchCase="'evaluation'" class="response-container">
+              <div class="scale-container">
+                <div class="scale-labels">
+                  <span>Pas du tout d'accord</span>
+                  <span>Tout à fait d'accord</span>
+                </div>
+                <mat-radio-group
+                  [(ngModel)]="answers[q._id]"
+                  name="eval-{{q._id}}"
+                  class="scale-list"
+                >
+                  <mat-radio-button *ngFor="let n of [1,2,3,4,5]" [value]="n">
+                    {{ n }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+
+            <!-- Type inconnu -->
+            <div *ngSwitchDefault class="unknown-type">
+              <mat-icon>error_outline</mat-icon>
+              Type de question non supporté
+            </div>
+          </ng-container>
+        </section>
+
+        <!-- Séparateur -->
+        <mat-divider *ngIf="i < sections.length - 1" class="section-divider"></mat-divider>
+      </ng-container>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="basic" (click)="close()">
+        <mat-icon>close</mat-icon> Annuler
+      </button>
+      <!-- <button mat-flat-button color="primary" (click)="submit()">
+        <mat-icon>send</mat-icon> Soumettre les réponses
+      </button> -->
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,64 +1,56 @@
-/* carte et ombre */
-.cardWithShadow {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
+/* src/app/pages/apps/formulairelist/formulairelist.component.scss */
+
+/* Card spacing */
+.mb-24 {
+  margin-bottom: 24px;
 }
 
-/* padding interne */
-.p-24 {
-  padding: 24px;
+/* Barre de recherche */
+.search-field {
+  width: 60%;
+}
+.search-field .mat-form-field-outline {
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
-/* hide default hint text */
-.hide-hint .mat-form-field-subscript-wrapper {
-  display: none;
+/* Bouton Nouveau formulaire */
+.new-btn {
+  height: 40px;
+}
+.new-btn mat-icon {
+  margin-right: 8px;
 }
 
-/* espacement vertical */
-.mt-3 {
-  margin-top: 16px;
-}
-
-/* responsive table */
-.table-responsive {
+/* Table container */
+.table-container {
   overflow-x: auto;
 }
 
-/* style rows */
-tr.mat-header-row {
-  background: #f5f5f5;
+/* Style de la table */
+.styled-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+.styled-table th.mat-header-cell {
   font-weight: 600;
+  background: #f5f5f5;
 }
-tr.mat-row {
-  background: #fff;
+.styled-table td.mat-cell,
+.styled-table th.mat-header-cell {
+  padding: 12px 16px;
 }
-tr.mat-row:nth-child(even) {
-  background: #fafaf8;
+.row-hover:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
-/* centrer la date */
+/* Centrer les colonnes texte */
 .text-center {
   text-align: center;
 }
 
-/* aligner icônes d’action */
-.action-cell {
+/* Pagination */
+.mat-paginator {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-}
-
-/* taille icônes */
-.action-cell mat-icon {
-  font-size: 20px;
-}
-
-/* survol */
-tr.mat-row:hover {
-  background-color: #f1f3f5;
-}
-
-/* paginator margin */
-.mat-paginator {
-  margin-top: 12px;
 }

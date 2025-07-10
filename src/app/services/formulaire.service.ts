@@ -38,8 +38,16 @@ export class FormulaireService {
     return this.http.put<Formulaire>(`${this.url}/${id}`, data);
   }
 
-  /** (Optionnel) Supprimer un formulaire */
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+
+/** DELETE /api/formulaires/:id */
+delete(id: string): Observable<void> {
+  return this.http.delete<void>(`${this.url}/${id}`);
+}
+
+    duplicate(id: string): Observable<Formulaire> {
+    return this.http.post<Formulaire>(`${this.url}/${id}/duplicate`, {});
   }
+
+  
+  
 }
