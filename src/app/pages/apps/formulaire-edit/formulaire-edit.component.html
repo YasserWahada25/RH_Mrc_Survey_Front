@@ -1,0 +1,50 @@
+<!-- src/app/pages/apps/formulaire-edit/formulaire-edit.component.html -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Édition du formulaire</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="mat-typography">
+    <!-- Formulaire lui-même -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Titre *</mat-label>
+      <input matInput [(ngModel)]="formData.titre" name="titre" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mt-3">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="formData.description"
+        name="description"
+        rows="3"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-divider class="my-4"></mat-divider>
+
+    <!-- Sections + Questions -->
+    <div *ngFor="let sec of sections; let i = index" class="mb-4">
+      <h4>Section {{ i + 1 }} : {{ sec.titre }}</h4>
+
+      <div *ngFor="let q of sec.questions; let j = index" class="ps-3 mb-2">
+        <strong>Q{{ j + 1 }}:</strong> {{ q.texte }}
+        <span class="ms-2" *ngIf="q.obligatoire">(obligatoire)</span>
+        <br />
+        <small>Type: {{ q.inputType }}</small>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-stroked-button (click)="cancel()">Annuler</button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="save()"
+      [disabled]="!formData.titre?.trim()"
+    >
+      Enregistrer
+    </button>
+  </mat-card-actions>
+</mat-card>
