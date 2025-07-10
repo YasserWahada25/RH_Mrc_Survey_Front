@@ -1,11 +1,13 @@
-.question-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
+.m-t-16 {
+  margin-top: 16px;
 }
 
-.choice-group {
-  display: flex;
-  gap: 16px;
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 8px;
+  font-size: 16px;
 }
