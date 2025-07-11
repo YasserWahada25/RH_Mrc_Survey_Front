@@ -1,4 +1,3 @@
-// src/app/pages/apps/formulaire-view/formulaire-view.component.ts
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule }           from '@angular/common';
@@ -11,6 +10,7 @@ import { MatCheckboxModule }      from '@angular/material/checkbox';
 import { MatRadioModule }         from '@angular/material/radio';
 import { MatButtonModule }        from '@angular/material/button';
 import { MatButtonToggleModule }  from '@angular/material/button-toggle';
+import { MatIconModule }          from '@angular/material/icon';
 
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { SectionService, Section }       from 'src/app/services/section.service';
@@ -18,7 +18,6 @@ import { QuestionService, Question }     from 'src/app/services/question.service
 
 import { forkJoin, of }      from 'rxjs';
 import { switchMap, map }    from 'rxjs/operators';
-import { MatIconModule } from '@angular/material/icon';
 
 export interface ViewDialogData { formulaireId: string; }
 
@@ -37,7 +36,6 @@ export interface ViewDialogData { formulaireId: string; }
     MatButtonModule,
     MatButtonToggleModule,
     MatIconModule,
-
   ],
   templateUrl: './formulaire-view.component.html',
   styleUrls: ['./formulaire-view.component.css']
@@ -76,35 +74,45 @@ export class FormulaireViewComponent implements OnInit {
     });
   }
 
-  /** Initialise l’objet answers pour chaque question */
+  // private initAnswers() {
+  //   this.sections.forEach(sec =>
+  //     sec.questions.forEach(q => {
+  //       this.answers[q._id!] = q.inputType === 'case_a_cocher' ? [] : null;
+  //     })
+  //   );
+  // }
+
   private initAnswers() {
-    this.sections.forEach(sec =>
-      sec.questions.forEach(q => {
-        if (q.inputType === 'case_a_cocher') {
-          this.answers[q._id!] = [];
-        } else {
-          this.answers[q._id!] = null;
-        }
-      })
-    );
-  }
+  this.sections.forEach(sec =>
+    sec.questions.forEach(q => {
+      if (q.inputType === 'case_a_cocher') {
+        this.answers[q._id!] = [];
+      } else if (q.inputType === 'evaluation') {
+        // on crée un tableau d'autant d'éléments que de propositions
+        this.answers[q._id!] = Array(q.options.length).fill(null);
+      } else {
+        this.answers[q._id!] = null;
+      }
+    })
+  );
+}
 
-  /** Ferme la fenêtre */
-  close() {
-    this.dialogRef.close();
-  }
+onEvalChange(qId: string, row: number, value: number) {
+  (this.answers[qId] as number[])[row] = value;
+}
 
-  /** Met à jour un tableau de réponses pour les checkboxes */
   onCheckboxChange(questionId: string, label: string, checked: boolean) {
-    if (!Array.isArray(this.answers[questionId])) {
-      this.answers[questionId] = [];
-    }
-    const arr: string[] = this.answers[questionId];
+    const arr: string[] = this.answers[questionId] || [];
     if (checked) {
       if (!arr.includes(label)) arr.push(label);
     } else {
       const idx = arr.indexOf(label);
       if (idx > -1) arr.splice(idx, 1);
     }
+    this.answers[questionId] = arr;
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }
