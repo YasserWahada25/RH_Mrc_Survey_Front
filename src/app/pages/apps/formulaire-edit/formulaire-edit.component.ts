@@ -70,7 +70,6 @@ export class FormulaireEditComponent implements OnInit {
     'case_a_cocher',
     'bouton_radio',
     'evaluation',
-    'spinner',
   ];
 
   constructor(
@@ -133,7 +132,7 @@ export class FormulaireEditComponent implements OnInit {
   }
 
   addOption(q: Question) {
-  q.options.push({ label: '', score: 0 });
+  q.options.push({ label: '', score: 1 });
 }
 
 removeOption(q: Question, idx: number) {

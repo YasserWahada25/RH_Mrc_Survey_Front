@@ -21,10 +21,6 @@ export class SectionService {
     return this.http
       .get<Section[]>(`${this.url}?formulaire=${formulaireId}`)
       .pipe(
-   /**      catchError((err) => {
-          console.error('Échec chargement sections', err);
-          return of([]);
-        })*/
       );
   }
   update(id: string, data: any) {

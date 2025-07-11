@@ -75,7 +75,6 @@ export class FormulaireWizardComponent implements OnInit {
     'case_a_cocher',
     'bouton_radio',
     'evaluation',
-    'spinner',
   ];
 
   constructor(
@@ -151,7 +150,8 @@ export class FormulaireWizardComponent implements OnInit {
     this.sections[si].questions.splice(qi, 1);
   }
   addOption(si: number, qi: number): void {
-    this.sections[si].questions[qi].options.push({ label: '', score: 0 });
+       // on initialise le score à 1 au lieu de 0
+   this.sections[si].questions[qi].options.push({ label: '', score: 1 });
   }
   removeOption(si: number, qi: number, oi: number): void {
     this.sections[si].questions[qi].options.splice(oi, 1);

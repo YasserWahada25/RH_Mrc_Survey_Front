@@ -51,7 +51,7 @@ export interface QuestionData {
 export class SectionDialogContentComponent {
   localSection = { titre: '' };
   questions: QuestionData[] = [];
-  inputTypes = ['texte','liste','case_a_cocher','bouton_radio','evaluation','spinner'];
+  inputTypes = ['texte','liste','case_a_cocher','bouton_radio','evaluation'];
 
   constructor(
     private dialogRef: MatDialogRef<SectionDialogContentComponent>,
@@ -74,7 +74,7 @@ export class SectionDialogContentComponent {
   }
 
   addOption(q: QuestionData): void {
-    q.options.push({ label: '', score: 0 });
+    q.options.push({ label: '', score: 1 });
   }
 
   removeOption(q: QuestionData, oi: number): void {

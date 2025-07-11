@@ -4,7 +4,6 @@
     <mat-card-title>Édition du formulaire</mat-card-title>
   </mat-card-header>
 
-  <!-- 1) On applique la classe dialog-scroll pour gérer le scroll -->
   <mat-card-content class="mat-typography dialog-scroll">
     <!-- ===== Formulaire lui-même ===== -->
     <mat-form-field appearance="outline" class="w-100">
@@ -45,6 +44,7 @@
 
       <!-- Questions -->
       <div *ngFor="let q of sec.questions; let j = index" class="ps-3 mb-4">
+        <!-- Texte de la question -->
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Q{{ j + 1 }} – Texte</mat-label>
           <input
@@ -56,6 +56,7 @@
           />
         </mat-form-field>
 
+        <!-- Obligatoire -->
         <mat-checkbox
           class="d-block mb-2"
           [(ngModel)]="q.obligatoire"
@@ -65,6 +66,7 @@
           Obligatoire
         </mat-checkbox>
 
+        <!-- Sélecteur de type -->
         <mat-form-field appearance="outline" class="ms-3 mb-3">
           <mat-label>Type</mat-label>
           <mat-select
@@ -78,8 +80,48 @@
           </mat-select>
         </mat-form-field>
 
-        <!-- Propositions & Scores (si applicable) -->
-        <ng-container *ngIf="q.inputType !== 'texte' && q.inputType !== 'date'">
+        <!-- ===== 1) ÉVALUATION (seulement labels) ===== -->
+        <ng-container *ngIf="q.inputType === 'evaluation'" class="ps-3 mb-4">
+          <div
+            *ngFor="let opt of q.options; let oi = index"
+            class="d-flex align-items-center mb-2"
+          >
+            <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+              <input
+                matInput
+                placeholder="Texte de la proposition"
+                [(ngModel)]="opt.label"
+                name="optLabelEval{{ i }}_{{ j }}_{{ oi }}"
+                (blur)="updateQuestion(q)"
+              />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="removeOption(q, oi)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div class="text-end">
+            <button
+              mat-mini-fab
+              color="primary"
+              (click)="addOption(q)"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- ===== 2) PROPOSITIONS & SCORES (autres types) ===== -->
+        <ng-container
+          *ngIf="
+            q.inputType !== 'texte'
+            && q.inputType !== 'date'
+            && q.inputType !== 'evaluation'
+          "
+        >
           <div class="d-flex align-items-center mb-1">
             <div class="flex-grow-1"><strong>Proposition</strong></div>
             <div class="px-2"><strong>Score</strong></div>
@@ -100,7 +142,11 @@
               />
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="me-2" style="width:80px">
+            <mat-form-field
+              appearance="outline"
+              class="me-2"
+              style="width: 80px"
+            >
               <input
                 matInput
                 type="number"
@@ -112,17 +158,30 @@
               />
             </mat-form-field>
 
-            <button mat-icon-button color="warn" (click)="removeOption(q, oi)">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="removeOption(q, oi)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </div>
 
-
+          <div class="text-end">
+            <button
+              mat-mini-fab
+              color="primary"
+              (click)="addOption(q)"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
         </ng-container>
       </div>
     </div>
   </mat-card-content>
 
+  <!-- Actions générales -->
   <mat-card-actions align="end">
     <button mat-stroked-button (click)="cancel()">Annuler</button>
     <button

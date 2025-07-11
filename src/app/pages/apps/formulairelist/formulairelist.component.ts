@@ -105,7 +105,7 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
     this.dialog.open<FormulaireViewComponent, ViewDialogData>(
       FormulaireViewComponent,
       {
-        width: '700px',
+        width: '800px',
         maxHeight: '90vh',
         data: { formulaireId: form._id! }
       }
