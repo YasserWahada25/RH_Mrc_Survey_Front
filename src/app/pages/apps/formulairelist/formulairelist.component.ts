@@ -95,9 +95,12 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
   }
 
   /** Duplique un formulaire existant */
-  duplicate(form: Formulaire): void {
-    this.formSvc.duplicate(form._id!).subscribe(() => this.loadForms());
-  }
+ duplicate(form: Formulaire): void {
+  this.formSvc.duplicate(form._id!).subscribe({
+    next: () => this.loadForms(),
+    error: err => console.error('Échec duplication', err)
+  });
+}
 
   /** Affiche / navigue vers la vue détaillée (non implémenté) */
    view(form: Formulaire): void {
@@ -105,8 +108,7 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
     this.dialog.open<FormulaireViewComponent, ViewDialogData>(
       FormulaireViewComponent,
       {
-        width: '800px',
-        maxHeight: '90vh',
+    
         data: { formulaireId: form._id! }
       }
     );
