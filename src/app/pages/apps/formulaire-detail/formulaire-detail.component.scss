@@ -1,0 +1,210 @@
+    .form-detail-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 24px;
+    background: #f5f6fa;
+    border-radius: 8px;
+    }
+
+    .form-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    }
+
+    .form-desc {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 32px;
+    }
+
+    .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 32px 0 16px;
+    color: #333;
+    }
+
+    .question-block {
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+    }
+
+    .question-text {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #222;
+    }
+
+    /* === Textarea === */
+    mat-form-field textarea {
+    background: #fafbfc;
+    border-radius: 4px;
+    font-size: 16px;
+    }
+
+    /* === Radio buttons simples === */
+    .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    }
+
+    .radio-item {
+    font-size: 16px;
+    line-height: 24px;
+    }
+
+    .mat-radio-button .mat-radio-outer-circle {
+    border-width: 2px;
+    border-color: #6c63ff;
+    }
+
+    .mat-radio-button.mat-radio-checked .mat-radio-inner-circle {
+    background-color: #6c63ff;
+    }
+
+    /* === Conteneur global de l’évaluation === */
+    .eval-flex {
+    width: 100%;
+    display: grid;
+    gap: 16px; /* espace entre les lignes */
+    margin-bottom: 24px;
+    }
+
+    /* === Ligne « header » et chaque ligne de critère === */
+    .eval-flex-header,
+    .eval-flex-row {
+    display: grid;
+    grid-template-columns: 250px repeat(5, 1fr);
+    align-items: center;
+    /* bordure sous le header pour la séparation */
+    }
+    .eval-flex-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    }
+
+    /* === Colonne des labels === */
+    .eval-label-col {
+    padding-right: 16px;
+    font-size: 16px;
+    color: #222;
+    }
+
+    /* === Numéros de note dans le header === */
+    .eval-note {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    }
+
+    /* === Pour « éclater » le mat-radio-group dans la grille === */
+    .eval-group {
+    display: contents;
+    }
+
+    /* === Chaque bouton radio centré dans sa cellule === */
+    .eval-radio {
+    justify-self: center;
+    }
+
+
+    /* === Boutons de liste === */
+    .list-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    }
+
+    .list-toggle-item {
+    text-transform: none;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    }
+
+    .mat-button-toggle-checked.list-toggle-item {
+    background-color: #6c63ff !important;
+    color: white !important;
+    border-color: #6c63ff !important;
+    }
+
+    /* === Cases à cocher === */
+    .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    }
+
+    .checkbox-item {
+    font-size: 16px;
+    }
+
+    .checkbox-item .mat-checkbox-frame {
+    border-color: #6c63ff;
+    }
+
+    .checkbox-item.mat-accent
+    .mat-checkbox-checked
+    .mat-checkbox-background {
+    background-color: #6c63ff;
+    }
+
+    /* === Séparateur === */
+    .section-divider {
+    margin: 32px 0;
+    border-color: #e0e0e0;
+    }
+
+    /* Section actions (3 boutons) */
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end; /* ou center selon ton besoin */
+  flex-wrap: wrap;
+}
+
+.btn-repondre,
+.btn-email,
+.btn-qr {
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 4px;
+  text-transform: none;
+}
+
+/* Style spécifique à chaque bouton */
+.btn-repondre {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.btn-email {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.btn-qr {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+/* Hover (facultatif) */
+.btn-repondre:hover {
+  background-color: darken(#4caf50, 10%);
+}
+.btn-email:hover {
+  background-color: darken(#2196f3, 10%);
+}
+.btn-qr:hover {
+  background-color: darken(#ff9800, 10%);
+}

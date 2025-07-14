@@ -18,8 +18,9 @@ import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.com
 import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
 import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
-import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 
+import { FormulaireListComponent } from './formulairelist/formulairelist.component';
+import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -116,6 +117,8 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
+      // === Formulaires ===
       {
         path: 'formulaires',
         component: FormulaireListComponent,
@@ -124,6 +127,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Formulaires' },
+          ],
+        },
+      },
+      {
+        path: 'formulaires/:id',
+        component: FormulaireDetailComponent,
+        data: {
+          title: 'Détail Formulaire',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Détail Formulaire' },
           ],
         },
       },

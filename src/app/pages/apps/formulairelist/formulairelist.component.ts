@@ -15,6 +15,9 @@ import { FormulaireService, Formulaire } from 'src/app/services/formulaire.servi
 import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizard.component';
 import { FormulaireEditComponent, EditDialogData } from '../formulaire-edit/formulaire-edit.component';
 import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/formulaire-view.component';
+import { RouterModule } from '@angular/router'
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 
 @Component({
   selector: 'app-formulaire-list',
@@ -30,6 +33,9 @@ import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/form
     MatInputModule,
     MatPaginatorModule,
     MatCardModule,
+    RouterModule, 
+     MatButtonToggleModule, 
+     
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css'],

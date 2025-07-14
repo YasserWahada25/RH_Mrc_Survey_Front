@@ -1,0 +1,109 @@
+<div class="form-detail-container">
+  <h1 class="form-title">{{ formData.titre }}</h1>
+  <p *ngIf="formData.description" class="form-desc">{{ formData.description }}</p>
+
+  <ng-container *ngFor="let sec of sections; let i = index">
+    <h2 class="section-title">Section {{ i + 1 }} : {{ sec.titre }}</h2>
+
+    <ng-container *ngFor="let q of sec.questions; let j = index">
+      <div class="question-block">
+        <div class="question-text">Q{{ j + 1 }}. {{ q.texte }}</div>
+
+        <!-- 1) TEXTE LIBRE -->
+        <mat-form-field
+          *ngIf="q.inputType === 'texte'"
+          appearance="outline"
+          class="w-100 mb-4"
+        >
+          <textarea
+            matInput
+            [(ngModel)]="answers[q._id]"
+            rows="4"
+            placeholder="Votre réponse…"
+          ></textarea>
+        </mat-form-field>
+
+        <!-- 2) BOUTONS RADIO -->
+        <mat-radio-group
+          *ngIf="q.inputType === 'bouton_radio'"
+          [(ngModel)]="answers[q._id]"
+          class="radio-group mb-4"
+        >
+          <mat-radio-button
+            *ngFor="let opt of q.options"
+            [value]="opt.label"
+            class="radio-item"
+          >
+            {{ opt.label }}
+          </mat-radio-button>
+        </mat-radio-group>
+
+    <!-- 3) ÉVALUATION MATRICIELLE FLEX -->
+<div *ngIf="q.inputType === 'evaluation'" class="eval-flex mb-4">
+  <!-- en-tête des notes -->
+  <div class="eval-flex-header">
+    <span class="eval-label-col"></span>
+    <span *ngFor="let n of [1,2,3,4,5]" class="eval-note">{{ n }}</span>
+  </div>
+  <!-- lignes de chaque critère -->
+  <div class="eval-flex-row" *ngFor="let opt of q.options; let ri = index">
+    <span class="eval-label-col">{{ opt.label }}</span>
+    <mat-radio-group
+      class="eval-group"
+      [(ngModel)]="answers[q._id][ri]"
+    >
+      <mat-radio-button
+        class="eval-radio"
+        *ngFor="let n of [1,2,3,4,5]"
+        [value]="n"
+      ></mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+
+        <!-- 4) LISTE DE BOUTONS -->
+        <mat-button-toggle-group
+          *ngIf="q.inputType === 'liste'"
+          [(ngModel)]="answers[q._id]"
+          class="list-toggle-group mb-4"
+
+        >
+          <mat-button-toggle
+            *ngFor="let opt of q.options"
+            [value]="opt.label"
+            class="list-toggle-item"
+          >
+            {{ opt.label }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <!-- 5) CASES À COCHER -->
+        <div *ngIf="q.inputType === 'case_a_cocher'" class="checkbox-group mb-4">
+          <mat-checkbox
+            *ngFor="let opt of q.options"
+            [checked]="answers[q._id]?.includes(opt.label)"
+            (change)="onCheckboxChange(q._id, opt.label, $event.checked)"
+            class="checkbox-item"
+          >
+            {{ opt.label }}
+          </mat-checkbox>
+        </div>
+      </div>
+    </ng-container>
+
+    <mat-divider *ngIf="i < sections.length - 1" class="section-divider"></mat-divider>
+
+
+  </ng-container>
+      <div class="action-buttons mb-4">
+  <button mat-flat-button class="btn-repondre">
+    Répondre
+  </button>
+  <button mat-flat-button class="btn-email">
+    Envoyer par Email
+  </button>
+  <button mat-flat-button class="btn-qr">
+    Scanner QR code
+  </button>
+</div>
+</div>
