@@ -4,8 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
 import { QuizService } from 'src/app/services/quiz.service';
 import { Lot } from 'src/app/models/quiz.model';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -14,10 +17,11 @@ import {
   ApexTooltip,
   ApexDataLabels,
   ApexPlotOptions,
-  ChartType,
   NgApexchartsModule,
   ApexLegend
 } from 'ng-apexcharts';
+
+import { QuizResultDialogComponent } from './quiz-result-dialog/quiz-result-dialog.component';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -41,7 +45,8 @@ export type ChartOptions = {
     MatButtonModule,
     MatCardModule,
     MatRadioModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    MatDialogModule
   ]
 })
 export class QuizDisqueComponent implements OnInit {
@@ -55,7 +60,7 @@ export class QuizDisqueComponent implements OnInit {
   public columnChartOptionsMinus: ChartOptions;
   public columnChartOptionsDiff: ChartOptions;
 
-  constructor(private quizService: QuizService) {}
+  constructor(private quizService: QuizService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.quizService.getAllLots().subscribe({
@@ -92,6 +97,19 @@ export class QuizDisqueComponent implements OnInit {
       next: (res: any) => {
         this.result = res;
         this.calculateScorePercentages();
+
+        // ✅ ouverture de la popup avec les données du quiz
+        this.dialog.open(QuizResultDialogComponent, {
+          width: '80%',
+          data: {
+            result: this.result,
+            columnChartOptionsPlus: this.columnChartOptionsPlus,
+            columnChartOptionsMinus: this.columnChartOptionsMinus,
+            columnChartOptionsDiff: this.columnChartOptionsDiff,
+            scorePercentagesPlus: this.scorePercentagesPlus,
+            scorePercentagesMinus: this.scorePercentagesMinus
+          }
+        });
       },
       error: (err) => {
         console.error('Erreur soumission :', err);

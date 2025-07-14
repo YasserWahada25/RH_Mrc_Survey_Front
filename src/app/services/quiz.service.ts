@@ -16,4 +16,7 @@ export class QuizService {
   submitAnswers(answers: { lotId: number; plusIndex: number | null; minusIndex: number | null }[]) {
     return this.http.post(`${this.apiUrl}/submit`, { answers });
   }
+
+
+
 }

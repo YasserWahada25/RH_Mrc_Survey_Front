@@ -1,0 +1,8 @@
+.scroll-container {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+  background-color: white;
+  color: black;
+  font-family: Arial, sans-serif;
+}
