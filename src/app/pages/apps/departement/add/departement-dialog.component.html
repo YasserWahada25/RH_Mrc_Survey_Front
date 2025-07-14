@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Ajouter un Département</h2>
+<mat-dialog-content style="max-width: 600px">
+  <form (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nom du département</mat-label>
+      <input matInput [(ngModel)]="nom" name="nom" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Responsable</mat-label>
+      <mat-select [(ngModel)]="responsable" name="responsable" required>
+        <mat-option *ngFor="let u of users" [value]="u._id">
+          {{ u.nom }} ({{ u.email }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="d-flex justify-content-end mt-3">
+      <button mat-flat-button color="primary" type="submit">Ajouter</button>
+      <button mat-stroked-button color="warn" class="ml-2" (click)="close()">Annuler</button>
+    </div>
+  </form>
+</mat-dialog-content>

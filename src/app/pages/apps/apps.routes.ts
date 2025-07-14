@@ -18,6 +18,8 @@ import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.com
 import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
 import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { DepartementComponent } from './departement/departement.component';
+
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 
 
@@ -25,6 +27,17 @@ export const AppsRoutes: Routes = [
   {
     path: '',
     children: [
+      {
+        path: 'departement',
+        component: DepartementComponent,
+        data: {
+          title: 'Département',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'departement' },
+          ],
+        },
+      },
       {
         path: 'chat',
         component: AppChatComponent,

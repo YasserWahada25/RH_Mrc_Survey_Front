@@ -121,6 +121,13 @@ export class AppLandingpageComponent {
       subtitle: 'Create new course',
       link: '/apps/courses',
     },
+       {
+      id: 9,
+      img: '/assets/images/svgs/icon-dd-application.svg',
+      title: 'Courses',
+      subtitle: 'Create new course',
+      link: '/apps/departement',
+    },
   ];
 
   demos: demos[] = [

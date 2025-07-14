@@ -17,9 +17,17 @@ export class UserService {
     });
     return this.http.post(this.apiUrl, userData, { headers });
   }
-   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+getAllUsers(): Observable<User[]> {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('Token manquant');
+    return new Observable(observer => observer.error('Token manquant'));
   }
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.get<User[]>(this.apiUrl, { headers });
+}
+
 
     updateUser(id: string, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data);

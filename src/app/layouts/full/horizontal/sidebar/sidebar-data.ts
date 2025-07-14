@@ -52,6 +52,11 @@ export const navItems: NavItem[] = [
         iconName: 'point',
         route: 'apps/courses',
       },
+         {
+        displayName: 'Departement',
+        iconName: 'point',
+        route: 'apps/departement',
+      },
       {
         displayName: 'Employe',
         iconName: 'point',
