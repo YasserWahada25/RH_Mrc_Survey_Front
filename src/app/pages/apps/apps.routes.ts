@@ -1,26 +1,24 @@
 import { Routes } from '@angular/router';
 
-import { AppChatComponent } from './chat/chat.component';
-import { AppEmailComponent } from './email/email.component';
-import { DetailComponent } from './email/detail/detail.component';
-import { AppCoursesComponent } from './courses/courses.component';
-import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
-import { AppEmployeeComponent } from './employee/employee.component';
-import { AppBlogsComponent } from './blogs/blogs.component';
-import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import { AppContactComponent } from './contact/contact.component';
-import { AppNotesComponent } from './notes/notes.component';
-import { AppTodoComponent } from './todo/todo.component';
-import { AppPermissionComponent } from './permission/permission.component';
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
-import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
-import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
-import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
-import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { AppChatComponent }              from './chat/chat.component';
+import { AppEmailComponent }             from './email/email.component';
+import { DetailComponent }               from './email/detail/detail.component';
+import { AppCoursesComponent }           from './courses/courses.component';
+import { AppCourseDetailComponent }      from './courses/course-detail/course-detail.component';
+import { AppEmployeeComponent }          from './employee/employee.component';
+import { AppBlogsComponent }             from './blogs/blogs.component';
+import { AppBlogDetailsComponent }       from './blogs/details/details.component';
+import { AppContactComponent }           from './contact/contact.component';
+import { AppNotesComponent }             from './notes/notes.component';
+import { AppTodoComponent }              from './todo/todo.component';
+import { AppPermissionComponent }        from './permission/permission.component';
+import { AppTaskboardComponent }         from './taskboard/taskboard.component';
+import { AppFullcalendarComponent }      from './fullcalendar/fullcalendar.component';
 
-import { FormulaireListComponent } from './formulairelist/formulairelist.component';
-import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
+import { FormulaireListComponent }       from './formulairelist/formulairelist.component';
+import { FormulaireDetailComponent }     from './formulaire-detail/formulaire-detail.component';
+// Nouveau module Réponses
+import { AppReponsesListComponent }      from './reponses/reponse-list/reponses-list.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -142,6 +140,19 @@ export const AppsRoutes: Routes = [
         },
       },
 
+      // === Réponses (module simplifié) ===
+      {
+        path: 'reponses',
+        component: AppReponsesListComponent,
+        data: {
+          title: 'Réponses',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Réponses' },
+          ],
+        },
+      },
+
       {
         path: 'contacts',
         component: AppContactComponent,
@@ -205,50 +216,6 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Employee' },
-          ],
-        },
-      },
-      {
-        path: 'invoice',
-        component: AppInvoiceListComponent,
-        data: {
-          title: 'Invoice',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Invoice' },
-          ],
-        },
-      },
-      {
-        path: 'addInvoice',
-        component: AppAddInvoiceComponent,
-        data: {
-          title: 'Add Invoice',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Add Invoice' },
-          ],
-        },
-      },
-      {
-        path: 'viewInvoice/:id',
-        component: AppInvoiceViewComponent,
-        data: {
-          title: 'View Invoice',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'View Invoice' },
-          ],
-        },
-      },
-      {
-        path: 'editinvoice/:id',
-        component: AppEditInvoiceComponent,
-        data: {
-          title: 'Edit Invoice',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Edit Invoice' },
           ],
         },
       },

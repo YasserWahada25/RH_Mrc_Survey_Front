@@ -57,11 +57,11 @@ export const navItems: NavItem[] = [
     iconName: 'file-invoice',
     route: 'apps/formulaires',
   },
-  {
-    displayName: 'Invoice',
-    iconName: 'file-invoice',
-    route: 'apps/invoice',
-  },
+{
+  displayName: 'Réponses',
+  iconName: 'message-2',   
+  route: 'apps/reponses',
+},
   {
     displayName: 'ToDo',
     iconName: 'edit',
