@@ -117,7 +117,7 @@ export const AppsRoutes: Routes = [
         },
       },
       {
-        path: 'tickets',
+        path: 'formulaires',
         component: FormulaireListComponent,
         data: {
           title: 'Formulaires',
