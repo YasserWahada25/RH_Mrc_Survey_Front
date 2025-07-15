@@ -19,6 +19,10 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+// pour histogramme
+import { provideCharts } from 'ng2-charts'; // ✅ Ajout ici
+
+
 // icons
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
@@ -38,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideCharts(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,

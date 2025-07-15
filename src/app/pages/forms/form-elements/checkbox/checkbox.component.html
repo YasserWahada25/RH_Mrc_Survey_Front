@@ -1,7 +1,8 @@
-<mat-card class="cardWithShadow theme-card">
+ <mat-card class="cardWithShadow theme-card">
   <mat-card-header>
     <mat-card-title class="m-b-0">Quiz Disque</mat-card-title>
   </mat-card-header>
+
   <mat-card-content class="b-t-1">
     <ng-container *ngFor="let lot of lots; let i = index">
       <mat-card class="b-1 m-b-16 shadow-none">
@@ -29,9 +30,63 @@
         </mat-card-content>
       </mat-card>
     </ng-container>
-    
+
     <button mat-raised-button color="primary" (click)="submitQuiz()">
       Soumettre le Quiz
     </button>
+
+ <div *ngIf="result" class="m-t-32">
+  <h3>Résultat :</h3>
+  <ul>
+    <li *ngFor="let score of [1, 2, 3, 4, 5]">
+      Score {{ score }} :
+      + {{ result.plus[score] || 0 }} fois ({{ scorePercentagesPlus[score] || 0 }}%) |
+      - {{ result.minus[score] || 0 }} fois ({{ scorePercentagesMinus[score] || 0 }}%)
+    </li>
+  </ul>
+
+  <h3 class="m-t-32">Adapté ( Histogramme des Scores +)</h3>
+  <apx-chart
+    *ngIf="columnChartOptionsPlus.series.length"
+    [series]="columnChartOptionsPlus.series"
+    [chart]="columnChartOptionsPlus.chart"
+    [xaxis]="columnChartOptionsPlus.xaxis"
+    [yaxis]="columnChartOptionsPlus.yaxis"
+    [tooltip]="columnChartOptionsPlus.tooltip"
+    [dataLabels]="columnChartOptionsPlus.dataLabels"
+  ></apx-chart>
+
+  <h3 class="m-t-32">Naturel ( Histogramme des Scores -)</h3>
+  <apx-chart
+    *ngIf="columnChartOptionsMinus.series.length"
+    [series]="columnChartOptionsMinus.series"
+    [chart]="columnChartOptionsMinus.chart"
+    [xaxis]="columnChartOptionsMinus.xaxis"
+    [yaxis]="columnChartOptionsMinus.yaxis"
+    [tooltip]="columnChartOptionsMinus.tooltip"
+    [dataLabels]="columnChartOptionsMinus.dataLabels"
+  ></apx-chart>
+
+
+  <h3 class="m-t-32">Delta ( Écart entre Scores + et - )</h3>
+<apx-chart
+  *ngIf="columnChartOptionsDiff.series.length"
+  [series]="columnChartOptionsDiff.series"
+  [chart]="columnChartOptionsDiff.chart"
+  [xaxis]="columnChartOptionsDiff.xaxis"
+  [yaxis]="columnChartOptionsDiff.yaxis"
+  [tooltip]="columnChartOptionsDiff.tooltip"
+  [dataLabels]="columnChartOptionsDiff.dataLabels"
+  [colors]="columnChartOptionsDiff.colors || []"
+></apx-chart>
+
+
+  
+</div>
+
+
+
+
+
   </mat-card-content>
-</mat-card>
+</mat-card> 

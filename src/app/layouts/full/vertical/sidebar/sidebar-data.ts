@@ -5,7 +5,7 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
-    displayName: 'Analytical',
+    displayName: 'Yasser',
     iconName: 'aperture',
     route: '/dashboards/dashboard1',
   },
@@ -18,9 +18,9 @@ export const navItems: NavItem[] = [
     navCap: 'Apps',
   },
   {
-    displayName: 'Chat',
-    iconName: 'message-2',
-    route: 'apps/chat',
+    displayName: 'Quiz Disque',
+    iconName: 'checklist',  
+    route: 'apps/QuizDisque',
   },
   {
     displayName: 'Calendar',

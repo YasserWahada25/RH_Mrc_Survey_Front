@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+<<<<<<< HEAD
 import { AppChatComponent }              from './chat/chat.component';
 import { AppEmailComponent }             from './email/email.component';
 import { DetailComponent }               from './email/detail/detail.component';
@@ -14,6 +15,29 @@ import { AppTodoComponent }              from './todo/todo.component';
 import { AppPermissionComponent }        from './permission/permission.component';
 import { AppTaskboardComponent }         from './taskboard/taskboard.component';
 import { AppFullcalendarComponent }      from './fullcalendar/fullcalendar.component';
+=======
+import { AppChatComponent } from './chat/chat.component';
+import { AppEmailComponent } from './email/email.component';
+import { DetailComponent } from './email/detail/detail.component';
+import { AppCoursesComponent } from './courses/courses.component';
+import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
+import { AppEmployeeComponent } from './employee/employee.component';
+import { AppBlogsComponent } from './blogs/blogs.component';
+import { AppBlogDetailsComponent } from './blogs/details/details.component';
+import { AppContactComponent } from './contact/contact.component';
+import { AppNotesComponent } from './notes/notes.component';
+import { AppTodoComponent } from './todo/todo.component';
+import { AppPermissionComponent } from './permission/permission.component';
+import { AppTaskboardComponent } from './taskboard/taskboard.component';
+// import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
+import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
+import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
+import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
+import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { FormulaireListComponent } from './formulairelist/formulairelist.component';
+import { QuizDisqueComponent  } from './quiz-disque/quiz-disque.component';
+
+>>>>>>> yasser
 
 import { FormulaireListComponent }       from './formulairelist/formulairelist.component';
 import { FormulaireDetailComponent }     from './formulaire-detail/formulaire-detail.component';
@@ -35,17 +59,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'calendar',
-        component: AppFullcalendarComponent,
-        data: {
-          title: 'Calendar',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Calendar' },
-          ],
-        },
-      },
+
       {
         path: 'notes',
         component: AppNotesComponent,
@@ -153,6 +167,18 @@ export const AppsRoutes: Routes = [
         },
       },
 
+          {
+        path: 'QuizDisque',
+        component: QuizDisqueComponent,
+        data: {
+          title: 'Quiz Disque',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Quiz Disque' },
+          ],
+        },
+         },
+
       {
         path: 'contacts',
         component: AppContactComponent,
@@ -164,6 +190,10 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+      
+
+
+
       {
         path: 'courses',
         component: AppCoursesComponent,
