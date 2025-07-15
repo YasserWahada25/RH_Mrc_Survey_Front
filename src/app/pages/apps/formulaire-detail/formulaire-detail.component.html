@@ -1,3 +1,5 @@
+<!-- src/app/pages/apps/formulaire-detail/formulaire-detail.component.html -->
+
 <mat-card class="cardWithShadow p-24">
   <!-- Titre & description -->
   <h1 class="form-title">{{ formData.titre }}</h1>
@@ -102,7 +104,12 @@
         Scanner QR code
       </button>
     </ng-container>
-    <button mat-flat-button color="primary" *ngIf="isGuestView">
+    <button
+      mat-flat-button
+      color="primary"
+      *ngIf="isGuestView"
+      (click)="submitResponses()"
+    >
       Répondre
     </button>
   </div>

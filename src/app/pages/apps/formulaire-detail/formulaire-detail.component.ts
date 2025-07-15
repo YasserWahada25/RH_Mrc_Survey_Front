@@ -1,3 +1,5 @@
+// src/app/pages/apps/formulaire-detail/formulaire-detail.component.ts
+
 import { Component, OnInit }                    from '@angular/core';
 import { ActivatedRoute }                       from '@angular/router';
 import { CommonModule }                         from '@angular/common';
@@ -21,6 +23,7 @@ import { SectionService }                       from 'src/app/services/section.s
 import { QuestionService }                      from 'src/app/services/question.service';
 import { FormEmailService }                     from 'src/app/services/form-email.service';
 import { UserSelectDialogComponent }            from './user-select-dialog/user-select-dialog.component';
+import { ResponseService }                      from 'src/app/services/response.service';
 
 @Component({
   selector: 'app-formulaire-detail',
@@ -47,7 +50,7 @@ export class FormulaireDetailComponent implements OnInit {
   formData!: any;
   sections: Array<any & { questions: any[] }> = [];
   answers: Record<string, any> = {};
-  isGuestView = false;  // Ajouté pour distinguer mode invité/propriétaire
+  isGuestView = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,7 +58,8 @@ export class FormulaireDetailComponent implements OnInit {
     private secSvc: SectionService,
     private qSvc: QuestionService,
     private dialog: MatDialog,
-    private emailSvc: FormEmailService
+    private emailSvc: FormEmailService,
+    private respSvc: ResponseService
   ) {}
 
   ngOnInit(): void {
@@ -146,7 +150,24 @@ export class FormulaireDetailComponent implements OnInit {
   }
 
   openQrScanner(): void {
-    // À implémenter si nécessaire
     alert('Scanner QR non implémenté.');
+  }
+
+  submitResponses(): void {
+    const userId = this.isGuestView ? 'guest' : 'owner';
+    const answersArray = Object.entries(this.answers).map(
+      ([questionId, answer]) => {
+        const sec = this.sections.find(s =>
+          s.questions.some((q: any) => q._id === questionId)
+        )!;
+        return {
+          sectionId: sec._id,
+          questionId,
+          answer
+        };
+      }
+    );
+    this.respSvc.create(this.formData._id, userId, answersArray)
+      .subscribe(() => alert('Réponses enregistrées !'));
   }
 }
