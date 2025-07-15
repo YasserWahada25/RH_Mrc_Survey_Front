@@ -1,40 +1,36 @@
-<mat-card class="cardWithShadow theme-card">
-  <mat-card-header>
-    <mat-card-title class="m-b-0">Quiz Disque</mat-card-title>
-  </mat-card-header>
+  <mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+      <mat-card-title class="m-b-0">Quiz Disque</mat-card-title>
+    </mat-card-header>
 
-  <mat-card-content class="b-t-1">
-    <!-- Boucle sur les lots/questions -->
-    <ng-container *ngFor="let lot of lots; let i = index">
-      <mat-card class="b-1 m-b-16 shadow-none">
-        <mat-card-content>
-          <div *ngFor="let q of lot.questions; let j = index" class="m-b-8">
-            <div class="question-box">
-              <span><strong>{{ q.text }}</strong></span>
-              <div class="choice-group">
-                <mat-radio-group
-                  [(ngModel)]="answers[i].plusIndex"
-                  (change)="setPlus(i, j)"
-                >
-                  <mat-radio-button [value]="j"> + </mat-radio-button>
-                </mat-radio-group>
+    <mat-card-content class="b-t-1">
+      <!-- Boucle sur les lots/questions -->
+      <ng-container *ngFor="let lot of lots; let i = index">
+        <mat-card class="b-1 m-b-16 shadow-none">
+          <mat-card-content>
+<div *ngFor="let q of lot.questions; let j = index" class="question-row">
+  <div class="question-text">
+    <strong>{{ q.text }}</strong>
+  </div>
 
-                <mat-radio-group
-                  [(ngModel)]="answers[i].minusIndex"
-                  (change)="setMinus(i, j)"
-                >
-                  <mat-radio-button [value]="j"> - </mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </ng-container>
+  <div class="radio-buttons">
+    <mat-radio-group [(ngModel)]="answers[i].plusIndex" (change)="setPlus(i, j)">
+      <mat-radio-button class="custom-radio" [value]="j"><span class="radio-label">+</span></mat-radio-button>
+    </mat-radio-group>
 
-    <!-- Bouton de validation -->
-    <button mat-raised-button color="primary" (click)="submitQuiz()">
-      Soumettre le Quiz
-    </button>
-  </mat-card-content>
-</mat-card>
+    <mat-radio-group [(ngModel)]="answers[i].minusIndex" (change)="setMinus(i, j)">
+      <mat-radio-button class="custom-radio" [value]="j"><span class="radio-label">-</span></mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+
+      <!-- Bouton de validation -->
+      <button mat-raised-button color="primary" (click)="submitQuiz()">
+        Soumettre le Quiz
+      </button>
+    </mat-card-content>
+  </mat-card>

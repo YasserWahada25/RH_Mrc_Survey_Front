@@ -38,6 +38,8 @@ export type ChartOptions = {
 @Component({
   selector: 'app-quiz-disque',
   templateUrl: './quiz-disque.component.html',
+  styleUrls: ['./quiz-disque.component.css'] ,
+
   standalone: true,
   imports: [
     CommonModule,

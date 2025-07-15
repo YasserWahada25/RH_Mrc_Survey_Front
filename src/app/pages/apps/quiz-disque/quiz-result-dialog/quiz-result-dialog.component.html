@@ -9,51 +9,45 @@
     </li>
   </ul>
 
-  <h3>Adapté (Histogramme des Scores +)</h3>
-  <div id="chart-plus">
-    <apx-chart
-      *ngIf="data.columnChartOptionsPlus.series.length"
-      [series]="data.columnChartOptionsPlus.series"
-      [chart]="data.columnChartOptionsPlus.chart"
-      [xaxis]="data.columnChartOptionsPlus.xaxis"
-      [yaxis]="data.columnChartOptionsPlus.yaxis"
-      [tooltip]="data.columnChartOptionsPlus.tooltip"
-      [dataLabels]="data.columnChartOptionsPlus.dataLabels"
-      [plotOptions]="data.columnChartOptionsPlus.plotOptions"
-    ></apx-chart>
-  </div>
+  <h3 class="m-t-32">Adapté (Histogramme des Scores +)</h3>
+  <apx-chart
+    *ngIf="data.columnChartOptionsPlus.series.length"
+    [series]="data.columnChartOptionsPlus.series"
+    [chart]="data.columnChartOptionsPlus.chart"
+    [xaxis]="data.columnChartOptionsPlus.xaxis"
+    [yaxis]="data.columnChartOptionsPlus.yaxis"
+    [tooltip]="data.columnChartOptionsPlus.tooltip"
+    [dataLabels]="data.columnChartOptionsPlus.dataLabels"
+    [plotOptions]="data.columnChartOptionsPlus.plotOptions"
+  ></apx-chart>
 
-  <h3>Naturel (Histogramme des Scores -)</h3>
-  <div id="chart-minus">
-    <apx-chart
-      *ngIf="data.columnChartOptionsMinus.series.length"
-      [series]="data.columnChartOptionsMinus.series"
-      [chart]="data.columnChartOptionsMinus.chart"
-      [xaxis]="data.columnChartOptionsMinus.xaxis"
-      [yaxis]="data.columnChartOptionsMinus.yaxis"
-      [tooltip]="data.columnChartOptionsMinus.tooltip"
-      [dataLabels]="data.columnChartOptionsMinus.dataLabels"
-      [plotOptions]="data.columnChartOptionsMinus.plotOptions"
-    ></apx-chart>
-  </div>
+  <h3 class="m-t-32">Naturel (Histogramme des Scores -)</h3>
+  <apx-chart
+    *ngIf="data.columnChartOptionsMinus.series.length"
+    [series]="data.columnChartOptionsMinus.series"
+    [chart]="data.columnChartOptionsMinus.chart"
+    [xaxis]="data.columnChartOptionsMinus.xaxis"
+    [yaxis]="data.columnChartOptionsMinus.yaxis"
+    [tooltip]="data.columnChartOptionsMinus.tooltip"
+    [dataLabels]="data.columnChartOptionsMinus.dataLabels"
+    [plotOptions]="data.columnChartOptionsMinus.plotOptions"
+  ></apx-chart>
 
-  <h3>Delta (Écart entre + et -)</h3>
-  <div id="chart-diff">
-    <apx-chart
-      *ngIf="data.columnChartOptionsDiff.series.length"
-      [series]="data.columnChartOptionsDiff.series"
-      [chart]="data.columnChartOptionsDiff.chart"
-      [xaxis]="data.columnChartOptionsDiff.xaxis"
-      [yaxis]="data.columnChartOptionsDiff.yaxis"
-      [tooltip]="data.columnChartOptionsDiff.tooltip"
-      [dataLabels]="data.columnChartOptionsDiff.dataLabels"
-      [plotOptions]="data.columnChartOptionsDiff.plotOptions"
-      [colors]="data.columnChartOptionsDiff.colors || []"
-    ></apx-chart>
-  </div>
+  <h3 class="m-t-32">Delta (Écart entre + et -)</h3>
+  <apx-chart
+    *ngIf="data.columnChartOptionsDiff.series.length"
+    [series]="data.columnChartOptionsDiff.series"
+    [chart]="data.columnChartOptionsDiff.chart"
+    [xaxis]="data.columnChartOptionsDiff.xaxis"
+    [yaxis]="data.columnChartOptionsDiff.yaxis"
+    [tooltip]="data.columnChartOptionsDiff.tooltip"
+    [dataLabels]="data.columnChartOptionsDiff.dataLabels"
+    [plotOptions]="data.columnChartOptionsDiff.plotOptions"
+    [colors]="data.columnChartOptionsDiff.colors || []"
+  ></apx-chart>
 </div>
 
-<div style="text-align: center; margin-top: 24px;">
+<!-- <div style="text-align: center; margin-top: 24px;">
   <button mat-raised-button color="primary" (click)="downloadPDF()">📥 Télécharger en PDF</button>
   <button mat-button color="warn" (click)="close()">Fermer</button>
-</div>
+</div> -->
