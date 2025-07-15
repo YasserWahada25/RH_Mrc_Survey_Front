@@ -15,7 +15,7 @@ export class ResponseService {
 
   /**
    * Enregistre les réponses pour un formulaire donné
-   * @param formId  ID du formulaire
+   * @param formId  ID du formulair
    * @param userId  ID de l’utilisateur
    * @param answers Tableau d’objets { sectionId, questionId, answer }
    */
