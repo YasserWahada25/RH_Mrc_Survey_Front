@@ -107,15 +107,19 @@ export class FormulaireDetailComponent implements OnInit {
     this.answers[questionId] = arr;
   }
 
-  openMailDialog() {
+openMailDialog(): void {
   const ref = this.dialog.open(UserSelectDialogComponent, {
     width: '400px',
     data: { formId: this.formData._id }
   });
-  ref.afterClosed().subscribe(userId => {
+
+  ref.afterClosed().subscribe((userId: string) => {
     if (userId) {
       this.emailSvc.sendFormEmail(this.formData._id, userId)
-        .subscribe(() => alert('Email envoyé !'));
+        .subscribe({
+          next: () => alert('Email envoyé !'),
+          error: err => alert('Erreur envoi e-mail : ' + err.message)
+        });
     }
   });
 }
