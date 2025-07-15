@@ -13,15 +13,11 @@ import { MatCardModule } from '@angular/material/card';
 
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizard.component';
-<<<<<<< HEAD
 import { FormulaireEditComponent, EditDialogData } from '../formulaire-edit/formulaire-edit.component';
 import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/formulaire-view.component';
 import { RouterModule } from '@angular/router'
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-=======
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
->>>>>>> maher
 
 @Component({
   selector: 'app-formulaire-list',
@@ -37,13 +33,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatInputModule,
     MatPaginatorModule,
     MatCardModule,
-<<<<<<< HEAD
     RouterModule, 
      MatButtonToggleModule, 
      
-=======
-    TranslateModule
->>>>>>> maher
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css'],
@@ -55,21 +47,13 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-<<<<<<< HEAD
   constructor(
     private dialog: MatDialog,
     private formSvc: FormulaireService
   ) {}
-=======
-  constructor(private dialog: MatDialog, private formSvc: FormulaireService, private translate: TranslateService ) {}
->>>>>>> maher
 
   ngOnInit(): void {
     this.loadForms();
-      console.log('Current lang:', this.translate.currentLang);
-  this.translate.get('FORM_DIALOG.CREATE_TITLE').subscribe(translation => {
-    console.log('Translation result:', translation);
-  });
   }
 
   ngAfterViewInit(): void {
