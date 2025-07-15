@@ -48,6 +48,12 @@ delete(id: string): Observable<void> {
     return this.http.post<Formulaire>(`${this.url}/${id}/duplicate`, {});
   }
 
+  getByToken(id: string, token: string) {
+  return this.http.get<{ form: Formulaire, sections: any[] }>(
+    `${this.url}/${id}/by-token/${token}`
+  );
+}
+
   
   
 }

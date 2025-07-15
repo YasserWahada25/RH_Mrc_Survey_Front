@@ -1,28 +1,26 @@
-// src/app/pages/apps/formulaire-detail/formulaire-detail.component.ts
+import { Component, OnInit }                    from '@angular/core';
+import { ActivatedRoute }                       from '@angular/router';
+import { CommonModule }                         from '@angular/common';
+import { FormsModule }                          from '@angular/forms';
+import { MatCardModule }                        from '@angular/material/card';
+import { MatDividerModule }                     from '@angular/material/divider';
+import { MatFormFieldModule }                   from '@angular/material/form-field';
+import { MatInputModule }                       from '@angular/material/input';
+import { MatCheckboxModule }                    from '@angular/material/checkbox';
+import { MatRadioModule }                       from '@angular/material/radio';
+import { MatButtonModule }                      from '@angular/material/button';
+import { MatIconModule }                        from '@angular/material/icon';
+import { MatButtonToggleModule }                from '@angular/material/button-toggle';
+import { MatDialogModule, MatDialog }           from '@angular/material/dialog';
 
-import { Component, OnInit }      from '@angular/core';
-import { ActivatedRoute }         from '@angular/router';
-import { CommonModule }           from '@angular/common';
-import { FormsModule }            from '@angular/forms';
-import { MatCardModule }          from '@angular/material/card';
-import { MatDividerModule }       from '@angular/material/divider';
-import { MatFormFieldModule }     from '@angular/material/form-field';
-import { MatInputModule }         from '@angular/material/input';
-import { MatCheckboxModule }      from '@angular/material/checkbox';
-import { MatRadioModule }         from '@angular/material/radio';
-import { MatButtonModule }        from '@angular/material/button';
-import { MatIconModule }          from '@angular/material/icon';
-import { MatButtonToggleModule }  from '@angular/material/button-toggle';
-import { MatDialogModule, MatDialog }     from '@angular/material/dialog';
+import { forkJoin, of }                         from 'rxjs';
+import { switchMap, map }                       from 'rxjs/operators';
 
-import { FormulaireService }      from 'src/app/services/formulaire.service';
-import { SectionService }         from 'src/app/services/section.service';
-import { QuestionService }        from 'src/app/services/question.service';
-import { FormEmailService }       from 'src/app/services/form-email.service';
-import { UserSelectDialogComponent } from './user-select-dialog/user-select-dialog.component';
-
-import { forkJoin, of }           from 'rxjs';
-import { switchMap, map }         from 'rxjs/operators';
+import { FormulaireService }                    from 'src/app/services/formulaire.service';
+import { SectionService }                       from 'src/app/services/section.service';
+import { QuestionService }                      from 'src/app/services/question.service';
+import { FormEmailService }                     from 'src/app/services/form-email.service';
+import { UserSelectDialogComponent }            from './user-select-dialog/user-select-dialog.component';
 
 @Component({
   selector: 'app-formulaire-detail',
@@ -49,6 +47,7 @@ export class FormulaireDetailComponent implements OnInit {
   formData!: any;
   sections: Array<any & { questions: any[] }> = [];
   answers: Record<string, any> = {};
+  isGuestView = false;  // Ajouté pour distinguer mode invité/propriétaire
 
   constructor(
     private route: ActivatedRoute,
@@ -60,17 +59,27 @@ export class FormulaireDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const id    = this.route.snapshot.paramMap.get('id')!;
+    const token = this.route.snapshot.queryParamMap.get('token');
+
+    if (token) {
+      this.isGuestView = true;
+      this.loadGuestView(id, token);
+    } else {
+      this.isGuestView = false;
+      this.loadOwnerView(id);
+    }
+  }
+
+  private loadOwnerView(id: string): void {
     this.route.paramMap.pipe(
-      switchMap(params => this.formSvc.getById(params.get('id')!)),
+      switchMap(() => this.formSvc.getById(id)),
       switchMap(form => {
         this.formData = form;
-        return this.secSvc.findByFormulaire(form._id!);
+        return this.secSvc.findByFormulaire(id);
       }),
       switchMap(secs => {
-        if (!secs.length) {
-          this.sections = [];
-          return of([]);
-        }
+        if (!secs.length) return of([]);
         return forkJoin(
           secs.map(sec =>
             this.qSvc.findBySection(sec._id!).pipe(
@@ -82,6 +91,17 @@ export class FormulaireDetailComponent implements OnInit {
     ).subscribe(secs => {
       this.sections = secs;
       this.initAnswers();
+    });
+  }
+
+  private loadGuestView(id: string, token: string): void {
+    this.formSvc.getByToken(id, token).subscribe({
+      next: ({ form, sections }) => {
+        this.formData = form;
+        this.sections = sections;
+        this.initAnswers();
+      },
+      error: () => alert('Lien invalide ou expiré')
     });
   }
 
@@ -115,7 +135,6 @@ export class FormulaireDetailComponent implements OnInit {
       width: '400px',
       data: { formId: this.formData._id }
     });
-
     ref.afterClosed().subscribe((userId: string) => {
       if (userId) {
         this.emailSvc.sendFormEmail(this.formData._id, userId).subscribe({
@@ -124,5 +143,10 @@ export class FormulaireDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  openQrScanner(): void {
+    // À implémenter si nécessaire
+    alert('Scanner QR non implémenté.');
   }
 }

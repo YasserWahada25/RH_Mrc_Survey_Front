@@ -1,15 +1,22 @@
-<div class="form-detail-container">
+<mat-card class="cardWithShadow p-24">
+  <!-- Titre & description -->
   <h1 class="form-title">{{ formData.titre }}</h1>
-  <p *ngIf="formData.description" class="form-desc">{{ formData.description }}</p>
+  <p *ngIf="formData.description" class="form-desc">
+    {{ formData.description }}
+  </p>
+  <mat-divider class="my-16"></mat-divider>
 
+  <!-- Sections & questions -->
   <ng-container *ngFor="let sec of sections; let i = index">
-    <h2 class="section-title">Section {{ i + 1 }} : {{ sec.titre }}</h2>
+    <h2 class="section-title">
+      Section {{ i + 1 }} : {{ sec.titre }}
+    </h2>
 
     <ng-container *ngFor="let q of sec.questions; let j = index">
-      <div class="question-block">
+      <div class="question-block mb-12">
         <div class="question-text">Q{{ j + 1 }}. {{ q.texte }}</div>
 
-        <!-- 1) TEXTE LIBRE -->
+        <!-- Texte libre -->
         <mat-form-field
           *ngIf="q.inputType === 'texte'"
           appearance="outline"
@@ -23,7 +30,7 @@
           ></textarea>
         </mat-form-field>
 
-        <!-- 2) BOUTONS RADIO -->
+        <!-- Boutons radio -->
         <mat-radio-group
           *ngIf="q.inputType === 'bouton_radio'"
           [(ngModel)]="answers[q._id]"
@@ -33,81 +40,70 @@
             *ngFor="let opt of q.options"
             [value]="opt.label"
             class="radio-item"
-          >
-            {{ opt.label }}
-          </mat-radio-button>
+          >{{ opt.label }}</mat-radio-button>
         </mat-radio-group>
 
-    <!-- 3) ÉVALUATION MATRICIELLE FLEX -->
-<div *ngIf="q.inputType === 'evaluation'" class="eval-flex mb-4">
-  <!-- en-tête des notes -->
-  <div class="eval-flex-header">
-    <span class="eval-label-col"></span>
-    <span *ngFor="let n of [1,2,3,4,5]" class="eval-note">{{ n }}</span>
-  </div>
-  <!-- lignes de chaque critère -->
-  <div class="eval-flex-row" *ngFor="let opt of q.options; let ri = index">
-    <span class="eval-label-col">{{ opt.label }}</span>
-    <mat-radio-group
-      class="eval-group"
-      [(ngModel)]="answers[q._id][ri]"
-    >
-      <mat-radio-button
-        class="eval-radio"
-        *ngFor="let n of [1,2,3,4,5]"
-        [value]="n"
-      ></mat-radio-button>
-    </mat-radio-group>
-  </div>
-</div>
+        <!-- Évaluation matricielle -->
+        <div *ngIf="q.inputType === 'evaluation'" class="eval-flex mb-4">
+          <div class="eval-flex-header">
+            <span class="eval-label-col"></span>
+            <span *ngFor="let n of [1,2,3,4,5]" class="eval-note">{{ n }}</span>
+          </div>
+          <div class="eval-flex-row" *ngFor="let opt of q.options; let ri = index">
+            <span class="eval-label-col">{{ opt.label }}</span>
+            <mat-radio-group
+              class="eval-group"
+              [(ngModel)]="answers[q._id][ri]"
+            >
+              <mat-radio-button
+                *ngFor="let n of [1,2,3,4,5]"
+                [value]="n"
+                class="eval-radio"
+              ></mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
 
-        <!-- 4) LISTE DE BOUTONS -->
+        <!-- Liste de boutons -->
         <mat-button-toggle-group
           *ngIf="q.inputType === 'liste'"
           [(ngModel)]="answers[q._id]"
           class="list-toggle-group mb-4"
-
         >
           <mat-button-toggle
             *ngFor="let opt of q.options"
             [value]="opt.label"
             class="list-toggle-item"
-          >
-            {{ opt.label }}
-          </mat-button-toggle>
+          >{{ opt.label }}</mat-button-toggle>
         </mat-button-toggle-group>
 
-        <!-- 5) CASES À COCHER -->
+        <!-- Cases à cocher -->
         <div *ngIf="q.inputType === 'case_a_cocher'" class="checkbox-group mb-4">
           <mat-checkbox
             *ngFor="let opt of q.options"
             [checked]="answers[q._id]?.includes(opt.label)"
             (change)="onCheckboxChange(q._id, opt.label, $event.checked)"
             class="checkbox-item"
-          >
-            {{ opt.label }}
-          </mat-checkbox>
+          >{{ opt.label }}</mat-checkbox>
         </div>
       </div>
     </ng-container>
 
-    <mat-divider *ngIf="i < sections.length - 1" class="section-divider"></mat-divider>
-
-
+    <mat-divider class="my-16" *ngIf="i < sections.length - 1"></mat-divider>
   </ng-container>
-      <div class="action-buttons mb-4">
-  <button mat-flat-button class="btn-repondre">
-    Répondre
-  </button>
-<button
-  mat-flat-button
-  color="primary"
-  (click)="openMailDialog()"
->
-  Envoyer par Email
-</button>
-  <button mat-flat-button class="btn-qr">
-    Scanner QR code
-  </button>
-</div>
-</div>
+
+  <!-- Boutons d’action -->
+  <div class="action-buttons text-center mt-24">
+    <ng-container *ngIf="!isGuestView">
+      <button mat-flat-button color="primary" (click)="openMailDialog()">
+        Envoyer par Email
+      </button>
+      <button mat-flat-button color="accent" (click)="openQrScanner()">
+        Scanner QR code
+      </button>
+    </ng-container>
+    <button mat-flat-button color="primary" *ngIf="isGuestView">
+      Répondre
+    </button>
+  </div>
+</mat-card>
