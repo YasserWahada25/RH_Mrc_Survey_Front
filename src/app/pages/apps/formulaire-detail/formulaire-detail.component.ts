@@ -1,26 +1,28 @@
-import { Component, OnInit }         from '@angular/core';
-import { ActivatedRoute }            from '@angular/router';
-import { CommonModule }              from '@angular/common';
-import { FormsModule }               from '@angular/forms';
-import { MatCardModule }             from '@angular/material/card';
-import { MatDividerModule }          from '@angular/material/divider';
-import { MatFormFieldModule }        from '@angular/material/form-field';
-import { MatInputModule }            from '@angular/material/input';
-import { MatCheckboxModule }         from '@angular/material/checkbox';
-import { MatRadioModule }            from '@angular/material/radio';
-import { MatButtonModule }           from '@angular/material/button';
-import { MatIconModule }             from '@angular/material/icon';
-import { MatButtonToggleModule }     from '@angular/material/button-toggle';
+// src/app/pages/apps/formulaire-detail/formulaire-detail.component.ts
 
-import { FormulaireService }         from 'src/app/services/formulaire.service';
-import { SectionService }            from 'src/app/services/section.service';
-import { QuestionService }           from 'src/app/services/question.service';
-import { forkJoin, of }              from 'rxjs';
-import { switchMap, map }            from 'rxjs/operators';
+import { Component, OnInit }      from '@angular/core';
+import { ActivatedRoute }         from '@angular/router';
+import { CommonModule }           from '@angular/common';
+import { FormsModule }            from '@angular/forms';
+import { MatCardModule }          from '@angular/material/card';
+import { MatDividerModule }       from '@angular/material/divider';
+import { MatFormFieldModule }     from '@angular/material/form-field';
+import { MatInputModule }         from '@angular/material/input';
+import { MatCheckboxModule }      from '@angular/material/checkbox';
+import { MatRadioModule }         from '@angular/material/radio';
+import { MatButtonModule }        from '@angular/material/button';
+import { MatIconModule }          from '@angular/material/icon';
+import { MatButtonToggleModule }  from '@angular/material/button-toggle';
+import { MatDialogModule, MatDialog }     from '@angular/material/dialog';
 
-import { MatDialog } from '@angular/material/dialog';
+import { FormulaireService }      from 'src/app/services/formulaire.service';
+import { SectionService }         from 'src/app/services/section.service';
+import { QuestionService }        from 'src/app/services/question.service';
+import { FormEmailService }       from 'src/app/services/form-email.service';
 import { UserSelectDialogComponent } from './user-select-dialog/user-select-dialog.component';
-import { FormEmailService } from 'src/app/services/form-email.service';
+
+import { forkJoin, of }           from 'rxjs';
+import { switchMap, map }         from 'rxjs/operators';
 
 @Component({
   selector: 'app-formulaire-detail',
@@ -36,7 +38,9 @@ import { FormEmailService } from 'src/app/services/form-email.service';
     MatRadioModule,
     MatButtonModule,
     MatIconModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDialogModule,
+    UserSelectDialogComponent
   ],
   templateUrl: './formulaire-detail.component.html',
   styleUrls: ['./formulaire-detail.component.scss']
@@ -55,18 +59,18 @@ export class FormulaireDetailComponent implements OnInit {
     private emailSvc: FormEmailService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.paramMap.pipe(
-      switchMap(params => {
-        const id = params.get('id')!;
-        return this.formSvc.getById(id);
-      }),
+      switchMap(params => this.formSvc.getById(params.get('id')!)),
       switchMap(form => {
         this.formData = form;
         return this.secSvc.findByFormulaire(form._id!);
       }),
       switchMap(secs => {
-        if (!secs.length) return of([]);
+        if (!secs.length) {
+          this.sections = [];
+          return of([]);
+        }
         return forkJoin(
           secs.map(sec =>
             this.qSvc.findBySection(sec._id!).pipe(
@@ -81,7 +85,7 @@ export class FormulaireDetailComponent implements OnInit {
     });
   }
 
-  private initAnswers() {
+  private initAnswers(): void {
     this.sections.forEach(sec =>
       sec.questions.forEach((q: any) => {
         if (q.inputType === 'case_a_cocher') {
@@ -95,8 +99,7 @@ export class FormulaireDetailComponent implements OnInit {
     );
   }
 
-  /** Gère les changments de case à cocher */
-  onCheckboxChange(questionId: string, label: string, checked: boolean) {
+  onCheckboxChange(questionId: string, label: string, checked: boolean): void {
     const arr: string[] = this.answers[questionId] || [];
     if (checked) {
       if (!arr.includes(label)) arr.push(label);
@@ -107,20 +110,19 @@ export class FormulaireDetailComponent implements OnInit {
     this.answers[questionId] = arr;
   }
 
-openMailDialog(): void {
-  const ref = this.dialog.open(UserSelectDialogComponent, {
-    width: '400px',
-    data: { formId: this.formData._id }
-  });
+  openMailDialog(): void {
+    const ref = this.dialog.open(UserSelectDialogComponent, {
+      width: '400px',
+      data: { formId: this.formData._id }
+    });
 
-  ref.afterClosed().subscribe((userId: string) => {
-    if (userId) {
-      this.emailSvc.sendFormEmail(this.formData._id, userId)
-        .subscribe({
+    ref.afterClosed().subscribe((userId: string) => {
+      if (userId) {
+        this.emailSvc.sendFormEmail(this.formData._id, userId).subscribe({
           next: () => alert('Email envoyé !'),
           error: err => alert('Erreur envoi e-mail : ' + err.message)
         });
-    }
-  });
-}
+      }
+    });
+  }
 }
