@@ -18,6 +18,10 @@ import { QuestionService }           from 'src/app/services/question.service';
 import { forkJoin, of }              from 'rxjs';
 import { switchMap, map }            from 'rxjs/operators';
 
+import { MatDialog } from '@angular/material/dialog';
+import { UserSelectDialogComponent } from './user-select-dialog/user-select-dialog.component';
+import { FormEmailService } from 'src/app/services/form-email.service';
+
 @Component({
   selector: 'app-formulaire-detail',
   standalone: true,
@@ -46,7 +50,9 @@ export class FormulaireDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private formSvc: FormulaireService,
     private secSvc: SectionService,
-    private qSvc: QuestionService
+    private qSvc: QuestionService,
+    private dialog: MatDialog,
+    private emailSvc: FormEmailService
   ) {}
 
   ngOnInit() {
@@ -100,4 +106,17 @@ export class FormulaireDetailComponent implements OnInit {
     }
     this.answers[questionId] = arr;
   }
+
+  openMailDialog() {
+  const ref = this.dialog.open(UserSelectDialogComponent, {
+    width: '400px',
+    data: { formId: this.formData._id }
+  });
+  ref.afterClosed().subscribe(userId => {
+    if (userId) {
+      this.emailSvc.sendFormEmail(this.formData._id, userId)
+        .subscribe(() => alert('Email envoyé !'));
+    }
+  });
+}
 }

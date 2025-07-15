@@ -1,0 +1,29 @@
+<!-- src/app/pages/apps/formulaire-detail/user-select-dialog/user-select-dialog.component.html -->
+<h2 mat-dialog-title>Sélectionnez un utilisateur</h2>
+
+<mat-dialog-content class="user-dialog-content">
+  <mat-radio-group class="user-radio-group" [(ngModel)]="selectedUserId">
+    <mat-radio-button
+      *ngFor="let u of users"
+      class="user-radio-button"
+      [value]="u._id"
+    >
+      <div class="user-info">
+        <div class="user-name">{{ u.nom }}</div>
+        <div class="user-email">{{ u.email }}</div>
+      </div>
+    </mat-radio-button>
+  </mat-radio-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="confirm()"
+    [disabled]="!selectedUserId"
+  >
+    Envoyer
+  </button>
+</mat-dialog-actions>

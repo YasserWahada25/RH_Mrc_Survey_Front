@@ -1,0 +1,51 @@
+/* src/app/pages/apps/formulaire-detail/user-select-dialog/user-select-dialog.component.css */
+
+/* Limite la hauteur du contenu et active le scroll si besoin */
+.user-dialog-content {
+  max-height: 300px;
+  padding: 0;
+  overflow-y: auto;
+}
+
+/* Affiche les radios en colonne */
+.user-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style de chaque option */
+.user-radio-button {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+/* Fond au survol */
+.user-radio-button:hover {
+  background-color: #f5f5f5;
+}
+
+/* Fond plus marqué quand sélectionné */
+.user-radio-button.mat-radio-checked {
+  background-color: #e3f2fd;
+}
+
+/* Texte de l’info utilisateur */
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.user-email {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  word-break: break-all;
+}
