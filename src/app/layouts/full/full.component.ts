@@ -143,6 +143,13 @@ export class FullComponent implements OnInit {
       subtitle: 'Create new course',
       link: '/apps/courses',
     },
+      {
+      id: 9,
+      img: '/assets/images/svgs/icon-dd-application.svg',
+      title: 'departement',
+      subtitle: 'Create new course',
+      link: '/apps/departement',
+    },
   ];
 
   quicklinks: quicklinks[] = [

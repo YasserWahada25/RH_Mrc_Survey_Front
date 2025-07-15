@@ -39,7 +39,16 @@ export class AppAddEmployeeComponent {
   ) {}
 
   createUser(): void {
-    this.userService.createUser(this.local_data).subscribe({
+    const payload = {
+      nom: this.local_data.nom,
+      email: this.local_data.email,
+      mot_de_passe: this.local_data.mot_de_passe,
+      type: this.local_data.type
+    };
+
+    console.log('➡️ Données envoyées :', payload);
+
+    this.userService.createUser(payload).subscribe({
       next: (res) => {
         this.snackBar.open('✅ Utilisateur créé avec succès !', 'Fermer', {
           duration: 3000
@@ -47,7 +56,9 @@ export class AppAddEmployeeComponent {
         this.dialogRef.close(true);
       },
       error: (err) => {
-        this.snackBar.open(`❌ Erreur: ${err.error.message}`, 'Fermer', {
+        console.error('❌ Erreur API:', err);
+        const msg = err?.error?.message || err.message || 'Erreur inconnue';
+        this.snackBar.open(`❌ Erreur: ${msg}`, 'Fermer', {
           duration: 5000
         });
       }

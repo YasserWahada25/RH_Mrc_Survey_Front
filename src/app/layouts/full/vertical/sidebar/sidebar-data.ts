@@ -42,6 +42,11 @@ export const navItems: NavItem[] = [
     iconName: 'certificate',
     route: 'apps/courses',
   },
+     {
+        displayName: 'Departement',
+        iconName: 'building',
+        route: 'apps/departement',
+      },
   {
     displayName: 'Employee',
     iconName: 'brand-ctemplar',

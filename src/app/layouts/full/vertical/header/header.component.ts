@@ -235,6 +235,13 @@ export class HeaderComponent {
       subtitle: 'Create new course',
       link: '/apps/courses',
     },
+      {
+      id: 9,
+      img: '/assets/images/svgs/icon-dd-application.svg',
+      title: 'Departement',
+      subtitle: 'Create new Departement',
+      link: '/apps/departement',
+    },
   ];
 
   quicklinks: quicklinks[] = [
