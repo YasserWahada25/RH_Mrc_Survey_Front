@@ -1,21 +1,5 @@
 import { Routes } from '@angular/router';
 
-<<<<<<< HEAD
-import { AppChatComponent }              from './chat/chat.component';
-import { AppEmailComponent }             from './email/email.component';
-import { DetailComponent }               from './email/detail/detail.component';
-import { AppCoursesComponent }           from './courses/courses.component';
-import { AppCourseDetailComponent }      from './courses/course-detail/course-detail.component';
-import { AppEmployeeComponent }          from './employee/employee.component';
-import { AppBlogsComponent }             from './blogs/blogs.component';
-import { AppBlogDetailsComponent }       from './blogs/details/details.component';
-import { AppContactComponent }           from './contact/contact.component';
-import { AppNotesComponent }             from './notes/notes.component';
-import { AppTodoComponent }              from './todo/todo.component';
-import { AppPermissionComponent }        from './permission/permission.component';
-import { AppTaskboardComponent }         from './taskboard/taskboard.component';
-import { AppFullcalendarComponent }      from './fullcalendar/fullcalendar.component';
-=======
 import { AppChatComponent } from './chat/chat.component';
 import { AppEmailComponent } from './email/email.component';
 import { DetailComponent } from './email/detail/detail.component';
@@ -30,21 +14,12 @@ import { AppTodoComponent } from './todo/todo.component';
 import { AppPermissionComponent } from './permission/permission.component';
 import { AppTaskboardComponent } from './taskboard/taskboard.component';
 // import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
-import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
-import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
-import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
-import { DepartementComponent } from './departement/departement.component';
 
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 import { QuizDisqueComponent  } from './quiz-disque/quiz-disque.component';
+import { DepartementComponent } from './departement/departement.component';
 
->>>>>>> yasser
 
-import { FormulaireListComponent }       from './formulairelist/formulairelist.component';
-import { FormulaireDetailComponent }     from './formulaire-detail/formulaire-detail.component';
-// Nouveau module Réponses
-import { AppReponsesListComponent }      from './reponses/reponse-list/reponses-list.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -142,40 +117,14 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
-      // === Formulaires ===
       {
-        path: 'formulaires',
+        path: 'tickets',
         component: FormulaireListComponent,
         data: {
           title: 'Formulaires',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Formulaires' },
-          ],
-        },
-      },
-      {
-        path: 'formulaires/:id',
-        component: FormulaireDetailComponent,
-        data: {
-          title: 'Détail Formulaire',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Détail Formulaire' },
-          ],
-        },
-      },
-
-      // === Réponses (module simplifié) ===
-      {
-        path: 'reponses',
-        component: AppReponsesListComponent,
-        data: {
-          title: 'Réponses',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Réponses' },
           ],
         },
       },
@@ -262,6 +211,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+      
     ],
   },
 ];
