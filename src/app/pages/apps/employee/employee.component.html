@@ -3,11 +3,7 @@
     <div class="row justify-content-between">
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input
-            matInput
-            placeholder="Search"
-            (keyup)="applyFilter($any($event.target).value)"
-          />
+          <input matInput placeholder="Search" (keyup)="applyFilter($any($event.target).value)" />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -15,7 +11,7 @@
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add Utilisateur 
+          Add Utilisateur
         </button>
       </div>
     </div>
@@ -34,11 +30,7 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
           <td mat-cell *matCellDef="let element">
             <div class="d-flex align-items-center">
-              <img
-                class="rounded-circle"
-                [src]="element.imagePath"
-                width="40"
-              />
+              <img class="rounded-circle" [src]="element.imagePath" width="40" />
               <div class="m-l-16">
                 <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
                   {{ element.Name }}
@@ -82,6 +74,23 @@
             {{ element.Salary }}
           </td>
         </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Rôle</th>
+          <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="added_by">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Ajouté par</th>
+          <td mat-cell *matCellDef="let element">{{ element.added_by }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Statut</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-slide-toggle [checked]="element.acces" (change)="toggleAccess(element)" color="primary">
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
 
         <ng-container matColumnDef="projects">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
@@ -92,20 +101,15 @@
           </td>
         </ng-container>
 
+
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Action
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
-            <a
-              (click)="openDialog('Update', element)"
-              class="m-r-10 cursor-pointer"
-              ><i-tabler name="edit" class="icon-18"></i-tabler
-            ></a>
-            <a
-              (click)="openDialog('Delete', element)"
-              class="m-r-10 cursor-pointer"
-            >
+            <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
+                class="icon-18"></i-tabler></a>
+            <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="trash" class="icon-18"></i-tabler>
             </a>
           </td>
@@ -114,10 +118,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
-        showFirstLastButtons
-      ></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

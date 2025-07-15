@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Ajouter un Département</h2>
-<mat-dialog-content style="max-width: 600px">
-  <form (ngSubmit)="submit()">
+
+<mat-dialog-content>
+  <form (ngSubmit)="submit()" #form="ngForm">
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Nom du département</mat-label>
       <input matInput [(ngModel)]="nom" name="nom" required />
@@ -16,8 +17,10 @@
     </mat-form-field>
 
     <div class="d-flex justify-content-end mt-3">
-      <button mat-flat-button color="primary" type="submit">Ajouter</button>
-      <button mat-stroked-button color="warn" class="ml-2" (click)="close()">Annuler</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+        Ajouter
+      </button>
+      <button mat-stroked-button color="warn" type="button" (click)="close()">Annuler</button>
     </div>
   </form>
 </mat-dialog-content>

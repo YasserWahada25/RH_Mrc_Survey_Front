@@ -4,11 +4,16 @@
       <h3>Liste des Départements</h3>
       <button mat-flat-button color="primary" (click)="openDialog()">Ajouter</button>
     </div>
+
     <table mat-table [dataSource]="departements" class="w-100">
+
+      <!-- Nom -->
       <ng-container matColumnDef="nom">
         <th mat-header-cell *matHeaderCellDef>Nom</th>
         <td mat-cell *matCellDef="let el">{{ el.nom }}</td>
       </ng-container>
+
+      <!-- Responsable -->
       <ng-container matColumnDef="responsable">
         <th mat-header-cell *matHeaderCellDef>Responsable</th>
         <td mat-cell *matCellDef="let el">
@@ -16,8 +21,22 @@
           <small>{{ el.responsable?.email }}</small>
         </td>
       </ng-container>
-      <tr mat-header-row *matHeaderRowDef="['nom', 'responsable']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['nom', 'responsable']"></tr>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let el">
+          <button mat-icon-button color="primary" (click)="editDepartement(el)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteDepartement(el._id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </mat-card-content>
 </mat-card>

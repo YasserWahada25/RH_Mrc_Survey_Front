@@ -13,7 +13,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AppAddEmployeeComponent } from './add/add.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
@@ -33,12 +33,14 @@ export interface Employee {
   type?: string;
   password?: string;
   _id?: string;
+  acces?: boolean;
 }
 
 @Component({
   templateUrl: './employee.component.html',
   standalone: true,
   imports: [
+    CommonModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
@@ -58,6 +60,9 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     '#',
     'name',
     'email',
+    'type',     // <-- ajouté
+    'added_by', // <-- ajouté
+    'status',   // <-- ajouté
     'date of joining',
     'action',
   ];
@@ -67,7 +72,7 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     public dialog: MatDialog,
     public datePipe: DatePipe,
     private http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchEmployees();
@@ -85,15 +90,21 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    
 
     this.http.get<any[]>('http://localhost:3033/api/users', { headers }).subscribe({
       next: (users) => {
+         console.log('✅ Données utilisateurs reçues :', users); // 👀 Vérifie bien addedBy ici
         const transformed = users.map((user, index) => ({
           id: index + 1,
           _id: user._id,
           Name: user.nom || 'N/A',
           Position: user.type || 'N/A',
           Email: user.email || 'N/A',
+          added_by: user.addedBy || 'Système',
+          status: user.actif ? 'Activé' : 'Désactivé',
+          acces: user.acces,
           DateOfJoining: new Date(),
           imagePath: 'assets/images/profile/user-1.jpg',
           nom: user.nom,
@@ -189,8 +200,25 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
       }
     });
   }
+
+toggleAccess(user: Employee): void {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  const payload = { acces: !user.acces }; // 👈 envoyer la valeur opposée
+
+  this.http.patch(`http://localhost:3033/api/users/acces/${user._id}`, payload, { headers }).subscribe({
+    next: () => {
+      this.fetchEmployees(); // ✅ recharge les données pour voir la nouvelle valeur
+    },
+    error: (err) => {
+      console.error('Erreur lors de la modification de l’accès :', err);
+    }
+  });
 }
 
+}
+  
 @Component({
   selector: 'app-dialog-content',
   standalone: true,
