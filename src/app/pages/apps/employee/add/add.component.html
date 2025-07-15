@@ -1,36 +1,44 @@
-<h2 mat-dialog-title>Ajouter un utilisateur</h2>
+<h2 mat-dialog-title>{{ 'USER_DIALOG.ADD_USER_TITLE' | translate }}</h2>
+
 <mat-dialog-content style="max-width: 600px">
   <form #userForm="ngForm">
+    <!-- Name Field -->
     <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Nom</mat-label>
+      <mat-label>{{ 'USER_DIALOG.NAME_LABEL' | translate }}</mat-label>
       <input matInput name="nom" [(ngModel)]="local_data.nom" required />
     </mat-form-field>
 
+    <!-- Email Field -->
     <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'USER_DIALOG.EMAIL_LABEL' | translate }}</mat-label>
       <input matInput name="email" [(ngModel)]="local_data.email" type="email" required />
     </mat-form-field>
 
+    <!-- Password Field -->
     <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Mot de passe</mat-label>
+      <mat-label>{{ 'USER_DIALOG.PASSWORD_LABEL' | translate }}</mat-label>
       <input matInput name="mot_de_passe" [(ngModel)]="local_data.mot_de_passe" type="password" required />
     </mat-form-field>
 
+    <!-- Role Field -->
     <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Rôle</mat-label>
+      <mat-label>{{ 'USER_DIALOG.ROLE_LABEL' | translate }}</mat-label>
       <mat-select [(ngModel)]="local_data.type" name="type" required>
-        <mat-option value="employe">Employé</mat-option>
-        <mat-option value="rh_admin">RH Admin</mat-option>
-        <mat-option value="responsable">Responsable</mat-option>
-        <mat-option value="owner">Owner</mat-option>
+        <mat-option value="employe">{{ 'USER_DIALOG.ROLES.EMPLOYEE' | translate }}</mat-option>
+        <mat-option value="rh_admin">{{ 'USER_DIALOG.ROLES.HR_ADMIN' | translate }}</mat-option>
+        <mat-option value="responsable">{{ 'USER_DIALOG.ROLES.MANAGER' | translate }}</mat-option>
+        <mat-option value="owner">{{ 'USER_DIALOG.ROLES.OWNER' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
 
+    <!-- Action Buttons -->
     <div class="d-flex justify-content-end m-t-16">
       <button mat-flat-button color="primary" [disabled]="!userForm.valid" (click)="createUser()">
-        Ajouter
+        {{ 'USER_DIALOG.ADD_BUTTON' | translate }}
       </button>
-      <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">Annuler</button>
+      <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+        {{ 'USER_DIALOG.CANCEL_BUTTON' | translate }}
+      </button>
     </div>
   </form>
 </mat-dialog-content>

@@ -1,29 +1,30 @@
 <!-- src/app/pages/apps/formulairelist/formulaire-dialog-content.html -->
-
-<h2 mat-dialog-title>Création du formulaire</h2>
+<h2 mat-dialog-title>{{ 'FORM_DIALOG.CREATE_TITLE' | translate }}</h2>
 
 <mat-dialog-content class="mat-typography" style="max-width: 700px">
   <form>
-    <!-- Champ titre avec hint “Nom du formulaire” -->
+    <!-- Title field with hint -->
     <mat-form-field appearance="outline" class="w-100">
       <input
         matInput
         name="titre"
         [(ngModel)]="local_data.titre"
-        placeholder="Entrez le titre du formulaire"
+        [placeholder]="'FORM_DIALOG.TITLE_PLACEHOLDER' | translate"
         required
       />
+      <mat-hint>{{ 'FORM_DIALOG.TITLE_HINT' | translate }}</mat-hint>
     </mat-form-field>
 
-    <!-- Champ description avec hint “Description (facultatif)” -->
+    <!-- Description field with hint -->
     <mat-form-field appearance="outline" class="w-100 mt-3">
       <textarea
         matInput
         name="description"
         [(ngModel)]="local_data.description"
-        placeholder="Entrez la description"
+        [placeholder]="'FORM_DIALOG.DESC_PLACEHOLDER' | translate"
         rows="4"
       ></textarea>
+      <mat-hint>{{ 'FORM_DIALOG.DESC_HINT' | translate }}</mat-hint>
     </mat-form-field>
   </form>
 </mat-dialog-content>
@@ -35,7 +36,9 @@
     (click)="doAction()"
     [disabled]="!local_data.titre?.trim()"
   >
-    Suivant
+    {{ 'FORM_DIALOG.NEXT_BUTTON' | translate }}
   </button>
-  <button mat-stroked-button color="warn" (click)="cancel()">Annuler</button>
+  <button mat-stroked-button color="warn" (click)="cancel()">
+    {{ 'FORM_DIALOG.CANCEL_BUTTON' | translate }}
+  </button>
 </mat-dialog-actions>

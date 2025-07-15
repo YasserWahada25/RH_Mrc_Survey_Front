@@ -8,6 +8,7 @@ import { MatTooltipModule }  from '@angular/material/tooltip';
 
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent }     from '../formulaire-wizard/formulaire-wizard.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-formulaire-list',
@@ -19,6 +20,7 @@ import { FormulaireWizardComponent }     from '../formulaire-wizard/formulaire-w
     MatIconModule,
     MatTableModule,
     MatTooltipModule,
+    TranslateModule
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css']

@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add',
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatSelectModule,
     MatOptionModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ]
 })
 export class AppAddEmployeeComponent {

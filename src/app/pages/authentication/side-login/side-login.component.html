@@ -1,5 +1,6 @@
 <div class="blank-layout-container justify-content-center">
   <div class="position-relative row w-100 h-100">
+    <!-- LEFT SIDE IMAGE -->
     <div class="col-lg-7 col-xl-8 bg-gredient p-0">
       <div class="p-32 h-100 d-flex flex-column">
         @if(options.theme === 'light') {
@@ -13,58 +14,67 @@
         }
 
         <div class="align-items-center justify-content-center flex-grow-1 d-none d-lg-flex">
-          <img src="/assets/images/backgrounds/login-bg.svg" alt="login" style="max-width: 600px; width: 100%;" />
+          <img src="/assets/images/backgrounds/welcome-bg2.png" alt="login" style="max-width: 600px; width: 100%;" />
         </div>
       </div>
     </div>
 
+    <!-- LOGIN FORM -->
     <div class="col-lg-5 col-xl-4 p-0 d-flex">
       <div class="p-40 d-flex flex-column justify-content-center w-100" style="height: 100%;">
         <div class="w-100">
           <div class="mx-auto" style="max-width: 420px;">
-            <h2 class="f-w-700 f-s-32 m-0">Welcome back</h2>
-            <span class="f-s-16 d-block mat-body-1 m-t-8 text-secondary">Login to your RH MRC SURVEY Dashboard</span>
+            <h2 class="f-w-700 f-s-32 m-0">{{ 'LOGIN.TITLE' | translate }}</h2>
+            <span class="f-s-16 d-block mat-body-1 m-t-8 text-secondary">{{ 'LOGIN.SUBTITLE' | translate }}</span>
 
-            <div class="or-border m-t-32 f-s-14">or sign in with email</div>
+            <div class="or-border m-t-32 f-s-14">{{ 'LOGIN.OR_EMAIL' | translate }}</div>
 
-            <!-- Error message -->
             <div *ngIf="message" class="alert alert-danger mt-3 text-center">{{ message }}</div>
 
             <form class="m-t-32" [formGroup]="form" (ngSubmit)="submit()">
-              <!-- Username -->
-              <mat-label class="mat-subtitle-2 f-s-16 f-w-600 m-b-16 d-block">Email</mat-label>
+              <!-- Email -->
+              <mat-label class="mat-subtitle-2 f-s-16 f-w-600 m-b-16 d-block">
+                {{ 'FORM.EMAIL' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 expanded-field" color="primary">
-                <input matInput formControlName="uname" type="email" class="f-s-16" placeholder="Enter your email" />
+                <input matInput formControlName="uname" type="email" class="f-s-16"
+                       [placeholder]="'LOGIN.PLACEHOLDER_EMAIL' | translate" />
                 <mat-error *ngIf="f['uname'].touched && f['uname'].invalid" class="f-s-14">
-                  {{ f['uname'].errors?.['required'] ? 'Email is required' : 'Invalid email format' }}
+                  {{ f['uname'].errors?.['required'] ? ('FORM.REQUIRED_EMAIL' | translate) : ('FORM.INVALID_EMAIL' | translate) }}
                 </mat-error>
               </mat-form-field>
 
               <!-- Password -->
-              <mat-label class="mat-subtitle-2 f-s-16 f-w-600 m-b-16 d-block">Password</mat-label>
+              <mat-label class="mat-subtitle-2 f-s-16 f-w-600 m-b-16 d-block">
+                {{ 'FORM.MOT_DE_PASSE' | translate }}
+              </mat-label>
               <mat-form-field appearance="outline" class="w-100 expanded-field" color="primary">
-                <input matInput type="password" formControlName="password" class="f-s-16" placeholder="Enter your password" />
+                <input matInput type="password" formControlName="password" class="f-s-16"
+                       [placeholder]="'LOGIN.PLACEHOLDER_PASSWORD' | translate" />
                 <mat-error *ngIf="f['password'].touched && f['password'].invalid" class="f-s-14">
-                  Password is required
+                  {{ 'FORM.REQUIRED_MDP' | translate }}
                 </mat-error>
               </mat-form-field>
 
               <div class="d-flex align-items-center m-b-24">
-                <mat-checkbox color="primary" class="f-s-14">Remember this device</mat-checkbox>
-                <a [routerLink]="['/authentication/side-forgot-pwd']" class="text-primary f-s-14 text-decoration-none m-l-auto">
-                  Forgot Password?
+                <mat-checkbox color="primary" class="f-s-14">{{ 'LOGIN.REMEMBER' | translate }}</mat-checkbox>
+                <a [routerLink]="['/authentication/side-forgot-pwd']"
+                   class="text-primary f-s-14 text-decoration-none m-l-auto">
+                  {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
                 </a>
               </div>
 
-              <button type="submit" mat-flat-button color="primary" class="w-100 expanded-button" [disabled]="!form.valid || isSubmitted">
-                <span class="f-s-16">Sign In</span>
+              <button type="submit" mat-flat-button color="primary" class="w-100 expanded-button"
+                      [disabled]="!form.valid || isSubmitted">
+                <span class="f-s-16">{{ 'FORM.SIGN_IN' | translate }}</span>
               </button>
             </form>
 
             <span class="d-block f-w-500 f-s-14 m-t-32 text-center text-secondary">
-              Don't have an account?
-              <a [routerLink]="['/authentication/side-register']" class="text-primary text-decoration-none f-w-600">
-                Create account
+              {{ 'LOGIN.NO_ACCOUNT' | translate }}
+              <a [routerLink]="['/authentication/side-register']"
+                 class="text-primary text-decoration-none f-w-600">
+                {{ 'FORM.SIGN_UP' | translate }}
               </a>
             </span>
           </div>

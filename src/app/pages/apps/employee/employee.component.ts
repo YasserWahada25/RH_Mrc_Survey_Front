@@ -20,6 +20,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Employee {
   id: number;
@@ -47,6 +48,7 @@ export interface Employee {
     TablerIconsModule,
     MatNativeDateModule,
     DatePipe,
+    TranslateModule,
     AppAddEmployeeComponent
   ],
   providers: [DatePipe],
