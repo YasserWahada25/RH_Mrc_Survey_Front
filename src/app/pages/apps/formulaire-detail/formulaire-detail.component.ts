@@ -52,6 +52,9 @@ export class FormulaireDetailComponent implements OnInit {
   answers: Record<string, any> = {};
   isGuestView = false;
   isReadOnlyView = false;
+  clientScore    = 0;  // ← nouveau
+  formTotalScore = 0;  // ← nouveau
+
 
   constructor(
     private route: ActivatedRoute,
@@ -114,31 +117,67 @@ export class FormulaireDetailComponent implements OnInit {
     });
   }
 
+  // private loadResponseView(formId: string, responseId: string): void {
+  //   this.respSvc.getResponse(formId, responseId).subscribe({
+  //     next: (resp: ResponseDetailDTO) => {
+  //       this.formData = resp.formulaire;
+  //       this.secSvc.findByFormulaire(formId).pipe(
+  //         switchMap(secs =>
+  //           secs.length
+  //             ? forkJoin(secs.map(sec =>
+  //                 this.qSvc.findBySection(sec._id!).pipe(
+  //                   map(qs => ({ ...sec, questions: qs }))
+  //                 )
+  //               ))
+  //             : of([])
+  //         )
+  //       ).subscribe(secs => {
+  //         this.sections = secs;
+  //         this.initAnswers();
+  //         resp.answers.forEach(a => {
+  //           this.answers[a.questionId] = a.answer;
+  //         });
+  //       });
+  //     },
+  //     error: () => alert('Réponse introuvable')
+  //   });
+  // }
+
   private loadResponseView(formId: string, responseId: string): void {
-    this.respSvc.getResponse(formId, responseId).subscribe({
-      next: (resp: ResponseDetailDTO) => {
-        this.formData = resp.formulaire;
-        this.secSvc.findByFormulaire(formId).pipe(
-          switchMap(secs =>
-            secs.length
-              ? forkJoin(secs.map(sec =>
+  this.respSvc.getResponse(formId, responseId).subscribe({
+    next: (resp: ResponseDetailDTO) => {
+      // 1) On stocke d'abord les scores récupérés du back-end
+      this.clientScore    = resp.score;
+      this.formTotalScore = resp.totalScore;
+
+      // 2) On charge ensuite les données du formulaire
+      this.formData = resp.formulaire;
+
+      // 3) On récupère les sections, puis leurs questions
+      this.secSvc.findByFormulaire(formId).pipe(
+        switchMap(secs =>
+          secs.length
+            ? forkJoin(
+                secs.map(sec =>
                   this.qSvc.findBySection(sec._id!).pipe(
                     map(qs => ({ ...sec, questions: qs }))
                   )
-                ))
-              : of([])
-          )
-        ).subscribe(secs => {
-          this.sections = secs;
-          this.initAnswers();
-          resp.answers.forEach(a => {
-            this.answers[a.questionId] = a.answer;
-          });
+                )
+              )
+            : of([])
+        )
+      ).subscribe(secs => {
+        // 4) On initialise les réponses et on les pré-remplit
+        this.sections = secs;
+        this.initAnswers();
+        resp.answers.forEach(a => {
+          this.answers[a.questionId] = a.answer;
         });
-      },
-      error: () => alert('Réponse introuvable')
-    });
-  }
+      });
+    },
+    error: () => alert('Réponse introuvable')
+  });
+}
 
   private initAnswers(): void {
     this.sections.forEach(sec =>
@@ -185,20 +224,49 @@ export class FormulaireDetailComponent implements OnInit {
   }
 
   submitResponses(): void {
-    const userId = this.isGuestView ? 'guest' : 'owner';
-    const answersArray = Object.entries(this.answers).map(
-      ([questionId, answer]) => {
-        const sec = this.sections.find(s =>
-          s.questions.some((q: any) => q._id === questionId)
-        )!;
-        return {
-          sectionId: sec._id,
-          questionId,
-          answer
-        };
-      }
-    );
-    this.respSvc.create(this.formData._id, userId, answersArray)
-      .subscribe(() => alert('Réponses enregistrées !'));
+  // 1) on bloque si une question obligatoire n'est pas remplie
+  if (!this.validateMandatory()) {
+    return alert('Veuillez répondre à toutes les questions obligatoires.');
   }
+
+  // 2) sinon on prépare et envoie
+  const userId = this.isGuestView ? 'guest' : 'owner';
+  const answersArray = Object.entries(this.answers).map(
+    ([questionId, answer]) => {
+      const sec = this.sections.find(s =>
+        s.questions.some((q: any) => q._id === questionId)
+      )!;
+      return {
+        sectionId: sec._id,
+        questionId,
+        answer
+      };
+    }
+  );
+  this.respSvc.create(this.formData._id, userId, answersArray)
+    .subscribe(() => alert('Réponses enregistrées !'));
+}
+
+
+  validateMandatory(): boolean {
+  return this.sections.every(sec =>
+    sec.questions.every((q: any) => {
+      if (!q.obligatoire) return true;
+      const ans = this.answers[q._id];
+      switch (q.inputType) {
+        case 'case_a_cocher':
+          return Array.isArray(ans) && ans.length > 0;
+        case 'evaluation':
+          return Array.isArray(ans) && ans.every(v => typeof v === 'number' && v > 0);
+        default:
+          return ans != null && ans !== '';
+      }
+    })
+  );
+}
+
+
+
+
+
 }

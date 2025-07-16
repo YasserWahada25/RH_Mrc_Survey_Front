@@ -21,6 +21,10 @@ export interface ResponseDetailDTO extends ResponseListDTO {
     questionId: string;
     answer: any;
   }>;
+    // Score total possible du formulaire
+  totalScore: number;
+  // Score obtenu par cet utilisateur
+  score:      number;
 }
 
 @Injectable({
@@ -65,4 +69,6 @@ export class ResponseService {
       `${this.base}/${formId}/responses/${responseId}`
     );
   }
+
+  
 }

@@ -5,7 +5,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 export interface SurveyOption {
   label: string;
-  score: number;
+  score: number;  
 }
 export interface Question {
   _id: string;

@@ -8,6 +8,14 @@
   </p>
   <mat-divider class="my-16"></mat-divider>
 
+  <!-- n’apparaît que dans la vue “réponse” -->
+<div *ngIf="isReadOnlyView" class="score-display">
+  Score obtenu : 
+  <span class="score-value">
+    {{ clientScore }} / {{ formTotalScore }}
+  </span>
+</div>
+
   <!-- Sections & questions -->
   <ng-container *ngFor="let sec of sections; let i = index">
     <h2 class="section-title">
@@ -16,7 +24,11 @@
 
     <ng-container *ngFor="let q of sec.questions; let j = index">
       <div class="question-block mb-12">
-        <div class="question-text">Q{{ j + 1 }}. {{ q.texte }}</div>
+        <!-- <div class="question-text">Q{{ j + 1 }}. {{ q.texte }}</div> -->
+          <div class="question-text">
+   Q{{ j + 1 }}. {{ q.texte }}
+   <span *ngIf="q.obligatoire" class="required-star">*</span>
+ </div>
 
         <!-- Texte libre -->
         <mat-form-field
@@ -110,13 +122,13 @@
       </button>
     </ng-container>
     <button
-      mat-flat-button
-      color="primary"
-      *ngIf="isGuestView"
-      (click)="submitResponses()"
-      [disabled]="isReadOnlyView"
-    >
-      Répondre
-    </button>
+  mat-flat-button
+  color="primary"
+  *ngIf="isGuestView"
+  (click)="submitResponses()"
+  [disabled]="isReadOnlyView || !validateMandatory()"
+>
+  Répondre
+</button>
   </div>
 </mat-card>
