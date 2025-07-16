@@ -1,0 +1,43 @@
+.quiz-card-modern {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eefc 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.1);
+  border: 1px solid rgba(63, 81, 181, 0.15);
+  height: 100%;
+  min-height: 220px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-card-modern:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(63, 81, 181, 0.15);
+}
+
+
+.request-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px 3px !important;
+  font-size: 0.8rem !important;
+  text-transform: none;
+  background-color:rgb(94, 111, 204) !important;
+  color: #fff !important; 
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.request-button:hover {
+  background-color: #1f2f87 !important; /* encore plus foncé au survol */
+}
+
+/* Ajoutez ceci temporairement */
+.quiz-title, .mat-subtitle-2, .mat-subtitle-1 {
+  color: red !important;
+  font-size: 20px !important;
+  background-color: yellow !important;
+}

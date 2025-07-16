@@ -22,6 +22,11 @@ export const navItems: NavItem[] = [
     iconName: 'checklist',  
     route: 'apps/QuizDisque',
   },
+    {
+    displayName: 'Credit Request List',
+    iconName: 'layout',  
+    route: 'apps/CreditRequestOwner',
+  },
   {
     displayName: 'Calendar',
     iconName: 'calendar-event',

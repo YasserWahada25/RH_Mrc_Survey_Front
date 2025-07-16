@@ -18,7 +18,6 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { CommonModule, DatePipe } from '@angular/common';
-import { AppAddKichenSinkComponent } from './add/add.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
@@ -212,7 +211,6 @@ export class AppKichenSinkComponent implements AfterViewInit {
       Projects: row_obj.Projects,
       imagePath: row_obj.imagePath,
     });
-    this.dialog.open(AppAddKichenSinkComponent);
     this.table.renderRows();
   }
 

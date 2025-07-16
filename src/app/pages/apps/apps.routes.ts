@@ -20,6 +20,7 @@ import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.com
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 import { QuizDisqueComponent  } from './quiz-disque/quiz-disque.component';
+import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 
 
 
@@ -131,6 +132,20 @@ export const AppsRoutes: Routes = [
           ],
         },
          },
+
+
+                   {
+        path: 'CreditRequestOwner',
+        component: OwnerCreditRequestsComponent,
+        data: {
+          title: 'Credit Request List',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Credit Request List' },
+          ],
+        },
+         },
+
 
       {
         path: 'contacts',
