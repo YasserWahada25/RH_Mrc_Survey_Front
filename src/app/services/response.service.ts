@@ -29,4 +29,14 @@ export class ResponseService {
       { userId, answers }
     );
   }
+
+    /** Récupère toutes les réponses (avec titre du formulaire) */
+  getAllResponses(): Observable<Array<{
+    _id: string;
+    createdAt: string;
+    userId: string;
+    formulaire: { titre: string };
+  }>> {
+    return this.http.get<Array<any>>( `${environment.apiUrl}/formulaires/responses/all` );
+  }
 }

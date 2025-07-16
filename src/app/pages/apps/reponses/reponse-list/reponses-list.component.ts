@@ -1,13 +1,27 @@
 // src/app/pages/apps/reponses/reponse-list/reponses-list.component.ts
 
-import { Component }       from '@angular/core';
-import { CommonModule }    from '@angular/common';
-import { MatCardModule }   from '@angular/material/card';
-import { MatTableModule }  from '@angular/material/table';
-import { MatIconModule }   from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { TablerIconsModule } from 'angular-tabler-icons';
-import { ResponseItem }    from 'src/app/models/response.model';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule }       from '@angular/common';
+import { MatCardModule }      from '@angular/material/card';
+import { MatTableModule }     from '@angular/material/table';
+import { MatIconModule }      from '@angular/material/icon';
+import { MatButtonModule }    from '@angular/material/button';
+import { TablerIconsModule }  from 'angular-tabler-icons';
+import { ResponseService }    from 'src/app/services/response.service';
+
+interface ResponseDTO {
+  _id: string;
+  createdAt: string;
+  userId: string;
+  formulaire: { titre: string };
+}
+
+export interface ResponseItem {
+  id: string;
+  date: string;
+  user: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-reponses-list',
@@ -18,18 +32,33 @@ import { ResponseItem }    from 'src/app/models/response.model';
     MatTableModule,
     MatIconModule,
     MatButtonModule,
-    TablerIconsModule
+    TablerIconsModule,
   ],
   templateUrl: './reponses-list.component.html',
 })
-export class AppReponsesListComponent {
+export class AppReponsesListComponent implements OnInit {
   displayedColumns: string[] = ['date', 'user', 'title', 'action'];
+  dataSource: ResponseItem[] = [];
 
-  dataSource: ResponseItem[] = [
-    { date: '2025-07-10', user: 'Alice', title: 'Formulaire A' },
-    { date: '2025-07-11', user: 'Bob',   title: 'Formulaire B' },
-    { date: '2025-07-12', user: 'Carla', title: 'Formulaire C' },
-    { date: '2025-07-13', user: 'David', title: 'Formulaire D' },
-    { date: '2025-07-14', user: 'Emma',  title: 'Formulaire E' },
-  ];
+  constructor(private respSvc: ResponseService) {}
+
+  ngOnInit(): void {
+    this.respSvc.getAllResponses().subscribe({
+      next: (list: ResponseDTO[]) => {
+        this.dataSource = list.map((r: ResponseDTO) => ({
+          id:    r._id,
+          date:  new Date(r.createdAt).toLocaleDateString('fr-FR', {
+                   day:   '2-digit',
+                   month: '2-digit',
+                   year:  'numeric',
+                 }),
+          user:  r.userId === 'guest' ? 'Anonyme' : r.userId,
+          title: r.formulaire?.titre ?? '—',
+        }));
+      },
+      error: (err) => {
+        console.error('Erreur chargement des réponses :', err);
+      }
+    });
+  }
 }
