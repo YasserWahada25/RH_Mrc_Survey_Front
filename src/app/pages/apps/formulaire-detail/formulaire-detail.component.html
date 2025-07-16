@@ -6,7 +6,7 @@
   <p *ngIf="formData.description" class="form-desc">
     {{ formData.description }}
   </p>
-  <mat-divider class="my-16"></mat-divider>
+  
 
   <!-- n’apparaît que dans la vue “réponse” -->
 <div *ngIf="isReadOnlyView" class="score-display">
@@ -14,13 +14,17 @@
   <span class="score-value">
     {{ clientScore }} / {{ formTotalScore }}
   </span>
+  <mat-divider class="my-16"></mat-divider>
 </div>
 
   <!-- Sections & questions -->
   <ng-container *ngFor="let sec of sections; let i = index">
     <h2 class="section-title">
-      Section {{ i + 1 }} : {{ sec.titre }}
-    </h2>
+   Section {{ i + 1 }} : {{ sec.titre }}
+   <span class="section-score">
+     ({{ sectionClientScore[sec._id] }} / {{ sectionMaxScore[sec._id] }})
+   </span>
+ </h2>
 
     <ng-container *ngFor="let q of sec.questions; let j = index">
       <div class="question-block mb-12">
@@ -28,6 +32,9 @@
           <div class="question-text">
    Q{{ j + 1 }}. {{ q.texte }}
    <span *ngIf="q.obligatoire" class="required-star">*</span>
+   <div *ngIf="isReadOnlyView" class="question-score">
+  Score : {{ questionClientScore[q._id] }} / {{ questionMaxScore[q._id] }}
+</div>
  </div>
 
         <!-- Texte libre -->
