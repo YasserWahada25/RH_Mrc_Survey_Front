@@ -8,7 +8,7 @@ import { MatTooltipModule }  from '@angular/material/tooltip';
 
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent }     from '../formulaire-wizard/formulaire-wizard.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-formulaire-list',
@@ -31,7 +31,8 @@ export class FormulaireListComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private formSvc: FormulaireService
+    private formSvc: FormulaireService,
+    private translate: TranslateService 
   ) {}
 
   ngOnInit(): void {
