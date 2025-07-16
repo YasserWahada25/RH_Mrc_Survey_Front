@@ -29,6 +29,7 @@
             [(ngModel)]="answers[q._id]"
             rows="4"
             placeholder="Votre réponse…"
+            [disabled]="isReadOnlyView"
           ></textarea>
         </mat-form-field>
 
@@ -36,6 +37,7 @@
         <mat-radio-group
           *ngIf="q.inputType === 'bouton_radio'"
           [(ngModel)]="answers[q._id]"
+          [disabled]="isReadOnlyView"
           class="radio-group mb-4"
         >
           <mat-radio-button
@@ -56,6 +58,7 @@
             <mat-radio-group
               class="eval-group"
               [(ngModel)]="answers[q._id][ri]"
+              [disabled]="isReadOnlyView"
             >
               <mat-radio-button
                 *ngFor="let n of [1,2,3,4,5]"
@@ -70,6 +73,7 @@
         <mat-button-toggle-group
           *ngIf="q.inputType === 'liste'"
           [(ngModel)]="answers[q._id]"
+          [disabled]="isReadOnlyView"
           class="list-toggle-group mb-4"
         >
           <mat-button-toggle
@@ -85,6 +89,7 @@
             *ngFor="let opt of q.options"
             [checked]="answers[q._id]?.includes(opt.label)"
             (change)="onCheckboxChange(q._id, opt.label, $event.checked)"
+            [disabled]="isReadOnlyView"
             class="checkbox-item"
           >{{ opt.label }}</mat-checkbox>
         </div>
@@ -96,7 +101,7 @@
 
   <!-- Boutons d’action -->
   <div class="action-buttons text-center mt-24">
-    <ng-container *ngIf="!isGuestView">
+    <ng-container *ngIf="!isReadOnlyView && !isGuestView">
       <button mat-flat-button color="primary" (click)="openMailDialog()">
         Envoyer par Email
       </button>
@@ -109,6 +114,7 @@
       color="primary"
       *ngIf="isGuestView"
       (click)="submitResponses()"
+      [disabled]="isReadOnlyView"
     >
       Répondre
     </button>

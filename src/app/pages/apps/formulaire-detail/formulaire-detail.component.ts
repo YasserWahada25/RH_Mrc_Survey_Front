@@ -23,7 +23,7 @@ import { SectionService }                       from 'src/app/services/section.s
 import { QuestionService }                      from 'src/app/services/question.service';
 import { FormEmailService }                     from 'src/app/services/form-email.service';
 import { UserSelectDialogComponent }            from './user-select-dialog/user-select-dialog.component';
-import { ResponseService }                      from 'src/app/services/response.service';
+import { ResponseService, ResponseDetailDTO }   from 'src/app/services/response.service';
 
 @Component({
   selector: 'app-formulaire-detail',
@@ -51,6 +51,7 @@ export class FormulaireDetailComponent implements OnInit {
   sections: Array<any & { questions: any[] }> = [];
   answers: Record<string, any> = {};
   isGuestView = false;
+  isReadOnlyView = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -63,15 +64,19 @@ export class FormulaireDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id    = this.route.snapshot.paramMap.get('id')!;
-    const token = this.route.snapshot.queryParamMap.get('token');
+    const formId = this.route.snapshot.paramMap.get('formId') ?? this.route.snapshot.paramMap.get('id')!;
+    const responseId = this.route.snapshot.paramMap.get('responseId');
+    const token      = this.route.snapshot.queryParamMap.get('token');
 
-    if (token) {
+    if (responseId) {
+      this.isReadOnlyView = true;
+       this.loadResponseView(formId, responseId);
+    }
+    else if (token) {
       this.isGuestView = true;
-      this.loadGuestView(id, token);
+      this.loadGuestView(formId, token);
     } else {
-      this.isGuestView = false;
-      this.loadOwnerView(id);
+      this.loadOwnerView(formId);
     }
   }
 
@@ -106,6 +111,32 @@ export class FormulaireDetailComponent implements OnInit {
         this.initAnswers();
       },
       error: () => alert('Lien invalide ou expiré')
+    });
+  }
+
+  private loadResponseView(formId: string, responseId: string): void {
+    this.respSvc.getResponse(formId, responseId).subscribe({
+      next: (resp: ResponseDetailDTO) => {
+        this.formData = resp.formulaire;
+        this.secSvc.findByFormulaire(formId).pipe(
+          switchMap(secs =>
+            secs.length
+              ? forkJoin(secs.map(sec =>
+                  this.qSvc.findBySection(sec._id!).pipe(
+                    map(qs => ({ ...sec, questions: qs }))
+                  )
+                ))
+              : of([])
+          )
+        ).subscribe(secs => {
+          this.sections = secs;
+          this.initAnswers();
+          resp.answers.forEach(a => {
+            this.answers[a.questionId] = a.answer;
+          });
+        });
+      },
+      error: () => alert('Réponse introuvable')
     });
   }
 

@@ -156,6 +156,18 @@ export const AppsRoutes: Routes = [
       },
 
       {
+  path: 'reponses/:formId/:responseId',
+  component: FormulaireDetailComponent,
+  data: {
+    title: 'Détail Réponse',
+    urls: [
+      { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      { title: 'Détail Réponse' }
+    ]
+  }
+},
+
+      {
         path: 'QuizDisque',
         component: QuizDisqueComponent,
         data: {

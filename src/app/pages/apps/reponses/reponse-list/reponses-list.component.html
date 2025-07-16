@@ -1,10 +1,12 @@
+<!-- src/app/pages/apps/reponses/reponse-list/reponses-list.component.html -->
+
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <h3 class="f-s-18 f-w-600 mb-16">Liste des réponses</h3>
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
 
-        <!-- Date -->
+        <!-- Date de soumission -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Date de soumission</th>
           <td mat-cell *matCellDef="let row">{{ row.date }}</td>
@@ -22,19 +24,25 @@
           <td mat-cell *matCellDef="let row">{{ row.title }}</td>
         </ng-container>
 
-        <!-- Actions (icônes sans méthode pour l’instant) -->
+        <!-- Actions -->
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let row" class="d-flex gap-2">
-            <button mat-icon-button>
+            <!-- Voir la réponse -->
+            <button
+              mat-icon-button
+              [routerLink]="['/apps/reponses', row.formId, row.id]"
+              matTooltip="Voir">
               <i-tabler name="eye" class="icon-18"></i-tabler>
             </button>
-            <button mat-icon-button>
+            <!-- Supprimer la réponse (désactivé pour l’instant) -->
+            <button mat-icon-button matTooltip="Supprimer" disabled>
               <i-tabler name="trash" class="icon-18"></i-tabler>
             </button>
           </td>
         </ng-container>
 
+        <!-- Header et lignes -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row        *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
