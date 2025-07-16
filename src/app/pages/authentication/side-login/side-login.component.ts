@@ -5,19 +5,19 @@ import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { AuthService } from 'src/app/services/authentification.service';
 import { CommonModule } from '@angular/common';
-<<<<<<< HEAD
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-=======
->>>>>>> yasser
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-side-login',
   standalone: true,
-<<<<<<< HEAD
-  imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule,TranslateModule],
-=======
-  imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
->>>>>>> yasser
+  imports: [
+    CommonModule,
+    RouterModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule
+  ],
   templateUrl: './side-login.component.html',
   styleUrls: ['./side-login.component.css'],
 })
@@ -49,11 +49,7 @@ export class AppSideLoginComponent {
 
     if (this.form.valid) {
       const loginData = {
-<<<<<<< HEAD
-        email: this.form.value.uname!, 
-=======
         email: this.form.value.uname!,
->>>>>>> yasser
         password: this.form.value.password!
       };
 
