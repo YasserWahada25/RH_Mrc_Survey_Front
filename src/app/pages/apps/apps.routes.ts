@@ -18,9 +18,16 @@ import { AppTaskboardComponent } from './taskboard/taskboard.component';
 
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
+<<<<<<< HEAD
 import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
 import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.component';
 import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
+=======
+import { QuizDisqueComponent  } from './quiz-disque/quiz-disque.component';
+import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
+
+
+>>>>>>> yasser
 
 export const AppsRoutes: Routes = [
   {
@@ -178,6 +185,20 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
+
+                   {
+        path: 'CreditRequestOwner',
+        component: OwnerCreditRequestsComponent,
+        data: {
+          title: 'Credit Request List',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Credit Request List' },
+          ],
+        },
+         },
+
 
       {
         path: 'contacts',

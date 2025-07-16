@@ -1,63 +1,80 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
+import { CreditRequestService } from '../../../services/credit-request.service';
+import { AuthService } from '../../../services/authentification.service';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 
-interface topcards {
-  id: number;
-  img: string;
-  color: string;
-  title: string;
-  subtitle: string;
-}
+// Attention au chemin relatif ! Selon ton arborescence, peut être '../../credit-request-dialog/credit-request-dialog.component'
+import { CreditRequestDialogComponent } from './credit-request-dialog/credit-request-dialog.component';
 
 @Component({
   selector: 'app-top-cards',
   standalone: true,
-  imports: [MaterialModule],
+  imports: [MaterialModule, MatDialogModule, CreditRequestDialogComponent],
   templateUrl: './top-cards.component.html',
+  styleUrls: ['./top-cards.component.css']
 })
-export class AppTopCardsComponent {
-  topcards: topcards[] = [
-    {
-      id: 1,
-      color: 'primary',
-      img: '/assets/images/svgs/icon-user-male.svg',
-      title: 'Employees',
-      subtitle: '96',
+export class AppTopCardsComponent implements OnInit {
+  credits: number = 0;
+  rhAdminId: string = '';
+
+  constructor(
+    private creditRequestService: CreditRequestService,
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.type === 'rh_admin') {
+      this.rhAdminId = currentUser.id;
+      this.loadCredits();
+    } else {
+      console.error('Utilisateur non connecté ou pas rh_admin');
+    }
+  }
+
+  loadCredits(): void {
+    this.creditRequestService.getCredits(this.rhAdminId).subscribe({
+      next: (res) => {
+        this.credits = res.nombre_credits;
+      },
+      error: (err) => {
+        console.error('Erreur chargement crédits', err);
+      }
+    });
+  }
+
+    openRequestDialog(): void {
+      const dialogRef = this.dialog.open(CreditRequestDialogComponent, {
+        width: '500px',  // augmenter ici
+        maxWidth: '90vw', // max responsive width
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.submitRequest(result);
+        }
+      });
+    }
+
+submitRequest(requestCredits: number) {
+  if (requestCredits < 1) {
+    alert('Veuillez saisir un nombre valide de crédits');
+    return;
+  }
+
+  this.creditRequestService.createRequest(this.rhAdminId, requestCredits).subscribe({
+    next: () => {
+      alert('Demande envoyée avec succès');
+      this.loadCredits(); 
     },
-    {
-      id: 2,
-      color: 'warning',
-      img: '/assets/images/svgs/icon-briefcase.svg',
-      title: 'Clients',
-      subtitle: '3,650',
-    },
-    {
-      id: 3,
-      color: 'accent',
-      img: '/assets/images/svgs/icon-mailbox.svg',
-      title: 'Projects',
-      subtitle: '356',
-    },
-    {
-      id: 4,
-      color: 'error',
-      img: '/assets/images/svgs/icon-favorites.svg',
-      title: 'Events',
-      subtitle: '696',
-    },
-    {
-      id: 5,
-      color: 'success',
-      img: '/assets/images/svgs/icon-speech-bubble.svg',
-      title: 'Payroll',
-      subtitle: '$96k',
-    },
-    {
-      id: 6,
-      color: 'accent',
-      img: '/assets/images/svgs/icon-connect.svg',
-      title: 'Reports',
-      subtitle: '59',
-    },
-  ];
+    error: (err) => {
+      console.error('Erreur lors de la demande', err);
+      alert('Erreur lors de la demande');
+    }
+  });
+}
+
 }

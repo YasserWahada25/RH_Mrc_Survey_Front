@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Demande de crédits</h2>
+
+<mat-dialog-content class="mat-typography" style="max-width: 100%; padding: 24px 36px;">
+  <form (ngSubmit)="onSubmit()" style="width: 100%;">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nombre de crédits à demander</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="requestCredits"
+        name="requestCredits"
+        min="1"
+        required
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="pt-0">
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!requestCredits || requestCredits < 1">
+    Envoyer
+  </button>
+  <button mat-stroked-button color="warn" (click)="onCancel()">Annuler</button>
+</mat-dialog-actions>
