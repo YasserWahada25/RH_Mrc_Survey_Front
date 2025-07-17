@@ -73,6 +73,11 @@ export const navItems: NavItem[] = [
   route: 'apps/reponses',
 },
   {
+    displayName: 'Rapport Formulaire',
+    iconName: 'chart-donut-3',
+    route: 'apps/rapport-formulaire',
+  },
+  {
     displayName: 'ToDo',
     iconName: 'edit',
     route: 'apps/todo',
