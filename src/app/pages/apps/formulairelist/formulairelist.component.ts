@@ -1,4 +1,5 @@
 // src/app/pages/apps/formulairelist/formulairelist.component.ts
+
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -10,23 +11,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizard.component';
-<<<<<<< HEAD
-=======
-
->>>>>>> nadhmi
 import { FormulaireEditComponent, EditDialogData } from '../formulaire-edit/formulaire-edit.component';
 import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/formulaire-view.component';
-import { RouterModule } from '@angular/router'
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
-<<<<<<< HEAD
-=======
-
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
->>>>>>> nadhmi
 
 @Component({
   selector: 'app-formulaire-list',
@@ -42,19 +34,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatInputModule,
     MatPaginatorModule,
     MatCardModule,
-<<<<<<< HEAD
-    RouterModule, 
-     MatButtonToggleModule, 
-     
-=======
-
-    RouterModule, 
-     MatButtonToggleModule, 
-     
-
+    MatButtonToggleModule,
+    RouterModule,
     TranslateModule
-
->>>>>>> nadhmi
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css'],
@@ -66,21 +48,11 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> nadhmi
   constructor(
     private dialog: MatDialog,
     private formSvc: FormulaireService,
-   private translate: TranslateService 
+    private translate: TranslateService
   ) {}
-<<<<<<< HEAD
-=======
-
-  // constructor(private dialog: MatDialog, private formSvc: FormulaireService, private translate: TranslateService ) {}
-
->>>>>>> nadhmi
 
   ngOnInit(): void {
     this.loadForms();
@@ -121,7 +93,7 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
       FormulaireEditComponent,
       {
         width: '700px',
-          maxHeight: '90vh', 
+        maxHeight: '90vh',
         data: { formulaireId: form._id! }
       }
     );
@@ -131,24 +103,22 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
   }
 
   /** Duplique un formulaire existant */
- duplicate(form: Formulaire): void {
-  this.formSvc.duplicate(form._id!).subscribe({
-    next: () => this.loadForms(),
-    error: err => console.error('Échec duplication', err)
-  });
-}
+  duplicate(form: Formulaire): void {
+    this.formSvc.duplicate(form._id!).subscribe({
+      next: () => this.loadForms(),
+      error: err => console.error('Échec duplication', err)
+    });
+  }
 
-  /** Affiche / navigue vers la vue détaillée (non implémenté) */
-   view(form: Formulaire): void {
-// -    console.log('View', form);
+  /** Affiche la vue détaillée d’un formulaire */
+  view(form: Formulaire): void {
     this.dialog.open<FormulaireViewComponent, ViewDialogData>(
       FormulaireViewComponent,
       {
-    
         data: { formulaireId: form._id! }
       }
     );
-   }
+  }
 
   /** Supprime un formulaire après confirmation */
   delete(form: Formulaire): void {

@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
-<<<<<<< HEAD
-=======
 
->>>>>>> nadhmi
 import { AppChatComponent } from './chat/chat.component';
 import { AppEmailComponent } from './email/email.component';
 import { DetailComponent } from './email/detail/detail.component';
@@ -16,7 +13,7 @@ import { AppNotesComponent } from './notes/notes.component';
 import { AppTodoComponent } from './todo/todo.component';
 import { AppPermissionComponent } from './permission/permission.component';
 import { AppTaskboardComponent } from './taskboard/taskboard.component';
-<<<<<<< HEAD
+
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
@@ -24,16 +21,6 @@ import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.
 import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
-
-=======
-// import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-
-import { FormulaireListComponent } from './formulairelist/formulairelist.component';
-import { QuizDisqueComponent  } from './quiz-disque/quiz-disque.component';
-import { DepartementComponent } from './departement/departement.component';
-
-
->>>>>>> nadhmi
 
 export const AppsRoutes: Routes = [
   {
@@ -145,7 +132,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-<<<<<<< HEAD
       {
         path: 'formulaires/:id',
         component: FormulaireDetailComponent,
@@ -168,17 +154,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-  {
-    path: 'rapport-formulaire',
-    component: RapportDoughnutPieComponent,
-    data: {
-      title: 'Rapport Formulaire',
-      urls: [
-        { title: 'Dashboard', url: '/dashboards/dashboard1' },
-        { title: 'Rapport Formulaire' }
-      ]
-    }
-  },
       {
         path: 'reponses/:formId/:responseId',
         component: FormulaireDetailComponent,
@@ -191,10 +166,17 @@ export const AppsRoutes: Routes = [
         },
       },
       {
-=======
-
-          {
->>>>>>> nadhmi
+        path: 'rapport-formulaire',
+        component: RapportDoughnutPieComponent,
+        data: {
+          title: 'Rapport Formulaire',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Rapport Formulaire' }
+          ]
+        }
+      },
+      {
         path: 'QuizDisque',
         component: QuizDisqueComponent,
         data: {
@@ -282,7 +264,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      
     ],
   },
 ];
