@@ -1,0 +1,28 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-title>📨 Générer des liens Quiz DISC</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Liste des emails (un par ligne)</mat-label>
+        <textarea matInput formControlName="emails" rows="6" placeholder="email1@example.com&#10;email2@example.com"></textarea>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+        <mat-icon *ngIf="!loading">send</mat-icon>
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        <span *ngIf="!loading">Envoyer</span>
+      </button>
+    </form>
+
+    <mat-divider class="m-y-16"></mat-divider>
+
+    <div *ngIf="response">
+      <h4>{{ response.message }}</h4>
+      <mat-list dense>
+        <mat-list-item *ngFor="let link of response.links">
+          📧 {{ link.email_beneficiaire }} — 🔗 {{ link.token_unique }}
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>
