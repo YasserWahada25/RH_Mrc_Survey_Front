@@ -75,51 +75,79 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     public datePipe: DatePipe,
     private http: HttpClient
   ) { }
+  canAddUser = true;
+  currentUser: any;
 
   ngOnInit(): void {
+
+
+
+    this.currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log('📦 Contenu brut localStorage user:', localStorage.getItem('user'));
+
+    console.log('🎯 Type connecté :', this.currentUser?.type);
+
+    if (this.currentUser?.type === 'responsable' && this.currentUser?.acces === false) {
+      alert('Votre compte est désactivé. Veuillez contacter un administrateur.');
+      return;
+    }
+
     this.fetchEmployees();
   }
-
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  fetchEmployees(): void {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No auth token found!');
-      return;
-    }
+fetchEmployees(): void {
+  const token = localStorage.getItem('token');
+  this.currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
-    
-
-    this.http.get<any[]>('http://localhost:3033/api/users', { headers }).subscribe({
-      next: (users) => {
-         console.log('✅ Données utilisateurs reçues :', users); // 👀 Vérifie bien addedBy ici
-        const transformed = users.map((user, index) => ({
-          id: index + 1,
-          _id: user._id,
-          Name: user.nom || 'N/A',
-          Position: user.type || 'N/A',
-          Email: user.email || 'N/A',
-          added_by: user.addedBy || 'Système',
-          status: user.actif ? 'Activé' : 'Désactivé',
-          acces: user.acces,
-          DateOfJoining: new Date(),
-          imagePath: 'assets/images/profile/user-1.jpg',
-          nom: user.nom,
-          email: user.email,
-          type: user.type
-        }));
-        this.dataSource.data = transformed;
-      },
-      error: (err) => {
-        console.error('Error fetching users:', err);
-      },
-    });
+  if (!token) {
+    console.error('❌ Aucun token trouvé. L’utilisateur n’est pas authentifié.');
+    return;
   }
+
+  const isResponsable = this.currentUser?.type === 'responsable';
+  const isRhAdmin = this.currentUser?.type === 'rh_admin';
+
+  if (isResponsable && this.currentUser?.acces === false) {
+    alert('🚫 Votre compte est désactivé. Veuillez contacter un administrateur.');
+    return;
+  }
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  const url = isResponsable
+    ? 'http://localhost:3033/api/users/for-responsable'
+    : 'http://localhost:3033/api/users';
+
+  this.http.get<any[]>(url, { headers }).subscribe({
+    next: (users) => {
+      console.log('✅ Utilisateurs reçus :', users);
+      const transformed = users.map((user, index) => ({
+        id: index + 1,
+        _id: user._id,
+        Name: user.nom || 'N/A',
+        Position: user.type || 'N/A',
+        Email: user.email || 'N/A',
+        added_by: user.addedBy || 'Système',
+        status: user.acces ? 'Activé' : 'Désactivé',
+        acces: user.acces,
+        DateOfJoining: new Date(), // tu peux remplacer par user.createdAt si tu veux plus précis
+        imagePath: 'assets/images/profile/user-1.jpg',
+        nom: user.nom,
+        email: user.email,
+        type: user.type
+      }));
+      this.dataSource.data = transformed;
+    },
+    error: (err) => {
+      console.error('❌ Erreur lors de la récupération des utilisateurs :', err);
+    }
+  });
+}
+
+
 
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -203,24 +231,30 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     });
   }
 
-toggleAccess(user: Employee): void {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  toggleAccess(user: Employee): void {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-  const payload = { acces: !user.acces }; // 👈 envoyer la valeur opposée
+    const updatedAccess = !user.acces;
 
-  this.http.patch(`http://localhost:3033/api/users/acces/${user._id}`, payload, { headers }).subscribe({
-    next: () => {
-      this.fetchEmployees(); // ✅ recharge les données pour voir la nouvelle valeur
-    },
-    error: (err) => {
-      console.error('Erreur lors de la modification de l’accès :', err);
-    }
-  });
+    // Optimistic update (change local state d'abord)
+    user.acces = updatedAccess;
+
+    this.http.patch(`http://localhost:3033/api/users/acces/${user._id}`, { acces: updatedAccess }, { headers }).subscribe({
+      next: () => {
+        console.log(`✅ Accès mis à jour pour ${user.Name}`);
+      },
+      error: (err) => {
+        console.error('❌ Erreur lors de la modification de l’accès :', err);
+        // Revert in case of error
+        user.acces = !updatedAccess;
+      }
+    });
+  }
+
+
 }
 
-}
-  
 @Component({
   selector: 'app-dialog-content',
   standalone: true,

@@ -13,11 +13,20 @@ import { MatCardModule } from '@angular/material/card';
 
 import { FormulaireService, Formulaire } from 'src/app/services/formulaire.service';
 import { FormulaireWizardComponent } from '../formulaire-wizard/formulaire-wizard.component';
+<<<<<<< HEAD
+=======
+
+>>>>>>> nadhmi
 import { FormulaireEditComponent, EditDialogData } from '../formulaire-edit/formulaire-edit.component';
 import { FormulaireViewComponent, ViewDialogData } from '../formulaire-view/formulaire-view.component';
 import { RouterModule } from '@angular/router'
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
+<<<<<<< HEAD
+=======
+
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+>>>>>>> nadhmi
 
 @Component({
   selector: 'app-formulaire-list',
@@ -33,9 +42,19 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatInputModule,
     MatPaginatorModule,
     MatCardModule,
+<<<<<<< HEAD
     RouterModule, 
      MatButtonToggleModule, 
      
+=======
+
+    RouterModule, 
+     MatButtonToggleModule, 
+     
+
+    TranslateModule
+
+>>>>>>> nadhmi
   ],
   templateUrl: './formulairelist.component.html',
   styleUrls: ['./formulairelist.component.css'],
@@ -47,10 +66,21 @@ export class FormulaireListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> nadhmi
   constructor(
     private dialog: MatDialog,
-    private formSvc: FormulaireService
+    private formSvc: FormulaireService,
+   private translate: TranslateService 
   ) {}
+<<<<<<< HEAD
+=======
+
+  // constructor(private dialog: MatDialog, private formSvc: FormulaireService, private translate: TranslateService ) {}
+
+>>>>>>> nadhmi
 
   ngOnInit(): void {
     this.loadForms();

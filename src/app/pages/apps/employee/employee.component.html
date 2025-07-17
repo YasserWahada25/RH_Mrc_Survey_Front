@@ -10,7 +10,11 @@
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
+<<<<<<< HEAD
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+=======
+        <button mat-flat-button *ngIf="canAddUser" (click)="openDialog('Add', {})" color="primary">
+>>>>>>> nadhmi
           Add Utilisateur
         </button>
       </div>
@@ -87,11 +91,16 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Statut</th>
           <td mat-cell *matCellDef="let element">
-            <mat-slide-toggle [checked]="element.acces" (change)="toggleAccess(element)" color="primary">
+            <mat-slide-toggle [checked]="element.acces" [color]="element.acces ? 'accent' : 'warn'"
+              (change)="toggleAccess(element)">
             </mat-slide-toggle>
           </td>
         </ng-container>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> nadhmi
         <ng-container matColumnDef="projects">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Projects
