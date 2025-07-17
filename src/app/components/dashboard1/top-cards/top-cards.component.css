@@ -4,7 +4,7 @@
   box-shadow: 0 4px 12px rgba(63, 81, 181, 0.1);
   border: 1px solid rgba(63, 81, 181, 0.15);
   height: 100%;
-  min-height: 220px;
+  min-height: 260px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -18,12 +18,14 @@
 
 .request-button {
   position: absolute;
-  top: 5px;
+  top: 10px;
   right: 5px;
-  padding: 5px 3px !important;
+  margin : 1px;
+  height : 25px ;
+  padding: 10px 12px !important;
   font-size: 0.8rem !important;
   text-transform: none;
-  background-color:rgb(94, 111, 204) !important;
+  background-color:rgb(91, 105, 187) !important;
   color: #fff !important; 
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -40,4 +42,9 @@
   color: red !important;
   font-size: 20px !important;
   background-color: yellow !important;
+}
+
+.infinite {
+  color: #00897b; /* vert cyan profond */
+  font-size: 26px;
 }

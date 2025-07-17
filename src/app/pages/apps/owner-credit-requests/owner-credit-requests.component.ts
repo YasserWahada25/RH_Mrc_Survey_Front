@@ -14,6 +14,7 @@ import { CreditRequestService, CreditRequest } from 'src/app/services/credit-req
 import { QuizCreditService } from 'src/app/services/quiz-credit.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
+
 @Component({
   standalone: true,
   selector: 'app-owner-credit-requests',
@@ -28,25 +29,25 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
-    MatButtonModule,
-    MatSnackBarModule
+    MatButtonModule
   ]
 })
 export class OwnerCreditRequestsComponent implements OnInit {
   displayedColumns: string[] = ['societe', 'rh', 'email', 'credits', 'status', 'date', 'action'];
-  dataSource = new MatTableDataSource<CreditRequest & { actionDisabled?: boolean }>();
+  dataSource = new MatTableDataSource<CreditRequest>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private creditRequestService: CreditRequestService,
     private quizCreditService: QuizCreditService,
-    private snackBar: MatSnackBar
+      private snackBar: MatSnackBar
+
   ) {}
 
   ngOnInit(): void {
     this.creditRequestService.getAllRequestsForOwner().subscribe((data) => {
-      this.dataSource.data = data.map(req => ({ ...req, actionDisabled: false }));
+      this.dataSource.data = data;
       this.dataSource.paginator = this.paginator;
     });
   }
@@ -55,31 +56,30 @@ export class OwnerCreditRequestsComponent implements OnInit {
     this.dataSource.filter = value.trim().toLowerCase();
   }
 
-  updateStatus(req: any, status: 'approved' | 'rejected'): void {
-    req.actionDisabled = true;
-
-    if (status === 'approved') {
-      this.quizCreditService.approveAndAffectCredits(req._id).subscribe(() => {
-        req.status = 'approved';
-        this.snackBar.open('✅ Crédits affectés, quiz envoyés et email transmis !', 'Fermer', {
-          duration: 4000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-success']
-        });
+updateStatus(req: CreditRequest, status: 'approved' | 'rejected'): void {
+  if (status === 'approved') {
+    this.quizCreditService.approveAndAffectCredits(req._id).subscribe(() => {
+      req.status = 'approved';
+      this.snackBar.open('✅ Crédits affectés, quiz envoyés et email transmis !', 'Fermer', {
+        duration: 6000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-success']
       });
-    } else {
-      this.creditRequestService.updateRequestStatus(req._id, 'rejected').subscribe(() => {
-        req.status = 'rejected';
-        this.snackBar.open('❌ Demande rejetée avec succès.', 'Fermer', {
-          duration: 6000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-error']
-        });
+    });
+  } else {
+    this.creditRequestService.updateRequestStatus(req._id, 'rejected').subscribe(() => {
+      req.status = 'rejected';
+      this.snackBar.open('❌ Demande rejetée avec succès.', 'Fermer', {
+        duration: 6000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-error']
       });
-    }
+    });
   }
+}
+
 
   getStatusClass(status: string): string {
     switch (status) {
