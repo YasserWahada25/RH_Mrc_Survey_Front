@@ -45,19 +45,19 @@ export class AppTopCardsComponent implements OnInit {
     });
   }
 
-    openRequestDialog(): void {
-      const dialogRef = this.dialog.open(CreditRequestDialogComponent, {
-        width: '500px',  // augmenter ici
-        maxWidth: '90vw', // max responsive width
-        data: {}
-      });
+  openRequestDialog(): void {
+    const dialogRef = this.dialog.open(CreditRequestDialogComponent, {
+      width: '500px',  // augmenter ici
+      maxWidth: '90vw', // max responsive width
+      data: {}
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.submitRequest(result);
-        }
-      });
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.submitRequest(result);
+      }
+    });
+  }
 
 submitRequest(requestCredits: number) {
   if (requestCredits < 1) {
