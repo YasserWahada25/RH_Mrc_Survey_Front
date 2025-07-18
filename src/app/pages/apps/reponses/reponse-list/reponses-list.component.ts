@@ -7,13 +7,16 @@ import { MatCardModule }     from '@angular/material/card';
 import { MatTableModule }    from '@angular/material/table';
 import { MatIconModule }     from '@angular/material/icon';
 import { MatButtonModule }   from '@angular/material/button';
+import { MatMenuModule }     from '@angular/material/menu';
 import { TablerIconsModule } from 'angular-tabler-icons';
 
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import * as ExcelJS from 'exceljs';
+import { saveAs }   from 'file-saver';
 
-import { forkJoin } from 'rxjs';
+import { forkJoin }      from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
+import autoTable from 'jspdf-autotable';
+import jsPDF from 'jspdf';
 
 import { ResponseService }    from 'src/app/services/response.service';
 import { FormulaireService }  from 'src/app/services/formulaire.service';
@@ -45,6 +48,7 @@ export interface ResponseItem {
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    MatMenuModule,
     TablerIconsModule,
   ],
   templateUrl: './reponses-list.component.html',
@@ -61,20 +65,15 @@ export class AppReponsesListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.respSvc.getAllResponses().subscribe(
-      (list: ResponseDTO[]) => {
-        this.dataSource = list.map(r => ({
-          id:     r._id,
-          formId: r.formulaire._id,
-          date:   new Date(r.createdAt).toLocaleDateString('fr-FR', {
-                    day:'2-digit', month:'2-digit', year:'numeric'
-                  }),
-          user:   r.userId==='guest'? 'Anonyme': r.userId,
-          title:  r.formulaire.titre
-        }));
-      },
-      err => console.error('Erreur chargement des réponses :', err)
-    );
+    this.respSvc.getAllResponses().subscribe(list => {
+      this.dataSource = list.map(r => ({
+        id:     r._id,
+        formId: r.formulaire._id,
+        date:   new Date(r.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}),
+        user:   r.userId==='guest'?'Anonyme':r.userId,
+        title:  r.formulaire.titre
+      }));
+    });
   }
 
   downloadPdf(formId: string, responseId: string): void {
@@ -205,5 +204,98 @@ export class AppReponsesListComponent implements OnInit {
     doc.text(dateStr, pageWidth - margin, y + 20, { align:'right' });
 
     doc.save(`${titreForm}.pdf`);
+  }
+
+  exportExcel(formId: string, responseId: string): void {
+    this.respSvc.getResponse(formId, responseId).pipe(
+      mergeMap(resp =>
+        forkJoin({
+          form: this.formSvc.getById(formId),
+          secs: this.secSvc.findByFormulaire(formId),
+        }).pipe(map(o => ({ resp, ...o })))
+      ),
+      mergeMap(({ resp, form, secs }) =>
+        forkJoin(
+          secs.map(sec =>
+            this.qSvc.findBySection(sec._id!).pipe(
+              map(questions => ({ sec, questions }))
+            )
+          )
+        ).pipe(map(secsWithQs => ({ resp, form, secsWithQs })))
+      )
+    ).subscribe(({ resp, form, secsWithQs }) => {
+      const wb = new ExcelJS.Workbook();
+      const ws = wb.addWorksheet('Réponses');
+      // Colonnes
+      ws.columns = [
+        { header: 'Section',  key: 'sec',       width: 30 },
+        { header: 'Question', key: 'question',  width: 50 },
+        { header: 'Réponse',  key: 'reponse',   width: 20 }
+      ];
+      // Header style
+      ws.getRow(1).eachCell(cell => {
+        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF4472C4'} };
+        cell.font = { color:{argb:'FFFFFFFF'}, bold:true };
+        cell.alignment = { horizontal:'center' };
+      });
+
+      let rowIndex = 2;
+      secsWithQs.forEach(({ sec, questions }) => {
+        // Section row in green
+        const secRow = ws.getRow(rowIndex++);
+        secRow.getCell(1).value = sec.titre;
+        secRow.getCell(1).font = { color:{argb:'FF008000'}, bold:true };
+
+        questions.forEach(q => {
+          if (q.inputType === 'evaluation') {
+            // question header row in gray
+            const qh = ws.getRow(rowIndex++);
+            qh.getCell(2).value = q.texte;
+            qh.getCell(2).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE1DFDF'} };
+            qh.getCell(2).font = { bold:true };
+            qh.getCell(2).alignment = { horizontal:'center' };
+
+            // options in red with note right-aligned
+            q.options.forEach((opt:any, idx:number) => {
+              const ans = resp.answers.find(a=>a.questionId===q._id.toString());
+              const val = ans && Array.isArray(ans.answer)? ans.answer[idx] : '';
+              const orow = ws.getRow(rowIndex++);
+              orow.getCell(2).value = opt.label;
+              orow.getCell(2).font  = { color:{argb:'FFFF0000'} };
+              orow.getCell(3).value = val;
+              orow.getCell(3).alignment = { horizontal:'right' };
+            });
+          } else {
+            // classique question/reponse
+            const ans = resp.answers.find(a=>a.questionId===q._id.toString());
+            const val = ans
+              ? Array.isArray(ans.answer)? ans.answer.join(', '): ans.answer
+              : '';
+            const crow = ws.getRow(rowIndex++);
+            crow.getCell(2).value = q.texte;
+            crow.getCell(3).value = val;
+            crow.getCell(3).alignment = { horizontal:'right' };
+          }
+        });
+
+        // blank row after section
+        rowIndex++;
+      });
+
+      // Date de soumission in green italic at end
+      const labelRow = ws.getRow(rowIndex++);
+      labelRow.getCell(1).value = 'Date de soumission';
+      labelRow.getCell(1).font  = { color:{argb:'FF008000'}, italic:true };
+
+      const valueRow = ws.getRow(rowIndex++);
+      valueRow.getCell(3).value = new Date(resp.createdAt)
+        .toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      valueRow.getCell(3).font  = { color:{argb:'FF008000'}, italic:true };
+      valueRow.getCell(3).alignment = { horizontal:'right' };
+
+      wb.xlsx.writeBuffer().then(buffer => {
+        saveAs(new Blob([buffer],{ type:'application/octet-stream' }), `${form.titre}.xlsx`);
+      });
+    });
   }
 }
