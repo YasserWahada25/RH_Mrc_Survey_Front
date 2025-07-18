@@ -1,33 +1,33 @@
 // src/app/pages/apps/reponses/reponse-list/reponses-list.component.ts
 
-import { Component, OnInit } from '@angular/core';
-import { CommonModule }      from '@angular/common';
-import { RouterModule }      from '@angular/router';
-import { MatCardModule }     from '@angular/material/card';
-import { MatTableModule }    from '@angular/material/table';
-import { MatIconModule }     from '@angular/material/icon';
-import { MatButtonModule }   from '@angular/material/button';
-import { MatMenuModule }     from '@angular/material/menu';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { Component, OnInit }   from '@angular/core';
+import { CommonModule }         from '@angular/common';
+import { RouterModule }         from '@angular/router';
+import { MatCardModule }        from '@angular/material/card';
+import { MatTableModule }       from '@angular/material/table';
+import { MatIconModule }        from '@angular/material/icon';
+import { MatButtonModule }      from '@angular/material/button';
+import { MatMenuModule }        from '@angular/material/menu';
+import { TablerIconsModule }    from 'angular-tabler-icons';
 
-import * as ExcelJS from 'exceljs';
-import { saveAs }   from 'file-saver';
+import * as ExcelJS             from 'exceljs';
+import { saveAs }               from 'file-saver';
 
-import { forkJoin }      from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
-import autoTable from 'jspdf-autotable';
-import jsPDF from 'jspdf';
+import { forkJoin }             from 'rxjs';
+import { mergeMap, map }        from 'rxjs/operators';
+import autoTable                from 'jspdf-autotable';
+import jsPDF                    from 'jspdf';
 
-import { ResponseService }    from 'src/app/services/response.service';
-import { FormulaireService }  from 'src/app/services/formulaire.service';
-import { SectionService }     from 'src/app/services/section.service';
-import { QuestionService }    from 'src/app/services/question.service';
+import { ResponseService }      from 'src/app/services/response.service';
+import { FormulaireService }    from 'src/app/services/formulaire.service';
+import { SectionService }       from 'src/app/services/section.service';
+import { QuestionService }      from 'src/app/services/question.service';
 
 interface ResponseDTO {
   _id: string;
   createdAt: string;
   userId: string;
-  formulaire: { _id: string; titre: string };
+  formulaire: { _id: string; titre: string } | null;
 }
 
 export interface ResponseItem {
@@ -54,7 +54,7 @@ export interface ResponseItem {
   templateUrl: './reponses-list.component.html',
 })
 export class AppReponsesListComponent implements OnInit {
-  displayedColumns = ['date','user','title','action'];
+  displayedColumns = ['date', 'user', 'title', 'action'];
   dataSource: ResponseItem[] = [];
 
   constructor(
@@ -65,14 +65,22 @@ export class AppReponsesListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.respSvc.getAllResponses().subscribe(list => {
-      this.dataSource = list.map(r => ({
-        id:     r._id,
-        formId: r.formulaire._id,
-        date:   new Date(r.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}),
-        user:   r.userId==='guest'?'Anonyme':r.userId,
-        title:  r.formulaire.titre
-      }));
+    this.respSvc.getAllResponses().subscribe((list: ResponseDTO[]) => {
+      // filtre ou fallback pour éviter les nulls
+      this.dataSource = list.map(r => {
+        const form = r.formulaire;
+        return {
+          id:    r._id,
+          formId: form?._id ?? '',                                  // vide si null
+          date:  new Date(r.createdAt).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                 }),
+          user:  r.userId === 'guest' ? 'Anonyme' : r.userId,
+          title: form?.titre ?? '— formulaire supprimé —'           // placeholder si null
+        };
+      });
     });
   }
 
@@ -105,33 +113,31 @@ export class AppReponsesListComponent implements OnInit {
     answers: Array<{ sectionId: string; questionId: string; answer: any }>,
     submittedAt: string
   ): void {
-    const doc = new jsPDF({ unit:'pt', format:'a4' });
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
     const margin = 40;
     let y = margin;
-
-    // Titre du formulaire
-    doc.setFontSize(18);
-    doc.setFont('helvetica','bold');
     const pageWidth = doc.internal.pageSize.getWidth();
-    doc.text(titreForm, pageWidth/2, y, { align:'center' });
+
+    // Titre
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text(titreForm, pageWidth / 2, y, { align: 'center' });
     y += 30;
 
-    // Parcours des sections
+    // Sections & questions...
     secsWithQs.forEach(({ sec, questions }) => {
-      // Titre de section
       doc.setFontSize(14);
-      doc.setFont('helvetica','bold');
+      doc.setFont('helvetica', 'bold');
       doc.text(sec.titre, margin, y);
       y += 20;
 
       questions.forEach(q => {
         if (q.inputType === 'evaluation') {
-          // En-tête question
           autoTable(doc, {
             startY: y,
             head: [[
               { content: q.texte, colSpan: 2,
-                styles: { halign:'center', fillColor:[230,230,230], fontStyle:'bold' }
+                styles: { halign: 'center', fillColor: [230,230,230], fontStyle: 'bold' }
               }
             ]],
             body: [],
@@ -140,47 +146,34 @@ export class AppReponsesListComponent implements OnInit {
           });
           y = (doc as any).lastAutoTable.finalY + 8;
 
-          // Tableau Propositions / Note
-          const rows = q.options.map((opt:any, idx:number) => {
+          const rows = q.options.map((opt: any, idx: number) => {
             const ans = answers.find(a => a.questionId === q._id.toString());
             const val = ans && Array.isArray(ans.answer) ? ans.answer[idx] : '';
             return [opt.label, String(val)];
           });
           autoTable(doc, {
             startY: y,
-            head: [[
-              'Proposition',
-              { content: 'Note', styles: { halign: 'right' } }
-            ]],
+            head: [['Proposition', { content: 'Note', styles: { halign: 'right' } }]],
             body: rows,
             styles:     { fontSize: 10, cellPadding: 4 },
-            headStyles: { fillColor:[240,240,240], textColor:30, fontStyle:'bold' },
-            columnStyles: {
-              0: { halign: 'left' },
-              1: { halign: 'right' }
-            },
+            headStyles: { fillColor: [240,240,240], textColor: 30, fontStyle: 'bold' },
+            columnStyles: { 0: { halign:'left' }, 1: { halign:'right' } },
             margin: { left: margin, right: margin }
           });
           y = (doc as any).lastAutoTable.finalY + 15;
+
         } else {
-          // Question classique
           const ans = answers.find(a => a.questionId === q._id.toString());
           const rep = ans
             ? Array.isArray(ans.answer) ? ans.answer.join(', ') : String(ans.answer)
             : '';
           autoTable(doc, {
             startY: y,
-            head: [[
-              'Question',
-              { content: 'Réponse', styles: { halign: 'right' } }
-            ]],
+            head: [['Question', { content: 'Réponse', styles: { halign:'right' } }]],
             body: [[q.texte, rep]],
             styles:     { fontSize: 10, cellPadding: 4 },
-            headStyles: { fillColor:[240,240,240], textColor:30, fontStyle:'bold' },
-            columnStyles: {
-              0: { halign: 'left' },
-              1: { halign: 'right' }
-            },
+            headStyles: { fillColor: [240,240,240], textColor: 30, fontStyle: 'bold' },
+            columnStyles: { 0: { halign:'left' }, 1: { halign:'right' } },
             margin: { left: margin, right: margin }
           });
           y = (doc as any).lastAutoTable.finalY + 15;
@@ -193,15 +186,15 @@ export class AppReponsesListComponent implements OnInit {
       });
     });
 
-    // Date de soumission à droite
+    // Date de soumission
     y += 10;
     doc.setFontSize(10);
-    doc.setFont('helvetica','italic');
-    doc.text('Date de soumission ', pageWidth - margin, y, { align:'right' });
+    doc.setFont('helvetica', 'italic');
+    doc.text('Date de soumission', pageWidth - margin, y, { align: 'right' });
     const dateStr = new Date(submittedAt).toLocaleString('fr-FR', {
-      day:'2-digit', month:'2-digit', year:'numeric'
+      day: '2-digit', month: '2-digit', year: 'numeric'
     });
-    doc.text(dateStr, pageWidth - margin, y + 20, { align:'right' });
+    doc.text(dateStr, pageWidth - margin, y + 20, { align: 'right' });
 
     doc.save(`${titreForm}.pdf`);
   }
@@ -226,50 +219,45 @@ export class AppReponsesListComponent implements OnInit {
     ).subscribe(({ resp, form, secsWithQs }) => {
       const wb = new ExcelJS.Workbook();
       const ws = wb.addWorksheet('Réponses');
-      // Colonnes
       ws.columns = [
-        { header: 'Section',  key: 'sec',       width: 30 },
-        { header: 'Question', key: 'question',  width: 50 },
-        { header: 'Réponse',  key: 'reponse',   width: 20 }
+        { header: 'Section',  key: 'sec',      width: 30 },
+        { header: 'Question', key: 'question', width: 50 },
+        { header: 'Réponse',  key: 'reponse',  width: 20 }
       ];
-      // Header style
       ws.getRow(1).eachCell(cell => {
-        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF4472C4'} };
-        cell.font = { color:{argb:'FFFFFFFF'}, bold:true };
+        cell.fill      = { type:'pattern', pattern:'solid', fgColor:{argb:'FF4472C4'} };
+        cell.font      = { color:{argb:'FFFFFFFF'}, bold:true };
         cell.alignment = { horizontal:'center' };
       });
 
       let rowIndex = 2;
       secsWithQs.forEach(({ sec, questions }) => {
-        // Section row in green
         const secRow = ws.getRow(rowIndex++);
         secRow.getCell(1).value = sec.titre;
-        secRow.getCell(1).font = { color:{argb:'FF008000'}, bold:true };
+        secRow.getCell(1).font  = { color:{argb:'FF008000'}, bold:true };
 
         questions.forEach(q => {
           if (q.inputType === 'evaluation') {
-            // question header row in gray
             const qh = ws.getRow(rowIndex++);
             qh.getCell(2).value = q.texte;
-            qh.getCell(2).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE1DFDF'} };
-            qh.getCell(2).font = { bold:true };
+            qh.getCell(2).fill  = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE1DFDF'} };
+            qh.getCell(2).font  = { bold:true };
             qh.getCell(2).alignment = { horizontal:'center' };
 
-            // options in red with note right-aligned
             q.options.forEach((opt:any, idx:number) => {
-              const ans = resp.answers.find(a=>a.questionId===q._id.toString());
-              const val = ans && Array.isArray(ans.answer)? ans.answer[idx] : '';
+              const ans = resp.answers.find(a => a.questionId === q._id.toString());
+              const val = ans && Array.isArray(ans.answer) ? ans.answer[idx] : '';
               const orow = ws.getRow(rowIndex++);
               orow.getCell(2).value = opt.label;
               orow.getCell(2).font  = { color:{argb:'FFFF0000'} };
               orow.getCell(3).value = val;
               orow.getCell(3).alignment = { horizontal:'right' };
             });
+
           } else {
-            // classique question/reponse
-            const ans = resp.answers.find(a=>a.questionId===q._id.toString());
+            const ans = resp.answers.find(a => a.questionId === q._id.toString());
             const val = ans
-              ? Array.isArray(ans.answer)? ans.answer.join(', '): ans.answer
+              ? Array.isArray(ans.answer) ? ans.answer.join(', ') : ans.answer
               : '';
             const crow = ws.getRow(rowIndex++);
             crow.getCell(2).value = q.texte;
@@ -278,23 +266,21 @@ export class AppReponsesListComponent implements OnInit {
           }
         });
 
-        // blank row after section
         rowIndex++;
       });
 
-      // Date de soumission in green italic at end
       const labelRow = ws.getRow(rowIndex++);
       labelRow.getCell(1).value = 'Date de soumission';
       labelRow.getCell(1).font  = { color:{argb:'FF008000'}, italic:true };
 
       const valueRow = ws.getRow(rowIndex++);
       valueRow.getCell(3).value = new Date(resp.createdAt)
-        .toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+        .toLocaleString('fr-FR',{ day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
       valueRow.getCell(3).font  = { color:{argb:'FF008000'}, italic:true };
       valueRow.getCell(3).alignment = { horizontal:'right' };
 
       wb.xlsx.writeBuffer().then(buffer => {
-        saveAs(new Blob([buffer],{ type:'application/octet-stream' }), `${form.titre}.xlsx`);
+        saveAs(new Blob([buffer], { type:'application/octet-stream' }), `${form.titre}.xlsx`);
       });
     });
   }
