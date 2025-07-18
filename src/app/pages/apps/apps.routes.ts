@@ -11,7 +11,9 @@ import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { AppContactComponent } from './contact/contact.component';
 import { AppNotesComponent } from './notes/notes.component';
 import { AppTodoComponent } from './todo/todo.component';
-import { AppPermissionComponent } from './permission/permission.component';
+// import { AppPermissionComponent } from './permission/permission.component';
+import { PermissionComponent } from './permission/permission.component';
+
 import { AppTaskboardComponent } from './taskboard/taskboard.component';
 
 import { DepartementComponent } from './departement/departement.component';
@@ -90,7 +92,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'permission',
-        component: AppPermissionComponent,
+        component: PermissionComponent,
         data: {
           title: 'Roll Base Access',
           urls: [

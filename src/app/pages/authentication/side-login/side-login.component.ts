@@ -43,44 +43,44 @@ export class AppSideLoginComponent {
   }
 
   submit() {
-    this.isSubmitted = true;
-    this.isError = false;
-    this.message = '';
+  this.isSubmitted = true;
+  this.isError = false;
+  this.message = '';
 
-    if (this.form.valid) {
-      const loginData = {
-        email: this.form.value.uname!,
-        password: this.form.value.password!
-      };
+  if (this.form.valid) {
+    const loginData = {
+      email: this.form.value.uname!,
+      password: this.form.value.password!
+    };
 
-      console.log('Données envoyées :', loginData);
-      this.authService.login(loginData).subscribe({
-        next: (res) => {
-          console.log('Réponse login : ', res);
+    console.log('📤 Données envoyées :', loginData);
+    this.authService.login(loginData).subscribe({
+      next: (res) => {
+        console.log('✅ Réponse login : ', res);
 
-          if (!res || !res.token || !res.user) {
-            this.isError = true;
-            this.message = 'Réponse serveur invalide.';
-            this.isSubmitted = false;
-            return;
-          }
-
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('userId', res.user.id);
-          localStorage.setItem('userEmail', res.user.email);
-          localStorage.setItem('userType', res.user.type);
-          localStorage.setItem('societe', res.user.societe);
-
-          this.router.navigate(['/dashboards/dashboard1']);
-        },
-        error: (err) => {
+        if (!res || !res.token || !res.user) {
           this.isError = true;
+          this.message = 'Réponse serveur invalide.';
           this.isSubmitted = false;
-          this.message = err.error?.message || 'Erreur lors de la connexion';
-          this.form.patchValue({ password: '' });
-          if (err.error.code === 403) this.form.patchValue({ uname: '' });
+          return;
         }
-      });
-    }
+
+        // ✅ Stockage correct dans localStorage
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user)); // ✅ Clé utilisée dans add.component.ts
+
+        this.router.navigate(['/dashboards/dashboard1']);
+      },
+      error: (err) => {
+        this.isError = true;
+        this.isSubmitted = false;
+        this.message = err.error?.message || 'Erreur lors de la connexion';
+        this.form.patchValue({ password: '' });
+
+        if (err.error.code === 403) this.form.patchValue({ uname: '' });
+      }
+    });
   }
+}
+
 }

@@ -100,30 +100,35 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
 
 fetchEmployees(): void {
   const token = localStorage.getItem('token');
-  this.currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  this.currentUser = currentUser;
 
   if (!token) {
     console.error('❌ Aucun token trouvé. L’utilisateur n’est pas authentifié.');
     return;
   }
 
-  const isResponsable = this.currentUser?.type === 'responsable';
-  const isRhAdmin = this.currentUser?.type === 'rh_admin';
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-  if (isResponsable && this.currentUser?.acces === false) {
+  const isResponsable = currentUser?.type === 'responsable';
+  const isRhAdmin = currentUser?.type === 'rh_admin';
+  const isEmploye = currentUser?.type === 'employe';
+
+  if (isResponsable && currentUser?.acces === false) {
     alert('🚫 Votre compte est désactivé. Veuillez contacter un administrateur.');
     return;
   }
 
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const url = isEmploye
+    ? 'http://localhost:3033/api/users/accessible'
+    : isResponsable
+      ? 'http://localhost:3033/api/users/responsable/employes'
+      : 'http://localhost:3033/api/users';
 
-  const url = isResponsable
-    ? 'http://localhost:3033/api/users/for-responsable'
-    : 'http://localhost:3033/api/users';
+  console.log('🌐 URL utilisée pour fetchEmployees:', url);
 
   this.http.get<any[]>(url, { headers }).subscribe({
     next: (users) => {
-      console.log('✅ Utilisateurs reçus :', users);
       const transformed = users.map((user, index) => ({
         id: index + 1,
         _id: user._id,
@@ -133,12 +138,13 @@ fetchEmployees(): void {
         added_by: user.addedBy || 'Système',
         status: user.acces ? 'Activé' : 'Désactivé',
         acces: user.acces,
-        DateOfJoining: new Date(), // tu peux remplacer par user.createdAt si tu veux plus précis
+        DateOfJoining: new Date(user.createdAt || Date.now()),
         imagePath: 'assets/images/profile/user-1.jpg',
         nom: user.nom,
         email: user.email,
         type: user.type
       }));
+
       this.dataSource.data = transformed;
     },
     error: (err) => {
@@ -146,6 +152,8 @@ fetchEmployees(): void {
     }
   });
 }
+
+
 
 
 

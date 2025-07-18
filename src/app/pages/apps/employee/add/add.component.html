@@ -21,15 +21,15 @@
     </mat-form-field>
 
     <!-- Role Field -->
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>{{ 'USER_DIALOG.ROLE_LABEL' | translate }}</mat-label>
-      <mat-select [(ngModel)]="local_data.type" name="type" required>
-        <mat-option value="employe">{{ 'USER_DIALOG.ROLES.EMPLOYEE' | translate }}</mat-option>
-        <mat-option value="rh_admin">{{ 'USER_DIALOG.ROLES.HR_ADMIN' | translate }}</mat-option>
-        <mat-option value="responsable">{{ 'USER_DIALOG.ROLES.MANAGER' | translate }}</mat-option>
-        <mat-option value="owner">{{ 'USER_DIALOG.ROLES.OWNER' | translate }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Rôle</mat-label>
+  <mat-select [(ngModel)]="local_data.type" name="type" required [disabled]="isResponsable">
+    <mat-option value="employe">Employé</mat-option>
+    <mat-option value="responsable">Responsable</mat-option>
+    <mat-option value="rh_admin">RH Admin</mat-option>
+    <mat-option value="owner">Owner</mat-option>
+  </mat-select>
+</mat-form-field>
 
     <!-- Action Buttons -->
     <div class="d-flex justify-content-end m-t-16">

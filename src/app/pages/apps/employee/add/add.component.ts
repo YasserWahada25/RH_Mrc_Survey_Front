@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
@@ -26,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule
   ]
 })
-export class AppAddEmployeeComponent {
+export class AppAddEmployeeComponent implements OnInit {
   local_data = {
     nom: '',
     email: '',
@@ -34,11 +34,24 @@ export class AppAddEmployeeComponent {
     type: 'employe'
   };
 
+  isResponsable = false;
+
   constructor(
     private userService: UserService,
     private dialogRef: MatDialogRef<AppAddEmployeeComponent>,
     private snackBar: MatSnackBar
   ) {}
+
+  ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log('🔎 Utilisateur détecté:', user);
+    this.isResponsable = user?.type === 'responsable';
+
+    // 🔒 Forcer le type à 'employe' si c'est un responsable
+    if (this.isResponsable) {
+      this.local_data.type = 'employe';
+    }
+  }
 
   createUser(): void {
     const payload = {
@@ -48,10 +61,15 @@ export class AppAddEmployeeComponent {
       type: this.local_data.type
     };
 
-    console.log('➡️ Données envoyées :', payload);
+    const url = this.isResponsable
+      ? 'http://localhost:3033/api/users/responsable/add'
+      : 'http://localhost:3033/api/users';
 
-    this.userService.createUser(payload).subscribe({
-      next: (res) => {
+    console.log('📤 Payload:', payload);
+    console.log('🌐 URL utilisée:', url);
+
+    this.userService.createUserCustom(payload, url).subscribe({
+      next: () => {
         this.snackBar.open('✅ Utilisateur créé avec succès !', 'Fermer', {
           duration: 3000
         });
@@ -60,9 +78,11 @@ export class AppAddEmployeeComponent {
       error: (err) => {
         console.error('❌ Erreur API:', err);
         const msg = err?.error?.message || err.message || 'Erreur inconnue';
-        this.snackBar.open(`❌ Erreur: ${msg}`, 'Fermer', {
-          duration: 5000
-        });
+        if (err.status === 403) {
+          this.snackBar.open('🚫 Accès refusé. Vérifiez vos droits.', 'Fermer', { duration: 4000 });
+        } else {
+          this.snackBar.open(`❌ Erreur: ${msg}`, 'Fermer', { duration: 5000 });
+        }
       }
     });
   }

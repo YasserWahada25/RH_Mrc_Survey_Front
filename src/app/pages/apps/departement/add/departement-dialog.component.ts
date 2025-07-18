@@ -40,7 +40,7 @@ export class AppDepartementDialogComponent implements OnInit {
     private deptService: DepartementService,
     private userService: UserService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.data) {
@@ -61,17 +61,29 @@ export class AppDepartementDialogComponent implements OnInit {
 
     const payload = { nom: this.nom, responsable: this.responsable };
 
-    if (this.mode === 'edit') {
-      this.deptService.update(this.data._id, payload).subscribe({
+    if (this.mode !== 'edit') {
+  this.deptService.create(payload).subscribe({
+    next: (createdDept) => {
+      const updatePayload = {
+        type: 'responsable',
+        departement: createdDept._id
+      };
+      this.userService.updateUser(this.responsable, updatePayload).subscribe({
         next: () => {
-          this.snackBar.open('Département mis à jour', 'Fermer', { duration: 3000 });
+          this.snackBar.open('Département créé et utilisateur mis à jour', 'Fermer', { duration: 3000 });
           this.dialogRef.close(true);
         },
-        error: (err) => {
-          console.error(err);
-          this.snackBar.open('Erreur mise à jour', 'Fermer', { duration: 3000 });
+        error: () => {
+          this.snackBar.open('Département créé, erreur mise à jour utilisateur', 'Fermer', { duration: 3000 });
+          this.dialogRef.close(true);
         }
       });
+    },
+    error: (err) => {
+      this.snackBar.open('Erreur création département : ' + err.message, 'Fermer', { duration: 3000 });
+    }
+  });
+
     } else {
       this.deptService.create(payload).subscribe({
         next: () => {

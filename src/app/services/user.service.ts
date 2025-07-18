@@ -20,6 +20,20 @@ export class UserService {
   createUser(userData: any) {
     return this.http.post(this.apiUrl, userData, this.getHeaders());
   }
+  
+
+  // ✅ Ajoutée : appelle URL dynamique (pour RH ou Responsable)
+  // createUserCustom(userData: any, url: string) {
+  //   return this.http.post(url, userData, this.getHeaders());
+  // }
+  createUserCustom(userData: any, url: string) {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('Token manquant');
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.post(url, userData, { headers });
+}
+
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl, this.getHeaders());
