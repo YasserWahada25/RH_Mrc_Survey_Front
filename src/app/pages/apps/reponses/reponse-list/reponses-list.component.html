@@ -1,5 +1,3 @@
-<!-- src/app/pages/apps/reponses/reponse-list/reponses-list.component.html -->
-
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <h3 class="f-s-18 f-w-600 mb-16">Liste des réponses</h3>
@@ -34,6 +32,13 @@
               [routerLink]="['/apps/reponses', row.formId, row.id]"
               matTooltip="Voir">
               <i-tabler name="eye" class="icon-18"></i-tabler>
+            </button>
+            <!-- Télécharger la réponse en PDF -->
+            <button
+              mat-icon-button
+              matTooltip="Télécharger"
+              (click)="downloadPdf(row.formId, row.id)">
+              <i-tabler name="download" class="icon-18"></i-tabler>
             </button>
             <!-- Supprimer la réponse (désactivé pour l’instant) -->
             <button mat-icon-button matTooltip="Supprimer" disabled>
