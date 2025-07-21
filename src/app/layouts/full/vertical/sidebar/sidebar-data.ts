@@ -62,6 +62,11 @@ export const navItems: NavItem[] = [
     iconName: 'note',
     route: 'apps/notes',
   },
+    {
+    displayName: 'Assessment',
+    iconName: 'file-invoice',
+    route: 'apps/assessment',
+  },
   {
     displayName: 'Formulaires',
     iconName: 'file-invoice',
