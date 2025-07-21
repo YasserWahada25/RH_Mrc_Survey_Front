@@ -3,8 +3,8 @@ import { Routes } from '@angular/router';
 import { AppChatComponent } from './chat/chat.component';
 import { AppEmailComponent } from './email/email.component';
 import { DetailComponent } from './email/detail/detail.component';
-import { AppCoursesComponent } from './courses/courses.component';
-import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
+// import { AppCoursesComponent } from './courses/courses.component';
+// import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
 import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
@@ -23,10 +23,14 @@ import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.
 import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
+import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
+
 
 export const AppsRoutes: Routes = [
   {
     path: '',
+      canActivate: [authGuard], // ✅ ici !
+
     children: [
       {
         path: 'departement',
@@ -208,28 +212,6 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Contacts' },
-          ],
-        },
-      },
-      {
-        path: 'courses',
-        component: AppCoursesComponent,
-        data: {
-          title: 'Courses',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Courses' },
-          ],
-        },
-      },
-      {
-        path: 'courses/coursesdetail/:id',
-        component: AppCourseDetailComponent,
-        data: {
-          title: 'Course Detail',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Course Detail' },
           ],
         },
       },

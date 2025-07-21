@@ -20,6 +20,8 @@ import { AppHorizontalHeaderComponent } from './horizontal/header/header.compone
 import { AppHorizontalSidebarComponent } from './horizontal/sidebar/sidebar.component';
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { CustomizerComponent } from './shared/customizer/customizer.component';
+import { AuthService } from 'src/app/services/authentification.service';
+
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -63,6 +65,8 @@ interface quicklinks {
   encapsulation: ViewEncapsulation.None,
 })
 export class FullComponent implements OnInit {
+  userName: string = '';
+  userRole: string = '';
   navItems = navItems;
 
   @ViewChild('leftsidenav')
@@ -200,8 +204,14 @@ export class FullComponent implements OnInit {
     private mediaMatcher: MediaMatcher,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
-    private navService: NavService
+    private navService: NavService,
+    private authService: AuthService
   ) {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.userName = user.nom; // ou user.nom si disponible
+      this.userRole = user.type; // exemple: rh_admin, responsable, etc.
+    }
     this.htmlElement = document.querySelector('html')!;
     this.layoutChangesSubscription = this.breakpointObserver
       .observe([MOBILE_VIEW, TABLET_VIEW, MONITOR_VIEW, BELOWMONITOR])

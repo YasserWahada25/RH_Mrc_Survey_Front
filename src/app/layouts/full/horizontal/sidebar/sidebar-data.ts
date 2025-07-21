@@ -38,11 +38,6 @@ export const navItems: NavItem[] = [
         route: 'apps/calendar',
       },
       {
-        displayName: 'Email',
-        iconName: 'point',
-        route: 'apps/email/inbox',
-      },
-      {
         displayName: 'Contacts',
         iconName: 'point',
         route: 'apps/contacts',
@@ -205,16 +200,6 @@ export const navItems: NavItem[] = [
     route: '',
     children: [
       {
-        displayName: 'Treeview',
-        iconName: 'point',
-        route: 'theme-pages/treeview',
-      },
-      {
-        displayName: 'Pricing',
-        iconName: 'point',
-        route: 'theme-pages/pricing',
-      },
-      {
         displayName: 'Account Setting',
         iconName: 'point',
         route: 'theme-pages/account-setting',
@@ -223,33 +208,6 @@ export const navItems: NavItem[] = [
         displayName: 'FAQ',
         iconName: 'point',
         route: 'theme-pages/faq',
-      },
-      {
-        displayName: 'Landingpage',
-        iconName: 'point',
-        route: 'landingpage',
-      },
-      {
-        displayName: 'Widgets',
-        iconName: 'point',
-        route: 'widgets',
-        children: [
-          {
-            displayName: 'Cards',
-            iconName: 'point',
-            route: 'widgets/cards',
-          },
-          {
-            displayName: 'Banners',
-            iconName: 'point',
-            route: 'widgets/banners',
-          },
-          {
-            displayName: 'Charts',
-            iconName: 'point',
-            route: 'widgets/charts',
-          },
-        ],
       },
       {
         displayName: 'Charts',

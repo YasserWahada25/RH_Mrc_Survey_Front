@@ -15,6 +15,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { AuthService } from 'src/app/services/authentification.service';
+
 
 interface notifications {
   id: number;
@@ -59,6 +61,9 @@ interface quicklinks {
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent {
+  userName: string = '';
+  userRole: string = '';
+  userEmail: string = '';
   @Input() showToggle = true;
   @Input() toggleChecked = false;
   @Output() toggleMobileNav = new EventEmitter<void>();
@@ -108,8 +113,16 @@ export class HeaderComponent {
   constructor(
     private vsidenav: CoreService,
     public dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
+    
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.userName = user.nom;
+      this.userRole = user.type;
+      this.userEmail = user.email;
+    }
     translate.setDefaultLang('en');
   }
 

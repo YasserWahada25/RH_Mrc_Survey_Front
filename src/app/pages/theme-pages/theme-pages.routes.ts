@@ -4,7 +4,7 @@ import { Routes } from '@angular/router';
 import { AppAccountSettingComponent } from './account-setting/account-setting.component';
 import { AppFaqComponent } from './faq/faq.component';
 import { AppPricingComponent } from './pricing/pricing.component';
-import { AppTreeviewComponent } from './treeview/treeview.component';
+// import { AppTreeviewComponent } from './treeview/treeview.component';
 
 export const ThemePagesRoutes: Routes = [
   {
@@ -43,17 +43,17 @@ export const ThemePagesRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'treeview',
-        component: AppTreeviewComponent,
-        data: {
-          title: 'Treeview',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Treeview' },
-          ],
-        },
-      },
+      // {
+      //   path: 'treeview',
+      //   component: AppTreeviewComponent,
+      //   data: {
+      //     title: 'Treeview',
+      //     urls: [
+      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      //       { title: 'Treeview' },
+      //     ],
+      //   },
+      // },
     ],
   },
 ];

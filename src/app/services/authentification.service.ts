@@ -5,7 +5,8 @@ import { Observable, BehaviorSubject, map } from 'rxjs';
 interface JwtPayload {
   id: string;
   email: string;
-  type: string; // rh_admin, owner, etc.
+  type: string; // rh_admin, owner, etc
+  nom: string;
 }
 
 @Injectable({ providedIn: 'root' })
