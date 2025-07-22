@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuizLinkService } from 'src/app/services/quiz-link.service';
-import { MaterialModule } from 'src/app/material.module'; // Chemin adapté selon ta structure
-
+import { MaterialModule } from 'src/app/material.module';
 @Component({
   selector: 'app-generate-link',
   standalone: true,

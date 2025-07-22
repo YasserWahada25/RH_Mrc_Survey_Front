@@ -1,0 +1,22 @@
+.question-row-horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.question-text {
+  font-size: 16px;
+  flex: 1;
+}
+
+.radio-buttons-inline {
+  display: flex;
+  gap: 8px;
+}
+
+.radio-label {
+  font-weight: bold;
+  margin-left: 4px;
+}

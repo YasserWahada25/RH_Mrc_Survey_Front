@@ -22,6 +22,15 @@ export const routes: Routes = [
             m => m.AppSideLoginComponent
           )
       },
+      
+          {
+      path: 'quiz-disc/:token',  
+      loadComponent: () =>
+        import('./pages/apps/quiz-disc-public/quiz-disc-public.component').then(
+          m => m.QuizDiscPublicComponent
+        )
+    },
+
       {
         path: 'authentication',
         loadChildren: () =>
