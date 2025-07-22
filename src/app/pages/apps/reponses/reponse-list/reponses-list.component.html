@@ -1,5 +1,3 @@
-<!-- src/app/pages/apps/reponses/reponse-list/reponses-list.component.html -->
-
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <h3 class="f-s-18 f-w-600 mb-16">Liste des réponses</h3>
@@ -35,6 +33,20 @@
               matTooltip="Voir">
               <i-tabler name="eye" class="icon-18"></i-tabler>
             </button>
+            <!-- Ajouter un menu de téléchargement -->
+<button mat-icon-button [matMenuTriggerFor]="downloadMenu" matTooltip="Télécharger">
+  <i-tabler name="download" class="icon-18"></i-tabler>
+</button>
+<mat-menu #downloadMenu="matMenu">
+  <button mat-menu-item (click)="downloadPdf(row.formId, row.id)">
+    <mat-icon>picture_as_pdf</mat-icon>
+    <span>PDF</span>
+  </button>
+  <button mat-menu-item (click)="exportExcel(row.formId, row.id)">
+    <mat-icon>grid_on</mat-icon>
+    <span>Excel</span>
+  </button>
+</mat-menu>
             <!-- Supprimer la réponse (désactivé pour l’instant) -->
             <button mat-icon-button matTooltip="Supprimer" disabled>
               <i-tabler name="trash" class="icon-18"></i-tabler>

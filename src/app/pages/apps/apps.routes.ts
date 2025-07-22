@@ -3,19 +3,14 @@ import { Routes } from '@angular/router';
 import { AppChatComponent } from './chat/chat.component';
 import { AppEmailComponent } from './email/email.component';
 import { DetailComponent } from './email/detail/detail.component';
-// import { AppCoursesComponent } from './courses/courses.component';
-// import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
 import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { AppContactComponent } from './contact/contact.component';
 import { AppNotesComponent } from './notes/notes.component';
 import { AppTodoComponent } from './todo/todo.component';
-// import { AppPermissionComponent } from './permission/permission.component';
 import { PermissionComponent } from './permission/permission.component';
-
 import { AppTaskboardComponent } from './taskboard/taskboard.component';
-
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
@@ -23,14 +18,14 @@ import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.
 import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
-import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
+import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 
+import { authGuard } from '../../guards/auth.guard';
 
 export const AppsRoutes: Routes = [
   {
     path: '',
-      canActivate: [authGuard], // ✅ ici !
-
+    canActivate: [authGuard],
     children: [
       {
         path: 'departement',
@@ -128,6 +123,17 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+        path: 'assessment',
+        component: AssessmentListComponent,
+        data: {
+          title: 'Assessment',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Assessment' },
+          ],
+        },
+      },
+      {
         path: 'formulaires',
         component: FormulaireListComponent,
         data: {
@@ -178,9 +184,9 @@ export const AppsRoutes: Routes = [
           title: 'Rapport Formulaire',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Rapport Formulaire' }
-          ]
-        }
+            { title: 'Rapport Formulaire' },
+          ],
+        },
       },
       {
         path: 'QuizDisque',
