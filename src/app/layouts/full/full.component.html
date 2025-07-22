@@ -35,9 +35,9 @@
               <span class="f-s-12">{{ userRole | titlecase }}</span>
             </div>
             <div class="m-l-auto">
-              <a mat-icon-button [routerLink]="['/authentication/login']" class="d-flex justify-content-center">
+              <button mat-icon-button class="d-flex justify-content-center" (click)="logout()">
                 <i-tabler name="power" class="text-primary icon-18 d-flex"></i-tabler>
-              </a>
+              </button>
             </div>
           </div>
         </div>

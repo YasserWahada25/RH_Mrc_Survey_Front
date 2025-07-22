@@ -279,4 +279,9 @@ export class FullComponent implements OnInit {
       this.htmlElement.classList.add('light-theme');
     }
   }
+  logout() {
+  this.authService.logout(); // supprime le token et réinitialise le subject
+  this.router.navigate(['/authentication/login']); // redirige vers login
+}
+
 }
