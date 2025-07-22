@@ -129,7 +129,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
+       {
         path: 'assessment',
         component: AssessmentListComponent,
         data: {
