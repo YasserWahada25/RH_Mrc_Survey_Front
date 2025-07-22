@@ -25,13 +25,27 @@ export class AuthService {
   }
 
   login(data: { email: string; password: string }): Observable<{ token: string, user: any }> {
-    return this.http.post<{ token: string, user: any }>(`${this.BASE_URL}/login`, data);
-  }
+  return this.http.post<{ token: string, user: any }>(`${this.BASE_URL}/login`, data).pipe(
+    map((response) => {
+      // Stocker le token dans localStorage
+      localStorage.setItem('token', response.token);
+
+      // Décoder le token pour obtenir les données (nom, type, etc)
+      const payload = this.decodeToken(response.token);
+
+      // Mettre à jour le BehaviorSubject
+      this.currentUserSubject.next(payload);
+
+      return response;
+    })
+  );
+}
 
   logout() {
     localStorage.removeItem('token');
-    this.currentUserSubject.next(null);
-  }
+    localStorage.removeItem('currentUser'); // facultatif si tu l’utilises
+  this.currentUserSubject.next(null);
+}
 
   getToken(): string | null {
     return localStorage.getItem('token');
