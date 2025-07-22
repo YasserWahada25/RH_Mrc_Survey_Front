@@ -24,28 +24,23 @@ export class AuthService {
     return this.http.post(`${this.BASE_URL}/register-rh`, data);
   }
 
-  login(data: { email: string; password: string }): Observable<{ token: string, user: any }> {
-  return this.http.post<{ token: string, user: any }>(`${this.BASE_URL}/login`, data).pipe(
-    map((response) => {
-      // Stocker le token dans localStorage
-      localStorage.setItem('token', response.token);
-
-      // Décoder le token pour obtenir les données (nom, type, etc)
-      const payload = this.decodeToken(response.token);
-
-      // Mettre à jour le BehaviorSubject
-      this.currentUserSubject.next(payload);
-
-      return response;
-    })
-  );
-}
+  login(data: { email: string; password: string }): Observable<{ token: string; user: any }> {
+    return this.http.post<{ token: string; user: any }>(`${this.BASE_URL}/login`, data).pipe(
+      map((response) => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        const payload = this.decodeToken(response.token);
+        this.currentUserSubject.next(payload);
+        return response;
+      })
+    );
+  }
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('currentUser'); // facultatif si tu l’utilises
-  this.currentUserSubject.next(null);
-}
+    localStorage.removeItem('user');
+    this.currentUserSubject.next(null);
+  }
 
   getToken(): string | null {
     return localStorage.getItem('token');
