@@ -208,6 +208,8 @@ export class FullComponent implements OnInit {
     private authService: AuthService
   ) {
     const user = this.authService.getCurrentUser();
+    console.log('Utilisateur courant:', user);
+
     if (user) {
       this.userName = user.nom; // ou user.nom si disponible
       this.userRole = user.type; // exemple: rh_admin, responsable, etc.
