@@ -4,7 +4,6 @@ import { FullComponent } from './layouts/full/full.component';
 import { FormulaireDetailComponent } from './pages/apps/formulaire-detail/formulaire-detail.component';
 import { AuthGuard } from './services/auth-guard.service';
 
-
 export const routes: Routes = [
   {
     path: '',
@@ -41,7 +40,7 @@ export const routes: Routes = [
   {
     path: '',
     component: FullComponent,
-    canActivateChild: [AuthGuard],   
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'starter',
@@ -72,22 +71,12 @@ export const routes: Routes = [
         path: 'apps',
         loadChildren: () =>
           import('./pages/apps/apps.routes').then(m => m.AppsRoutes),
-        canLoad: [AuthGuard]           
+        canLoad: [AuthGuard]
       },
       {
         path: 'widgets',
         loadChildren: () =>
           import('./pages/widgets/widgets.routes').then(m => m.WidgetsRoutes),
-      },
-      {
-        path: 'tables',
-        loadChildren: () =>
-          import('./pages/tables/tables.routes').then(m => m.TablesRoutes),
-      },
-      {
-        path: 'datatable',
-        loadChildren: () =>
-          import('./pages/datatable/datatable.routes').then(m => m.DatatablesRoutes),
       },
       {
         path: 'theme-pages',
@@ -108,7 +97,6 @@ export const routes: Routes = [
     ],
   },
 
-  
   {
     path: '**',
     redirectTo: 'authentication/error',

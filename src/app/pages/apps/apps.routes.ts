@@ -3,19 +3,13 @@ import { Routes } from '@angular/router';
 import { AppChatComponent } from './chat/chat.component';
 import { AppEmailComponent } from './email/email.component';
 import { DetailComponent } from './email/detail/detail.component';
-// import { AppCoursesComponent } from './courses/courses.component';
-// import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
 import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { AppContactComponent } from './contact/contact.component';
 import { AppNotesComponent } from './notes/notes.component';
 import { AppTodoComponent } from './todo/todo.component';
-// import { AppPermissionComponent } from './permission/permission.component';
 import { PermissionComponent } from './permission/permission.component';
-
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
-
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
@@ -27,9 +21,6 @@ import { AssessmentListComponent } from './assessmentlist/assessmentlist.compone
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
 import { AuthGuard } from '../../services/auth-guard.service';
 import { QuizResultsListRHComponent } from './quiz-results-listRH/quiz-results-listRH.component';
-
-
-
 
 export const AppsRoutes: Routes = [
   {
@@ -109,7 +100,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
       {
         path: 'todo',
         component: AppTodoComponent,
@@ -121,19 +111,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
       {
-        path: 'taskboard',
-        component: AppTaskboardComponent,
-        data: {
-          title: 'Taskboard',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Taskboard' },
-          ],
-        },
-      },
-       {
         path: 'assessment',
         component: AssessmentListComponent,
         data: {
@@ -177,7 +155,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
       {
         path: 'reponses/:formId/:responseId',
         component: FormulaireDetailComponent,
@@ -189,7 +166,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
       {
         path: 'rapport-formulaire',
         component: RapportDoughnutPieComponent,
@@ -197,11 +173,10 @@ export const AppsRoutes: Routes = [
           title: 'Rapport Formulaire',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Rapport Formulaire' }
-          ]
-        }
+            { title: 'Rapport Formulaire' },
+          ],
+        },
       },
-
       {
         path: 'QuizDisque',
         component: QuizDisqueComponent,
@@ -213,8 +188,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
-            {
+      {
         path: 'quiz-results',
         component: QuizResultsListRHComponent,
         data: {
@@ -225,13 +199,9 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
-
-
       {
         path: 'CreditRequestOwner',
         component: OwnerCreditRequestsComponent,
-        
         data: {
           title: 'Credit Request List',
           urls: [
@@ -240,9 +210,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-
-
-            {
+      {
         path: 'generate-links',
         component: GenerateLinkComponent,
         data: {
@@ -253,12 +221,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      
-
-      
-
-
-
       {
         path: 'contacts',
         component: AppContactComponent,
