@@ -23,16 +23,20 @@ import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.
 import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
+<<<<<<< HEAD
 import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 
+=======
+import { GenerateLinkComponent } from './generate-link/generate-link.component';
+import { AuthGuard } from '../../services/auth-guard.service';
+>>>>>>> yasser
 
 
 export const AppsRoutes: Routes = [
   {
     path: '',
-      canActivate: [authGuard], // ✅ ici !
-
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'departement',
@@ -206,6 +210,8 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
+
       {
         path: 'CreditRequestOwner',
         component: OwnerCreditRequestsComponent,
@@ -217,6 +223,38 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
+
+            {
+        path: 'generate-links',
+        component: GenerateLinkComponent,
+        data: {
+          title: 'Generate Links Quiz Disque',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Generate Links Quiz Disque' },
+          ],
+        },
+      },
+      
+      //     {
+      //   path: 'quiz-disc/:linkId',
+      //   component: QuizDiscFromLinkComponent,
+      //   data: {
+      //     title: 'Quiz Disc Link',
+      //     urls: [
+      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      //       { title: 'Quiz Disc Link' },
+      //     ],
+      //   },
+      // },
+
+      
+
+      
+
+
+
       {
         path: 'contacts',
         component: AppContactComponent,

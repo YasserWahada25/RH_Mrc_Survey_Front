@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, map } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 interface JwtPayload {
   id: string;
@@ -25,15 +26,19 @@ export class AuthService {
   }
 
   login(data: { email: string; password: string }): Observable<{ token: string; user: any }> {
-    return this.http.post<{ token: string; user: any }>(`${this.BASE_URL}/login`, data).pipe(
-      map((response) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        const payload = this.decodeToken(response.token);
-        this.currentUserSubject.next(payload);
-        return response;
-      })
-    );
+    return this.http
+      .post<{ token: string; user: any }>(`${this.BASE_URL}/login`, data)
+      .pipe(
+        tap(response => {
+          // Stockage en localStorage
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+
+          // Décodage du token et mise à jour du BehaviorSubject
+          const payload = this.decodeToken(response.token);
+          this.currentUserSubject.next(payload);
+        })
+      );
   }
 
   logout() {
@@ -68,39 +73,3 @@ export class AuthService {
     return JSON.parse(decodedJson);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { HttpClient } from '@angular/common/http';
-// import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs'; 
-
-
-// @Injectable({ providedIn: 'root' })
-// export class AuthService {
-//   private BASE_URL = 'http://localhost:3033/api/auth';
-
-//   constructor(private http: HttpClient) {}
-
-//   registerRh(data: any) {
-//     return this.http.post(`${this.BASE_URL}/register-rh`, data);
-//   }
-
-//   login(data: { email: string, password: string }): Observable<any> {
-//     return this.http.post(`${this.BASE_URL}/login`, data);
-//   }
-// }
-
-
-

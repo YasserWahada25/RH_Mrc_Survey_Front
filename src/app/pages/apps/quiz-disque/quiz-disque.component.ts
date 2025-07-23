@@ -100,7 +100,6 @@ export class QuizDisqueComponent implements OnInit {
         this.result = res;
         this.calculateScorePercentages();
 
-        // ✅ ouverture de la popup avec les données du quiz
         this.dialog.open(QuizResultDialogComponent, {
           width: '80%',
           data: {
