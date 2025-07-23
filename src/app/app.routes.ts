@@ -83,18 +83,6 @@ export const routes: Routes = [
           import('./pages/widgets/widgets.routes').then((m) => m.WidgetsRoutes),
       },
       {
-        path: 'tables',
-        loadChildren: () =>
-          import('./pages/tables/tables.routes').then((m) => m.TablesRoutes),
-      },
-      {
-        path: 'datatable',
-        loadChildren: () =>
-          import('./pages/datatable/datatable.routes').then(
-            (m) => m.DatatablesRoutes
-          ),
-      },
-      {
         path: 'theme-pages',
         loadChildren: () =>
           import('./pages/theme-pages/theme-pages.routes').then(

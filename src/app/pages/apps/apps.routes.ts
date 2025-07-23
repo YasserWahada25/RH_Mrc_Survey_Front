@@ -14,7 +14,7 @@ import { AppTodoComponent } from './todo/todo.component';
 // import { AppPermissionComponent } from './permission/permission.component';
 import { PermissionComponent } from './permission/permission.component';
 
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
+// import { AppTaskboardComponent } from './taskboard/taskboard.component';
 
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
@@ -113,17 +113,6 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Todo App' },
-          ],
-        },
-      },
-      {
-        path: 'taskboard',
-        component: AppTaskboardComponent,
-        data: {
-          title: 'Taskboard',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Taskboard' },
           ],
         },
       },
