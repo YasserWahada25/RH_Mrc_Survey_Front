@@ -1,0 +1,45 @@
+
+<div *ngIf="isInvalidLink" class="error-message" style="color: red; font-weight: bold; margin: 20px;">
+  {{ errorMessage }}
+</div>
+
+<!-- Formulaire uniquement si lien valide -->
+<mat-card *ngIf="!isInvalidLink && !quizSubmitted" class="cardWithShadow theme-card">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Quiz DISC - Accès Public</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="b-t-1">
+    <div class="m-b-16">📧 Participant : <strong>{{ beneficiaireEmail }}</strong></div>
+
+    <ng-container *ngFor="let lot of lots; let i = index">
+      <mat-card class="b-1 m-b-16 shadow-none">
+        <mat-card-content>
+          <div *ngFor="let q of lot.questions; let j = index" class="question-row-horizontal">
+            <div class="question-text">
+              <strong>{{ q.text }}</strong>
+            </div>
+
+            <div class="radio-buttons-inline">
+              <mat-radio-group [(ngModel)]="answers[i].plusIndex" (change)="setPlus(i, j)">
+                <mat-radio-button class="custom-radio" [value]="j">
+                  <span class="radio-label">+</span>
+                </mat-radio-button>
+              </mat-radio-group>
+
+              <mat-radio-group [(ngModel)]="answers[i].minusIndex" (change)="setMinus(i, j)">
+                <mat-radio-button class="custom-radio" [value]="j">
+                  <span class="radio-label">-</span>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+
+    <button mat-raised-button color="primary" (click)="submitQuiz()">
+      Soumettre le Quiz
+    </button>
+  </mat-card-content>
+</mat-card>

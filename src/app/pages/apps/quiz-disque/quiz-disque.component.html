@@ -4,7 +4,6 @@
     </mat-card-header>
 
     <mat-card-content class="b-t-1">
-      <!-- Boucle sur les lots/questions -->
       <ng-container *ngFor="let lot of lots; let i = index">
         <mat-card class="b-1 m-b-16 shadow-none">
           <mat-card-content>
@@ -28,7 +27,6 @@
         </mat-card>
       </ng-container>
 
-      <!-- Bouton de validation -->
       <button mat-raised-button color="primary" (click)="submitQuiz()">
         Soumettre le Quiz
       </button>

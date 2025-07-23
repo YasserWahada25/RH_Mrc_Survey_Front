@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router'; 
 import { MaterialModule } from '../../../material.module';
 import { AuthService } from 'src/app/services/authentification.service';
 import { CommonModule } from '@angular/common';
@@ -26,6 +32,7 @@ export class AppSideLoginComponent {
   isSubmitted = false;
   isError = false;
   message = '';
+  private returnUrl = '/starter';  // ← URL de redirection par défaut
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.email]),
@@ -35,14 +42,18 @@ export class AppSideLoginComponent {
   constructor(
     private settings: CoreService,
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private route: ActivatedRoute          // ← injection
+  ) {
+    // on récupère l'URL souhaitée pour rediriger après login
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.returnUrl;
+  }
 
   get f() {
     return this.form.controls;
   }
 
-  submit() {
+ submit() {
   this.isSubmitted = true;
   this.isError = false;
   this.message = '';
@@ -54,10 +65,12 @@ export class AppSideLoginComponent {
     };
 
     console.log('📤 Données envoyées :', loginData);
+
     this.authService.login(loginData).subscribe({
       next: (res) => {
-        console.log('✅ Réponse login : ', res);
+        console.log('✅ Réponse login :', res);
 
+        // Vérification basique de la réponse
         if (!res || !res.token || !res.user) {
           this.isError = true;
           this.message = 'Réponse serveur invalide.';
@@ -65,22 +78,32 @@ export class AppSideLoginComponent {
           return;
         }
 
-        // ✅ Stockage correct dans localStorage
+        // Stockage du token et des infos utilisateur
         localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user)); // ✅ Clé utilisée dans add.component.ts
+        localStorage.setItem('userId', res.user.id);
+        localStorage.setItem('userEmail', res.user.email);
+        localStorage.setItem('userType', res.user.type);
+        localStorage.setItem('societe', res.user.societe);
+        localStorage.setItem('user', JSON.stringify(res.user));
 
-        this.router.navigate(['/dashboards/dashboard1']);
+        // Redirection vers l’URL de retour (ou tableau de bord)
+        this.router.navigate([this.returnUrl]);
       },
+
       error: (err) => {
         this.isError = true;
         this.isSubmitted = false;
         this.message = err.error?.message || 'Erreur lors de la connexion';
-        this.form.patchValue({ password: '' });
 
-        if (err.error.code === 403) this.form.patchValue({ uname: '' });
+        // On reset le mot de passe, et éventuellement l’email si 403
+        this.form.patchValue({ password: '' });
+        if (err.error.code === 403) {
+          this.form.patchValue({ uname: '' });
+        }
       }
     });
   }
 }
+
 
 }

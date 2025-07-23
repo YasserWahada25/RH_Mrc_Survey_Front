@@ -5,7 +5,7 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
-    displayName: 'Yasser',
+    displayName: 'Home',
     iconName: 'aperture',
     route: '/dashboards/dashboard1',
   },
@@ -27,6 +27,13 @@ export const navItems: NavItem[] = [
     iconName: 'layout',  
     route: 'apps/CreditRequestOwner',
   },
+
+    {
+    displayName: 'Generate Links Quiz Disque',
+    iconName: 'link',  
+    route: 'apps/generate-links',
+  },
+
   {
     displayName: 'Calendar',
     iconName: 'calendar-event',
@@ -51,6 +58,11 @@ export const navItems: NavItem[] = [
     displayName: 'Notes',
     iconName: 'note',
     route: 'apps/notes',
+  },
+    {
+    displayName: 'Assessment',
+    iconName: 'file-invoice',
+    route: 'apps/assessment',
   },
   {
     displayName: 'Formulaires',

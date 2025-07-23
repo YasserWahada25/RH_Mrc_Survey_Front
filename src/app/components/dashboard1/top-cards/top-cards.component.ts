@@ -3,20 +3,20 @@ import { MaterialModule } from '../../../material.module';
 import { CreditRequestService } from '../../../services/credit-request.service';
 import { AuthService } from '../../../services/authentification.service';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-
-// Attention au chemin relatif ! Selon ton arborescence, peut être '../../credit-request-dialog/credit-request-dialog.component'
+import { CommonModule } from '@angular/common';
 import { CreditRequestDialogComponent } from './credit-request-dialog/credit-request-dialog.component';
 
 @Component({
   selector: 'app-top-cards',
   standalone: true,
-  imports: [MaterialModule, MatDialogModule, CreditRequestDialogComponent],
+  imports: [MaterialModule, MatDialogModule, CreditRequestDialogComponent,  CommonModule ],
   templateUrl: './top-cards.component.html',
   styleUrls: ['./top-cards.component.css']
 })
 export class AppTopCardsComponent implements OnInit {
   credits: number = 0;
   rhAdminId: string = '';
+  isRhAdmin: boolean = false; // 👈 Ajouter cette ligne
 
   constructor(
     private creditRequestService: CreditRequestService,
@@ -26,13 +26,16 @@ export class AppTopCardsComponent implements OnInit {
 
   ngOnInit(): void {
     const currentUser = this.authService.getCurrentUser();
+
     if (currentUser && currentUser.type === 'rh_admin') {
       this.rhAdminId = currentUser.id;
+      this.isRhAdmin = true; // 👈 Marquer que c’est un RH admin
       this.loadCredits();
     } else {
-      console.error('Utilisateur non connecté ou pas rh_admin');
+      this.credits = -1;
     }
   }
+
 
   loadCredits(): void {
     this.creditRequestService.getCredits(this.rhAdminId).subscribe({
