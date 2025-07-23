@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router'; 
 import { MaterialModule } from '../../../material.module';
 import { AuthService } from 'src/app/services/authentification.service';
 import { CommonModule } from '@angular/common';
@@ -26,6 +32,7 @@ export class AppSideLoginComponent {
   isSubmitted = false;
   isError = false;
   message = '';
+  private returnUrl = '/starter';  // ← URL de redirection par défaut
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.email]),
@@ -35,8 +42,12 @@ export class AppSideLoginComponent {
   constructor(
     private settings: CoreService,
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private route: ActivatedRoute          // ← injection
+  ) {
+    // on récupère l'URL souhaitée pour rediriger après login
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.returnUrl;
+  }
 
   get f() {
     return this.form.controls;
@@ -53,11 +64,8 @@ export class AppSideLoginComponent {
         password: this.form.value.password!
       };
 
-      console.log('Données envoyées :', loginData);
       this.authService.login(loginData).subscribe({
         next: (res) => {
-          console.log('Réponse login : ', res);
-
           if (!res || !res.token || !res.user) {
             this.isError = true;
             this.message = 'Réponse serveur invalide.';
@@ -65,20 +73,24 @@ export class AppSideLoginComponent {
             return;
           }
 
+          // on stocke token + infos utilisateurs
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.user.id);
           localStorage.setItem('userEmail', res.user.email);
           localStorage.setItem('userType', res.user.type);
           localStorage.setItem('societe', res.user.societe);
 
-          this.router.navigate(['/dashboards/dashboard1']);
+          // redirection vers l'URL initiale
+          this.router.navigate([this.returnUrl]);
         },
         error: (err) => {
           this.isError = true;
           this.isSubmitted = false;
           this.message = err.error?.message || 'Erreur lors de la connexion';
           this.form.patchValue({ password: '' });
-          if (err.error.code === 403) this.form.patchValue({ uname: '' });
+          if (err.error.code === 403) {
+            this.form.patchValue({ uname: '' });
+          }
         }
       });
     }

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, map } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 
 interface JwtPayload {
   id: string;
@@ -23,9 +25,23 @@ export class AuthService {
     return this.http.post(`${this.BASE_URL}/register-rh`, data);
   }
 
-  login(data: { email: string; password: string }): Observable<{ token: string, user: any }> {
-    return this.http.post<{ token: string, user: any }>(`${this.BASE_URL}/login`, data);
-  }
+  // login(data: { email: string; password: string }): Observable<{ token: string, user: any }> {
+  //   return this.http.post<{ token: string, user: any }>(`${this.BASE_URL}/login`, data);
+  // }
+
+
+    login(data: { email: string; password: string }) {
+      return this.http
+        .post<{ token: string, user: any }>(`${this.BASE_URL}/login`, data)
+        .pipe(
+          tap(res => {
+            localStorage.setItem('token', res.token);
+            const payload = this.decodeToken(res.token);
+            this.currentUserSubject.next(payload);
+          })
+        );
+    }
+
 
   logout() {
     localStorage.removeItem('token');

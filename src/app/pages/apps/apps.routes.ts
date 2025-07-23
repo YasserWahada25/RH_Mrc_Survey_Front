@@ -22,10 +22,14 @@ import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
+import { AuthGuard } from '../../services/auth-guard.service';
+
 
 export const AppsRoutes: Routes = [
   {
     path: '',
+    canActivateChild: [AuthGuard],     
+
     children: [
       {
         path: 'departement',
