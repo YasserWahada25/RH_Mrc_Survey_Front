@@ -23,14 +23,10 @@ import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.
 import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
-<<<<<<< HEAD
-import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
-
-=======
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
 import { AuthGuard } from '../../services/auth-guard.service';
->>>>>>> yasser
+// import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
 
 
 export const AppsRoutes: Routes = [
