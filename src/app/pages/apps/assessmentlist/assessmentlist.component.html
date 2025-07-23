@@ -1,28 +1,16 @@
-<!-- src/app/pages/apps/assessmentlist/assessmentlist.component.html -->
-
 <mat-card class="cardWithShadow mb-24">
   <mat-card-content class="p-16">
     <div class="d-flex align-items-center">
-      <!-- Search -->
       <mat-form-field appearance="outline" class="flex-fill me-3 search-field">
         <mat-label>Search assessments</mat-label>
         <input
           matInput
           placeholder="Type to filter…"
           (keyup)="applyFilter($any($event.target).value)" />
-        <button mat-icon-button matSuffix>
-          <mat-icon>search</mat-icon>
-        </button>
+        <button mat-icon-button matSuffix><mat-icon>search</mat-icon></button>
       </mat-form-field>
-
-      <!-- Add Assessment -->
-      <button
-        mat-flat-button
-        color="primary"
-        class="add-btn"
-        (click)="openWizard()">
-        <mat-icon>add</mat-icon>
-        Add Assessment
+      <button mat-flat-button color="primary" class="add-btn" (click)="openWizard()">
+        <mat-icon>add</mat-icon> Add Assessment
       </button>
     </div>
   </mat-card-content>
@@ -32,48 +20,41 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
-        <!-- Colonne Name (Titre) -->
+
+        <!-- Titre -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Titre
-          </th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Titre</th>
+          <td mat-cell *matCellDef="let a" class="f-s-14">{{ a.name }}</td>
+        </ng-container>
+
+        <!-- Type -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
           <td mat-cell *matCellDef="let a" class="f-s-14">
-            {{ a.name }}
+            {{ a.type==='normal' ? 'Normal' : 'Avant / Après' }}
           </td>
         </ng-container>
 
-        <!-- Colonne Actions -->
+        <!-- Actions -->
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
-          </th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
           <td mat-cell *matCellDef="let a" class="action-link">
-            <button
-              mat-icon-button
-              color="warn"
-              matTooltip="Supprimer"
-              (click)="delete(a)">
+            <button mat-icon-button color="warn" matTooltip="Supprimer" (click)="delete(a)">
               <mat-icon>delete</mat-icon>
             </button>
-            <button
-              mat-icon-button
-              color="primary"
-              matTooltip="Voir"
-              [routerLink]="['/apps/assessment', a._id]">
+            <!-- ← ici on navigue vers le détail -->
+            <button mat-icon-button color="primary" matTooltip="Voir"
+                    [routerLink]="['/apps/assessment', a._id]">
               <mat-icon>visibility</mat-icon>
             </button>
           </td>
         </ng-container>
 
-        <!-- En‑têtes et lignes -->
-        <tr mat-header-row *matHeaderRowDef="['name','action']"></tr>
-        <tr mat-row        *matRowDef="let row; columns: ['name','action']"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row        *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
-        showFirstLastButtons>
-      </mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

@@ -9,11 +9,11 @@ import { MatIconModule }                     from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule }  from '@angular/material/paginator';
 import { MatTooltipModule }                  from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
-import { RouterModule }  from '@angular/router';
+import { MatCardModule }                     from '@angular/material/card';
+import { RouterModule }                      from '@angular/router';
 
-import { AssessmentWizardDialogComponent } from '../assessment-wizard-dialog/assessment-wizard-dialog.component';
-import { AssessmentService }               from 'src/app/services/assessment.service';
+import { AssessmentWizardDialogComponent }   from '../assessment-wizard-dialog/assessment-wizard-dialog.component';
+import { AssessmentService }                 from 'src/app/services/assessment.service';
 
 @Component({
   selector: 'app-assessmentlist',
@@ -28,13 +28,14 @@ import { AssessmentService }               from 'src/app/services/assessment.ser
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
-    MatTooltipModule, 
-    MatCardModule,  
-    RouterModule
+    MatTooltipModule,
+    MatCardModule,
+    RouterModule             // <- nécessaire pour routerLink
   ],
   templateUrl: './assessmentlist.component.html',
 })
 export class AssessmentListComponent implements OnInit {
+  displayedColumns: string[] = ['name','type','action'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -48,10 +49,11 @@ export class AssessmentListComponent implements OnInit {
   }
 
   loadAssessments() {
-    this.assessmentService.findAll().subscribe(list => {
-      this.dataSource.data      = list;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.assessmentService.findAll()
+      .subscribe(list => {
+        this.dataSource.data      = list;
+        this.dataSource.paginator = this.paginator;
+      });
   }
 
   applyFilter(filter: string) {
@@ -59,29 +61,16 @@ export class AssessmentListComponent implements OnInit {
   }
 
   openWizard() {
-    const ref = this.dialog.open(AssessmentWizardDialogComponent, {
-      width: '600px'
-    });
+    const ref = this.dialog.open(AssessmentWizardDialogComponent, { width: '600px' });
     ref.afterClosed().subscribe(result => {
-      if (result) {
-        this.assessmentService.create(result)
-          .subscribe(() => this.loadAssessments());
-      }
+      if (result) this.assessmentService.create(result)
+                         .subscribe(() => this.loadAssessments());
     });
-  }
-delete(a: any) {
-    if (!confirm(`Supprimer "${a.name}" ?`)) return;   // confirmation
-    this.assessmentService.delete(a._id)
-      .subscribe({
-        next: () => {
-          this.loadAssessments();                      // recharge la liste
-          // (optionnel) this.snack.open('Supprimé !', 'Fermer', { duration: 2000 });
-        },
-        error: err => console.error('Erreur delete', err)
-      });
   }
 
-  edit(a: any) {
-    // à implémenter si besoin
+  delete(a: any) {
+    if (!confirm(`Supprimer "${a.name}" ?`)) return;
+    this.assessmentService.delete(a._id)
+      .subscribe(() => this.loadAssessments());
   }
 }

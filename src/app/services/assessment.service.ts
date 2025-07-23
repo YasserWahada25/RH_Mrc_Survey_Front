@@ -19,5 +19,25 @@ export class AssessmentService {
     return this.http.delete(`${this.api}/${id}`);
   }
 
-  // update, findById… à ajouter si besoin
+   findResponses(assessmentId: string, userId: string) {
+   return this.http.get<any[]>(
+     `${this.api}/${assessmentId}/responses?userId=${userId}`
+   );
+ }
+
+ submitResponse(assessmentId: string, payload: any) {
+   return this.http.post(
+     `${this.api}/${assessmentId}/responses`,
+     payload
+   );
+ }
+
+ getById(id: string) {
+  return this.http.get<any>(`${this.api}/${id}`);
 }
+
+}
+
+
+
+

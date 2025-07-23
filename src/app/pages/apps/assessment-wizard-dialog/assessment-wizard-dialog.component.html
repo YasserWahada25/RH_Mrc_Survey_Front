@@ -1,20 +1,40 @@
+<!-- src/app/pages/apps/assessment-wizard-dialog/assessment-wizard-dialog.component.html -->
+
 <h2 mat-dialog-title>Créer un assessment</h2>
 
 <mat-dialog-content class="wizard-content">
   <!-- 1) Nom de l’assessment -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Nom de l’assessment</mat-label>
-    <input matInput [(ngModel)]="local.name" name="name" required />
+    <input
+      matInput
+      [(ngModel)]="local.name"
+      name="name"
+      required
+    />
   </mat-form-field>
 
-  <!-- 2) Tasks dynamiques -->
+  <!-- 2) Sélection du type -->
+  <mat-form-field appearance="outline" class="w-100 mb-4">
+    <mat-label>Type d’assessment</mat-label>
+    <mat-select
+      [(ngModel)]="local.type"
+      name="type"
+      required
+    >
+      <mat-option [value]="'normal'">Normal</mat-option>
+      <mat-option [value]="'avant_apres'">Avant / Après</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- 3) Tasks dynamiques -->
   <button mat-button color="primary" (click)="addTask()">
-    <mat-icon>add</mat-icon> Nouvelle tâche
+    <mat-icon>add</mat-icon> Nouvelle Question
   </button>
 
   <div *ngFor="let t of local.tasks; let ti = index" class="task-block">
     <div class="d-flex align-items-center mb-2">
-      <h4>Tâche {{ ti + 1 }}</h4>
+      <h4>Question {{ ti + 1 }}</h4>
       <button mat-icon-button color="warn" (click)="removeTask(ti)">
         <mat-icon>delete</mat-icon>
       </button>
@@ -23,7 +43,12 @@
     <!-- Description de la tâche -->
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Description</mat-label>
-      <input matInput [(ngModel)]="t.description" name="desc{{ti}}" required />
+      <input
+        matInput
+        [(ngModel)]="t.description"
+        name="desc{{ti}}"
+        required
+      />
     </mat-form-field>
 
     <!-- Options avec score 1–5 -->
@@ -71,7 +96,7 @@
     mat-flat-button
     color="primary"
     (click)="finish()"
-    [disabled]="!local.name.trim()"
+    [disabled]="!local.name.trim() || !local.type"
   >
     Enregistrer
   </button>

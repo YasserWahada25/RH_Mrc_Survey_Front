@@ -22,6 +22,7 @@ import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
+import { AssessmentDetailComponent } from './assessment-detail/assessment-detail.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -130,6 +131,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Assessment' },
+          ],
+        },
+      },
+      // ← ajoute cette route juste en-dessous :
+      {
+        path: 'assessment/:id',
+        component: AssessmentDetailComponent,
+        data: {
+          title: 'Détail Assessment',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Détail Assessment' },
           ],
         },
       },
