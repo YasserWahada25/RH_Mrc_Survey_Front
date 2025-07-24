@@ -2,27 +2,32 @@
 
 <mat-card class="assessment-card" *ngIf="assessment">
   <mat-card-header>
-    <mat-card-title class="mat-h2">{{ assessment.name }}</mat-card-title>
+    <mat-card-title>{{ assessment.name }}</mat-card-title>
     <mat-card-subtitle>
-      Type : {{ assessment.type === 'normal' ? 'Normal' : 'Avant / Après' }}
+      {{ adminMode
+         ? ('Type : ' + (assessment.type==='normal' ? 'Normal' : 'Avant / Après'))
+         : (assessment.type==='normal'
+             ? 'Réponse unique'
+             : (phase==='avant'
+                 ? 'Phase «Avant»'
+                 : phase==='apres'
+                   ? 'Phase «Après»'
+                   : 'Toutes réponses envoyées')) }}
     </mat-card-subtitle>
   </mat-card-header>
   <mat-divider></mat-divider>
 
-  <form (ngSubmit)="onSubmit()">
+  <!-- mode admin -->
+  <ng-container *ngIf="adminMode; else userBlock">
     <ng-container *ngFor="let t of assessment.tasks; let i = index">
       <mat-card class="question-card">
-        <mat-card-title>Q{{ i + 1 }}. {{ t.description }}</mat-card-title>
+        <mat-card-header>
+          <mat-card-title>Q{{ i+1 }}. {{ t.description }}</mat-card-title>
+        </mat-card-header>
         <mat-card-content>
-          <mat-radio-group
-            [(ngModel)]="answers[t._id]"
-            name="ans{{ i }}"
-            class="options-group"
-            disabled
-          >
+          <mat-radio-group [disabled]="true" class="options-group">
             <mat-radio-button
               *ngFor="let o of t.options"
-              class="option"
               [value]="o.score"
             >
               {{ o.text }}
@@ -31,11 +36,48 @@
         </mat-card-content>
       </mat-card>
     </ng-container>
-
     <div class="submit-container">
-      <button mat-raised-button color="primary" type="submit">
+      <button mat-raised-button color="accent" (click)="sendByEmail()">
         Envoyer par email
       </button>
     </div>
-  </form>
+  </ng-container>
+
+  <!-- mode utilisateur -->
+  <ng-template #userBlock>
+    <form (ngSubmit)="onSubmit()">
+      <ng-container *ngFor="let t of assessment.tasks; let i = index">
+        <mat-card class="question-card">
+          <mat-card-header>
+            <mat-card-title>Q{{ i+1 }}. {{ t.description }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-radio-group
+              [(ngModel)]="answers[t._id]"
+              name="ans{{i}}"
+              class="options-group"
+              [disabled]="disabledForm"
+            >
+              <mat-radio-button
+                *ngFor="let o of t.options"
+                [value]="o.score"
+              >
+                {{ o.text }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+      <div class="submit-container">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="disabledForm"
+        >
+          Soumettre
+        </button>
+      </div>
+    </form>
+  </ng-template>
 </mat-card>

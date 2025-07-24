@@ -1,0 +1,54 @@
+<!-- src/app/pages/apps/assessment-guest/assessment-guest.component.html -->
+
+<mat-card class="assessment-card" *ngIf="assessment">
+  <mat-card-header>
+    <mat-card-title>{{ assessment.name }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ assessment.type==='normal'
+          ? 'Réponse unique'
+          : (phase==='avant'
+              ? 'Phase «Avant»'
+              : phase==='apres'
+                ? 'Phase «Après»'
+                : 'Toutes réponses envoyées') }}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+
+  <form (ngSubmit)="onSubmit()">
+    <ng-container *ngFor="let t of assessment.tasks; let i = index">
+      <mat-card class="question-card">
+        <mat-card-header>
+          <mat-card-title>Q{{ i + 1 }}. {{ t.description }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-radio-group
+            [(ngModel)]="answers[t._id]"
+            name="ans{{i}}"
+            class="options-group"
+            [disabled]="disabledForm"
+          >
+            <mat-radio-button
+              *ngFor="let o of t.options"
+              [value]="o.score"
+              class="option"
+            >
+              {{ o.text }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+
+    <div class="submit-container">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="disabledForm"
+      >
+        Soumettre
+      </button>
+    </div>
+  </form>
+</mat-card>

@@ -1,11 +1,23 @@
-import { Routes } from '@angular/router';
-import { BlankComponent } from './layouts/blank/blank.component';
-import { FullComponent } from './layouts/full/full.component';
-import { FormulaireDetailComponent } from './pages/apps/formulaire-detail/formulaire-detail.component';
+// src/app/app.routes.ts
 
+import { Routes } from '@angular/router';
+
+// Layouts
+import { BlankComponent } from './layouts/blank/blank.component';
+import { FullComponent }  from './layouts/full/full.component';
+
+// Pages
+import { FormulaireDetailComponent }    from './pages/apps/formulaire-detail/formulaire-detail.component';
+import { AssessmentGuestComponent }     from './pages/apps/assessment-guest/assessment-guest.component';
 
 export const routes: Routes = [
-  // Routes sans layout (auth, landing page)
+  // 0) Route isolée pour les invités (quiz sans header/sidebar)
+  {
+    path: 'take-assessment/:id',
+    component: AssessmentGuestComponent
+  },
+
+  // 1) Routes sans layout (auth, landing page)
   {
     path: '',
     component: BlankComponent,
@@ -13,32 +25,30 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'authentication/side-login',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'authentication/side-login',
         loadComponent: () =>
-          import('./pages/authentication/side-login/side-login.component').then(
-            m => m.AppSideLoginComponent
-          )
+          import('./pages/authentication/side-login/side-login.component')
+            .then(m => m.AppSideLoginComponent)
       },
       {
         path: 'authentication',
         loadChildren: () =>
-          import('./pages/authentication/authentication.routes').then(
-            (m) => m.AuthenticationRoutes
-          ),
+          import('./pages/authentication/authentication.routes')
+            .then(m => m.AuthenticationRoutes)
       },
       {
         path: 'landingpage',
         loadChildren: () =>
-          import('./pages/theme-pages/landingpage/landingpage.routes').then(
-            (m) => m.LandingPageRoutes
-          ),
-      },
-    ],
+          import('./pages/theme-pages/landingpage/landingpage.routes')
+            .then(m => m.LandingPageRoutes)
+      }
+    ]
   },
 
+  // 2) Routes avec layout complet (sidebar, header, footer)
   {
     path: '',
     component: FullComponent,
@@ -46,77 +56,72 @@ export const routes: Routes = [
       {
         path: 'starter',
         loadChildren: () =>
-          import('./pages/pages.routes').then((m) => m.PagesRoutes),
+          import('./pages/pages.routes').then(m => m.PagesRoutes)
       },
       {
         path: 'dashboards',
         loadChildren: () =>
-          import('./pages/dashboards/dashboards.routes').then(
-            (m) => m.DashboardsRoutes
-          ),
+          import('./pages/dashboards/dashboards.routes').then(m => m.DashboardsRoutes)
       },
       {
         path: 'ui-components',
         loadChildren: () =>
-          import('./pages/ui-components/ui-components.routes').then(
-            (m) => m.UiComponentsRoutes
-          ),
+          import('./pages/ui-components/ui-components.routes').then(m => m.UiComponentsRoutes)
       },
       {
         path: 'forms',
         loadChildren: () =>
-          import('./pages/forms/forms.routes').then((m) => m.FormsRoutes),
+          import('./pages/forms/forms.routes').then(m => m.FormsRoutes)
       },
       {
         path: 'charts',
         loadChildren: () =>
-          import('./pages/charts/charts.routes').then((m) => m.ChartsRoutes),
+          import('./pages/charts/charts.routes').then(m => m.ChartsRoutes)
       },
       {
         path: 'apps',
         loadChildren: () =>
-          import('./pages/apps/apps.routes').then((m) => m.AppsRoutes),
+          import('./pages/apps/apps.routes').then(m => m.AppsRoutes)
       },
       {
         path: 'widgets',
         loadChildren: () =>
-          import('./pages/widgets/widgets.routes').then((m) => m.WidgetsRoutes),
+          import('./pages/widgets/widgets.routes').then(m => m.WidgetsRoutes)
       },
       {
         path: 'tables',
         loadChildren: () =>
-          import('./pages/tables/tables.routes').then((m) => m.TablesRoutes),
+          import('./pages/tables/tables.routes').then(m => m.TablesRoutes)
       },
       {
         path: 'datatable',
         loadChildren: () =>
-          import('./pages/datatable/datatable.routes').then(
-            (m) => m.DatatablesRoutes
-          ),
+          import('./pages/datatable/datatable.routes').then(m => m.DatatablesRoutes)
       },
       {
         path: 'theme-pages',
         loadChildren: () =>
-          import('./pages/theme-pages/theme-pages.routes').then(
-            (m) => m.ThemePagesRoutes
-          ),
+          import('./pages/theme-pages/theme-pages.routes').then(m => m.ThemePagesRoutes)
       },
 
-        {
-    path: 'formulaire/:id',
-    component: FormulaireDetailComponent,
-    data: {
-      title: 'Détail Formulaire',
-      urls: [
-        { title: 'Dashboard', url: '/dashboards/dashboard1' },
-        { title: 'Formulaire' }
-      ]
-    }  },
-    ],
+      // Formulaire detail (hors quiz)
+      {
+        path: 'formulaire/:id',
+        component: FormulaireDetailComponent,
+        data: {
+          title: 'Détail Formulaire',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Formulaire' }
+          ]
+        }
+      }
+    ]
   },
 
+  // 3) Catch-all
   {
     path: '**',
-    redirectTo: 'authentication/error',
-  },
+    redirectTo: 'authentication/error'
+  }
 ];

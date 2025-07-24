@@ -19,22 +19,33 @@ export class AssessmentService {
     return this.http.delete(`${this.api}/${id}`);
   }
 
-   findResponses(assessmentId: string, userId: string) {
-   return this.http.get<any[]>(
-     `${this.api}/${assessmentId}/responses?userId=${userId}`
-   );
- }
-
- submitResponse(assessmentId: string, payload: any) {
-   return this.http.post(
-     `${this.api}/${assessmentId}/responses`,
-     payload
-   );
- }
+findResponses(assessmentId: string, userId: string) {
+    return this.http.get<any[]>(
+      `${this.api}/${assessmentId}/responses?userId=${userId}`
+    );
+  }
 
  getById(id: string) {
   return this.http.get<any>(`${this.api}/${id}`);
 }
+
+// Envoi du lien par email à userId
+sendByEmail(assessmentId: string, userId: string) {
+  return this.http.post(
+    `${this.api}/${assessmentId}/send-email`,
+    { userId }
+  );
+}
+
+// Soumission des réponses
+  submitResponse(assessmentId: string, payload: any) {
+    return this.http.post(
+      `${this.api}/${assessmentId}/responses`,
+      payload
+    );
+  }
+  // récupérer les réponses existantes
+  
 
 }
 
