@@ -26,6 +26,7 @@ import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/d
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
 import { AuthGuard } from '../../services/auth-guard.service';
+
 // import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
 
 
@@ -211,6 +212,7 @@ export const AppsRoutes: Routes = [
       {
         path: 'CreditRequestOwner',
         component: OwnerCreditRequestsComponent,
+        
         data: {
           title: 'Credit Request List',
           urls: [

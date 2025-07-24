@@ -32,7 +32,7 @@ export class AppSideLoginComponent {
   isSubmitted = false;
   isError = false;
   message = '';
-  private returnUrl = '/starter';  // ← URL de redirection par défaut
+  private returnUrl = '/dashboards/dashboard1';
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.email]),
@@ -43,9 +43,8 @@ export class AppSideLoginComponent {
     private settings: CoreService,
     private router: Router,
     private authService: AuthService,
-    private route: ActivatedRoute          // ← injection
+    private route: ActivatedRoute          
   ) {
-    // on récupère l'URL souhaitée pour rediriger après login
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.returnUrl;
   }
 

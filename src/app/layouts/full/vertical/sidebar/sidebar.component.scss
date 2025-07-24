@@ -1,0 +1,105 @@
+/* sidebar.component.scss */
+
+/* 1) Host full-height, pas de scroll global */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;               /* désactive tout scroll sur l’hôte */
+  background-color: #ffffff;
+  border-right: 1px solid #e6e8ec;
+}
+
+/* 2) Header fixe (logo + toggle) */
+.sidebar-header {
+  flex: 0 0 auto;                /* jamais scrollé */
+  padding: 1rem;
+  border-bottom: 1px solid #e6e8ec;
+}
+
+/* 3) Contenu scrollable MAIS scrollbar masquée */
+.sidebar-content {
+  flex: 1 1 auto;                /* prend tout l’espace restant */
+  overflow-y: auto;              /* rend ce bloc scrollable */
+  scrollbar-width: none;         /* Firefox */
+  -ms-overflow-style: none;      /* IE 10+ */
+}
+.sidebar-content::-webkit-scrollbar {
+  display: none;                 /* Chrome, Safari, Opera */
+}
+
+/* On enlève les puces au cas où */
+.sidebar-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sidebar-content li {
+  list-style: none;
+}
+
+/* 4) Vos styles de liens et d’icônes */
+.nav-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  padding: 0.75rem 1rem 0.25rem;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: #374151;
+  transition: background-color 0.2s, color 0.2s;
+}
+.nav-link:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+}
+.nav-link.active {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+.nav-link i-tabler {
+  stroke-width: 1.5px;
+  stroke: #6b7280;
+}
+.nav-link.active i-tabler {
+  stroke: #ffffff;
+}
+.nav-link .ms-2 {
+  margin-left: 0.5rem;
+}
+
+/* 5) Footer fixe (profil) */
+.sidebar-footer {
+  flex: 0 0 auto;               /* jamais scrollé */
+  padding: 1rem;
+  border-top: 1px solid #e6e8ec;
+  display: flex;
+  align-items: center;
+}
+.icon-avatar {
+  font-size: 1.5rem;
+  stroke: #6b7280;
+}
+.user-info {
+  margin-left: 0.75rem;
+}
+.user-info .user-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+.user-info .user-role {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+.logout-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

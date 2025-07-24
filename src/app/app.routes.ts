@@ -4,6 +4,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { FormulaireDetailComponent } from './pages/apps/formulaire-detail/formulaire-detail.component';
 import { AuthGuard } from './services/auth-guard.service';
 
+
 export const routes: Routes = [
   {
     path: '',
