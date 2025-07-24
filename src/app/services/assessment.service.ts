@@ -44,7 +44,20 @@ sendByEmail(assessmentId: string, userId: string) {
       payload
     );
   }
-  // récupérer les réponses existantes
+  
+
+//   getUserInfo(assessmentId: string, userId: string) {
+//   return this.http.get<{ firstName: string; lastName: string; email: string }>(
+//     `/api/assessments/${assessmentId}/user-info?userId=${userId}`
+//   );
+// }
+
+getUserInfo(id: string, userId: string) {
+  return this.http.get<{ firstName: string, lastName: string, email: string }>(
+    `/api/assessments/${id}/user-info`,
+    { params: { userId } }
+  );
+}
   
 
 }

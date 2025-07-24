@@ -1,6 +1,6 @@
 <mat-card class="assessment-card" *ngIf="assessment">
   <mat-card-content>
-    <!-- TITRE & DATES -->
+    <!-- EN-TÊTE -->
     <div class="assessment-header">
       <div class="title-block">
         <h1 class="assessment-title">{{ assessment.name }}</h1>
@@ -20,25 +20,49 @@
 
     <!-- FORMULAIRE -->
     <form (ngSubmit)="onSubmit()">
-      <!-- Infos utilisateur -->
+      <!-- ✅ Message préremplissage -->
+      <div *ngIf="readOnlyUser" class="info-message">
+        📝 Vos informations ont été préremplies automatiquement.
+      </div>
+
+      <!-- INFOS UTILISATEUR -->
       <div class="user-info-form">
         <mat-form-field appearance="outline" class="info-field">
           <mat-label>Prénom</mat-label>
-          <input matInput [(ngModel)]="firstName" name="firstName" required />
+          <input
+            matInput
+            [(ngModel)]="firstName"
+            name="firstName"
+            required
+            [readonly]="readOnlyUser"
+          />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="info-field">
           <mat-label>Nom</mat-label>
-          <input matInput [(ngModel)]="lastName" name="lastName" required />
+          <input
+            matInput
+            [(ngModel)]="lastName"
+            name="lastName"
+            required
+            [readonly]="readOnlyUser"
+          />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="info-field">
           <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="email" name="email" type="email" required />
+          <input
+            matInput
+            [(ngModel)]="email"
+            name="email"
+            type="email"
+            required
+            [readonly]="readOnlyUser"
+          />
         </mat-form-field>
       </div>
 
-      <!-- Questions -->
+      <!-- QUESTIONS -->
       <div class="questions-list">
         <ng-container *ngFor="let t of assessment.tasks; let i = index">
           <mat-card class="question-card">
@@ -65,7 +89,7 @@
         </ng-container>
       </div>
 
-      <!-- Bouton -->
+      <!-- BOUTON -->
       <div class="submit-container">
         <button
           mat-raised-button

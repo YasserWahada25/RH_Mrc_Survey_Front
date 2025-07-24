@@ -1,5 +1,3 @@
-// src/app/pages/apps/assessment-guest/assessment-guest.component.ts
-
 import { Component, OnInit }              from '@angular/core';
 import { CommonModule }                   from '@angular/common';
 import { FormsModule }                    from '@angular/forms';
@@ -9,8 +7,8 @@ import { MatButtonModule }                from '@angular/material/button';
 import { MatDividerModule }               from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute }                 from '@angular/router';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule }     from '@angular/material/input';
+import { MatFormFieldModule }             from '@angular/material/form-field';
+import { MatInputModule }                 from '@angular/material/input';
 
 import { AssessmentService }              from 'src/app/services/assessment.service';
 
@@ -39,9 +37,11 @@ export class AssessmentGuestComponent implements OnInit {
   userId!: string;
   phase!: Phase;
   disabledForm = false;
+
   firstName = '';
   lastName  = '';
   email     = '';
+  readOnlyUser = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,10 +52,11 @@ export class AssessmentGuestComponent implements OnInit {
   ngOnInit() {
     const id    = this.route.snapshot.paramMap.get('id')!;
     this.userId = this.route.snapshot.queryParamMap.get('uid')!;
+
     this.svc.getById(id).subscribe(a => {
       this.assessment = a;
       this.initAnswers();
-      this.determinePhase();
+      this.determinePhaseAndLoadUserInfo();
     });
   }
 
@@ -63,37 +64,61 @@ export class AssessmentGuestComponent implements OnInit {
     this.assessment.tasks.forEach((t: any) => this.answers[t._id] = null);
   }
 
-  determinePhase() {
+  determinePhaseAndLoadUserInfo() {
     this.svc.findResponses(this.assessment._id, this.userId)
       .subscribe(list => {
         if (this.assessment.type === 'normal') {
           this.phase = list.length ? 'done' : 'normal';
         } else {
           const done = list.map((r: any) => r.phase as Phase);
-          if (!done.includes('avant')) this.phase = 'avant';
-          else if (!done.includes('apres')) this.phase = 'apres';
-          else this.phase = 'done';
+          if (!done.includes('avant')) {
+            this.phase = 'avant';
+          } else if (!done.includes('apres')) {
+            this.phase = 'apres';
+            // ⚠️ On est en phase "après", il faut charger les infos utilisateur
+            this.loadUserInfoFromPhaseAvant();
+          } else {
+            this.phase = 'done';
+          }
         }
+
         this.disabledForm = (this.phase === 'done');
       });
   }
 
+  loadUserInfoFromPhaseAvant() {
+    this.svc.getUserInfo(this.assessment._id, this.userId).subscribe({
+      next: (data) => {
+        this.firstName = data.firstName;
+        this.lastName  = data.lastName;
+        this.email     = data.email;
+        this.readOnlyUser = true;
+      },
+      error: (err) => {
+        console.warn('❌ Impossible de charger les infos de la phase "avant" :', err);
+      }
+    });
+  }
+
   onSubmit() {
     if (this.disabledForm) return;
+
     const oldPhase = this.phase;
+
     const payload = {
-  userId: this.userId,
-  phase: this.phase,
-  firstName: this.firstName,
-  lastName: this.lastName,
-  email: this.email,
-  answers: Object.entries(this.answers)
-    .map(([taskId, selected]) => ({ taskId, selected }))
-};
+      userId:    this.userId,
+      phase:     this.phase,
+      firstName: this.firstName,
+      lastName:  this.lastName,
+      email:     this.email,
+      answers: Object.entries(this.answers)
+        .map(([taskId, selected]) => ({ taskId, selected }))
+    };
+
     this.svc.submitResponse(this.assessment._id, payload)
       .subscribe(() => {
-        this.determinePhase();
-        // Affichage du message
+        this.determinePhaseAndLoadUserInfo();
+
         if (this.assessment.type !== 'normal') {
           if (oldPhase === 'avant') {
             this.snack.open(
