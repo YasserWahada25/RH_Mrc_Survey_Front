@@ -197,70 +197,70 @@ export class HeaderComponent {
   ];
 
   apps: apps[] = [
-    {
-      id: 1,
-      img: '/assets/images/svgs/icon-dd-chat.svg',
-      title: 'Chat Application',
-      subtitle: 'Messages & Emails',
-      link: '/apps/chat',
-    },
-    {
-      id: 2,
-      img: '/assets/images/svgs/icon-dd-cart.svg',
-      title: 'Todo App',
-      subtitle: 'Completed task',
-      link: '/apps/todo',
-    },
-    {
-      id: 3,
-      img: '/assets/images/svgs/icon-dd-invoice.svg',
-      title: 'Invoice App',
-      subtitle: 'Get latest invoice',
-      link: '/apps/invoice',
-    },
-    {
-      id: 4,
-      img: '/assets/images/svgs/icon-dd-date.svg',
-      title: 'Calendar App',
-      subtitle: 'Get Dates',
-      link: '/apps/calendar',
-    },
-    {
-      id: 5,
-      img: '/assets/images/svgs/icon-dd-mobile.svg',
-      title: 'Contact Application',
-      subtitle: '2 Unsaved Contacts',
-      link: '/apps/contacts',
-    },
-    {
-      id: 6,
-      img: '/assets/images/svgs/icon-dd-lifebuoy.svg',
-      title: 'Tickets App',
-      subtitle: 'Create new ticket',
-      link: '/apps/tickets',
-    },
-    {
-      id: 7,
-      img: '/assets/images/svgs/icon-dd-message-box.svg',
-      title: 'Email App',
-      subtitle: 'Get new emails',
-      link: '/apps/email/inbox',
-    },
-    {
-      id: 8,
-      img: '/assets/images/svgs/icon-dd-application.svg',
-      title: 'Courses',
-      subtitle: 'Create new course',
-      link: '/apps/courses',
-    },
-      {
-      id: 9,
-      img: '/assets/images/svgs/icon-dd-application.svg',
-      title: 'Departement',
-      subtitle: 'Create new Departement',
-      link: '/apps/departement',
-    },
-  ];
+  {
+    id: 1,
+    img: '/assets/images/svgs/icon-dd-chat.svg',
+    title: 'Quiz Disque',
+    subtitle: 'Quiz DISC Test',
+    link: '/apps/QuizDisque',
+  },
+  {
+    id: 2,
+    img: '/assets/images/svgs/icon-dd-cart.svg',
+    title: 'Credit Request',
+    subtitle: 'Gestion des crédits',
+    link: '/apps/CreditRequestOwner',
+  },
+  {
+    id: 3,
+    img: '/assets/images/svgs/icon-dd-application.svg',
+    title: 'Generate Links',
+    subtitle: 'Liens Quiz DISC',
+    link: '/apps/generate-links',
+  },
+  {
+    id: 6,
+    img: '/assets/images/svgs/icon-dd-application.svg',
+    title: 'Departement',
+    subtitle: 'Gestion des départements',
+    link: '/apps/departement',
+  },
+  {
+    id: 7,
+    img: '/assets/images/svgs/icon-dd-application.svg',
+    title: 'Employee',
+    subtitle: 'Gestion des employés',
+    link: '/apps/employee',
+  },
+  {
+    id: 9,
+    img: '/assets/images/svgs/icon-dd-chat.svg',
+    title: 'Assessment',
+    subtitle: 'Évaluations',
+    link: '/apps/assessment',
+  },
+  {
+    id: 10,
+    img: '/assets/images/svgs/imagess.png',
+    title: 'Formulaires',
+    subtitle: 'Formulaires personnalisés',
+    link: '/apps/formulaires',
+  },
+  {
+    id: 11,
+    img: '/assets/images/svgs/icon-dd-message-box.svg',
+    title: 'Réponses',
+    subtitle: 'Réponses aux formulaires',
+    link: '/apps/reponses',
+  },
+  {
+    id: 12,
+    img: '/assets/images/svgs/icon-pie.svg',
+    title: 'Rapport Formulaire',
+    subtitle: 'Statistiques & rapports',
+    link: '/apps/rapport-formulaire',
+  }
+];
 
   quicklinks: quicklinks[] = [
     {

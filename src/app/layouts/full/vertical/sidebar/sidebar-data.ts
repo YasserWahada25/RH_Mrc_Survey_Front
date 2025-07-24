@@ -31,6 +31,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Generate Links Quiz Disque',
+<<<<<<< HEAD
     iconName:    'link',
     route:       'apps/generate-links',
     roles:       ['rh_admin']
@@ -52,6 +53,16 @@ export const navItems: NavItem[] = [
     iconName:    'building',
     route:       'apps/departement',
   },
+=======
+    iconName: 'link',  
+    route: 'apps/generate-links',
+  },
+     {
+        displayName: 'Departement',
+        iconName: 'building',
+        route: 'apps/departement',
+      },
+>>>>>>> nadhmi
   {
     displayName: 'Employee',
     iconName:    'brand-ctemplar',
@@ -83,6 +94,7 @@ export const navItems: NavItem[] = [
     route:       'apps/rapport-formulaire',
   },
   {
+<<<<<<< HEAD
     displayName: 'ToDo',
     iconName:    'edit',
     route:       'apps/todo',
@@ -90,10 +102,16 @@ export const navItems: NavItem[] = [
 
   { navCap: 'Pages' },
   {
+=======
+    navCap: 'Compte',
+  },
+    {
+>>>>>>> nadhmi
     displayName: 'Account Setting',
     iconName:    'user-circle',
     route:       'theme-pages/account-setting',
   },
+<<<<<<< HEAD
   {
     displayName: 'Roll Base Access',
     iconName:    'lock-access',
@@ -109,4 +127,6 @@ export const navItems: NavItem[] = [
     iconName:    'help',
     route:       'theme-pages/faq',
   },
+=======
+>>>>>>> nadhmi
 ];

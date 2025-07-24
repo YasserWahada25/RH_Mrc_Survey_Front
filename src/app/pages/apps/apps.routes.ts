@@ -8,13 +8,13 @@ import { DetailComponent } from './email/detail/detail.component';
 import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import { AppContactComponent } from './contact/contact.component';
+// import { AppContactComponent } from './contact/contact.component';
 import { AppNotesComponent } from './notes/notes.component';
-import { AppTodoComponent } from './todo/todo.component';
+// import { AppTodoComponent } from './todo/todo.component';
 // import { AppPermissionComponent } from './permission/permission.component';
 import { PermissionComponent } from './permission/permission.component';
 
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
+// import { AppTaskboardComponent } from './taskboard/taskboard.component';
 
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
@@ -108,28 +108,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'todo',
-        component: AppTodoComponent,
-        data: {
-          title: 'Todo App',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Todo App' },
-          ],
-        },
-      },
-      {
-        path: 'taskboard',
-        component: AppTaskboardComponent,
-        data: {
-          title: 'Taskboard',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Taskboard' },
-          ],
-        },
-      },
+      
        {
         path: 'assessment',
         component: AssessmentListComponent,
@@ -247,23 +226,6 @@ export const AppsRoutes: Routes = [
       //   },
       // },
 
-      
-
-      
-
-
-
-      {
-        path: 'contacts',
-        component: AppContactComponent,
-        data: {
-          title: 'Contacts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Contacts' },
-          ],
-        },
-      },
       {
         path: 'blog/post',
         component: AppBlogsComponent,
