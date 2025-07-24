@@ -6,8 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule }            from '@angular/router';
 import { HttpClientModule }        from '@angular/common/http';
 
-import { AppComponent }            from './app.component';           // standalone
-import { routes }                  from './app.routes';             // vos routes
+import { AppComponent }            from './app.component';          
+import { routes }                  from './app.routes';            
 
 @NgModule({
   imports: [
@@ -15,9 +15,9 @@ import { routes }                  from './app.routes';             // vos route
     BrowserAnimationsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    AppComponent                                       // importer le composant standalone
+    AppComponent                                      
   ],
   providers: [],
-  bootstrap: [AppComponent]                             // le démarrer
+  bootstrap: [AppComponent]                           
 })
 export class AppModule {}

@@ -10,10 +10,18 @@ import { MatSelectModule }               from '@angular/material/select';
 import { MatButtonModule }               from '@angular/material/button';
 import { MatIconModule }                 from '@angular/material/icon';
 import { MatDividerModule }              from '@angular/material/divider';
+import { MatCheckboxModule }             from '@angular/material/checkbox'; // ✅ Ajouté
 
+interface Option {
+  text: string;
+  score: number;
+  isCorrect: boolean; // ✅ Ajouté
+}
 
-interface Option { text: string; score: number; }
-interface Task   { description: string; options: Option[]; }
+interface Task {
+  description: string;
+  options: Option[];
+}
 
 @Component({
   selector: 'app-assessment-wizard-dialog',
@@ -27,24 +35,22 @@ interface Task   { description: string; options: Option[]; }
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule, 
-    
+    MatDividerModule,
+    MatCheckboxModule // ✅ Ajouté
   ],
   templateUrl: './assessment-wizard-dialog.component.html',
   styles: []
 })
 export class AssessmentWizardDialogComponent {
-  // On renomme titre → name, questions → tasks, label → text, et on ajoute type
   local = {
-    name:  '',
-    type:  '' as 'normal' | 'avant_apres',
-    tasks: [] as Task[], 
-    startDate: '', // ← format YYYY-MM-DD
-    endDate: '' 
+    name: '',
+    type: '' as 'normal' | 'avant_apres',
+    tasks: [] as Task[],
+    startDate: '',
+    endDate: ''
   };
 
-  // Liste des deux types possibles
-  types: Array<'normal'|'avant_apres'> = ['normal', 'avant_apres'];
+  types: Array<'normal' | 'avant_apres'> = ['normal', 'avant_apres'];
 
   constructor(
     private dialogRef: MatDialogRef<AssessmentWizardDialogComponent>
@@ -53,7 +59,7 @@ export class AssessmentWizardDialogComponent {
   addTask() {
     this.local.tasks.push({
       description: '',
-      options: [{ text: '', score: 1 }]
+      options: [{ text: '', score: 1, isCorrect: false }] // ✅ Ajouté
     });
   }
 
@@ -62,7 +68,7 @@ export class AssessmentWizardDialogComponent {
   }
 
   addOption(taskIdx: number) {
-    this.local.tasks[taskIdx].options.push({ text: '', score: 1 });
+    this.local.tasks[taskIdx].options.push({ text: '', score: 1, isCorrect: false }); // ✅ Ajouté
   }
 
   removeOption(taskIdx: number, optIdx: number) {
@@ -70,7 +76,6 @@ export class AssessmentWizardDialogComponent {
   }
 
   finish() {
-    // renvoie l’objet avec name/type/tasks/options/score
     this.dialogRef.close(this.local);
   }
 

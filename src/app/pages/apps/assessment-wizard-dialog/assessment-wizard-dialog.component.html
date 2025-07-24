@@ -3,7 +3,7 @@
 <h2 mat-dialog-title>Créer un assessment</h2>
 
 <mat-dialog-content class="wizard-content">
-  <!-- 1) Nom de l’assessment -->
+  <!-- Nom de l’assessment -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Nom de l’assessment</mat-label>
     <input
@@ -14,7 +14,7 @@
     />
   </mat-form-field>
 
-  <!-- 2) Sélection du type -->
+  <!-- Type d’assessment -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Type d’assessment</mat-label>
     <mat-select
@@ -27,20 +27,20 @@
     </mat-select>
   </mat-form-field>
 
+  <!-- Dates de formation -->
   <div *ngIf="local.type === 'avant_apres'" class="mb-4">
-  <mat-form-field appearance="outline" class="w-100 mb-2">
-    <mat-label>Date début de formation</mat-label>
-    <input matInput [(ngModel)]="local.startDate" name="startDate" type="date" required />
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100 mb-2">
+      <mat-label>Date début de formation</mat-label>
+      <input matInput [(ngModel)]="local.startDate" name="startDate" type="date" required />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Date fin de formation</mat-label>
-    <input matInput [(ngModel)]="local.endDate" name="endDate" type="date" required />
-  </mat-form-field>
-</div>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Date fin de formation</mat-label>
+      <input matInput [(ngModel)]="local.endDate" name="endDate" type="date" required />
+    </mat-form-field>
+  </div>
 
-
-  <!-- 3) Tasks dynamiques -->
+  <!-- Questions -->
   <button mat-button color="primary" (click)="addTask()">
     <mat-icon>add</mat-icon> Nouvelle Question
   </button>
@@ -53,7 +53,7 @@
       </button>
     </div>
 
-    <!-- Description de la tâche -->
+    <!-- Description -->
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Description</mat-label>
       <input
@@ -64,11 +64,11 @@
       />
     </mat-form-field>
 
-    <!-- Options avec score 1–5 -->
+    <!-- Options -->
     <div class="d-flex align-items-center mb-1">
       <div class="flex-grow-1 font-weight-semibold">Option</div>
       <div class="score-col font-weight-semibold">Score (1–5)</div>
-      <div class="action-col"></div>
+      <div class="font-weight-semibold">Correcte ?</div>
     </div>
     <mat-divider class="mb-2"></mat-divider>
 
@@ -81,6 +81,7 @@
           name="optText{{ti}}_{{oi}}"
         />
       </mat-form-field>
+
       <mat-form-field appearance="outline" class="score-col me-2">
         <input
           matInput
@@ -91,6 +92,15 @@
           name="optScore{{ti}}_{{oi}}"
         />
       </mat-form-field>
+
+      <!-- ✅ Checkbox pour isCorrect -->
+      <mat-checkbox
+        [(ngModel)]="o.isCorrect"
+        name="optCorrect{{ti}}_{{oi}}"
+        style="margin-right: 12px;"
+      >
+      </mat-checkbox>
+
       <button mat-icon-button color="warn" (click)="removeOption(ti, oi)">
         <mat-icon>delete</mat-icon>
       </button>
