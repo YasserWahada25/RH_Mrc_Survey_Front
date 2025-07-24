@@ -1,0 +1,5 @@
+.dates { margin: 0 16px 16px; font-style: italic; }
+.section { margin: 24px 0; }
+.question { margin-bottom: 16px; }
+ul { list-style: none; padding: 0; }
+mat-icon { vertical-align: middle; color: green; margin-right: 4px; }

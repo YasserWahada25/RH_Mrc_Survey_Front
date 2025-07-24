@@ -28,7 +28,7 @@ import { AssessmentDetailComponent } from './assessment-detail/assessment-detail
 import { GuestLayoutComponent } from './assessment-detail/guest-layout/guest-layout.component';
 
 export const AppsRoutes: Routes = [
-  // --- 1) Route isolée pour les invités (guest) ---
+  // --- 1) Route invitée (guest) pour répondre ---
   {
     path: 'take-assessment/:id',
     component: GuestLayoutComponent,
@@ -41,7 +41,7 @@ export const AppsRoutes: Routes = [
     ],
   },
 
-  // --- 2) Toutes les autres routes de la plateforme ---
+  // --- 2) Routes principales de l’application ---
   {
     path: '',
     children: [
@@ -168,6 +168,22 @@ export const AppsRoutes: Routes = [
           import(
             './assessment-responses-list/assessment-responses-list.component'
           ).then((m) => m.AssessmentResponsesListComponent),
+      },
+      // ← Nouvelle route pour le détail d’une réponse
+
+      {
+        path: 'assessment-responses/:assessmentId/:userId',
+        loadComponent: () =>
+          import(
+            './assessment-response-detail/assessment-response-detail.component'
+          ).then((m) => m.AssessmentResponseDetailComponent),
+        data: {
+          title: 'Détail Réponse',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Détail Réponse' },
+          ],
+        },
       },
       {
         path: 'formulaires',

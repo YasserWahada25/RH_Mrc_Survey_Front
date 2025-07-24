@@ -1,0 +1,68 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      {{ userInfo.firstName }} {{ userInfo.lastName }} : {{ userInfo.email }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ assessment.name }}
+    </mat-card-subtitle>
+    <div class="dates">
+      Début : {{ assessment.startDate | date:'dd/MM/yyyy' }} —
+      Fin : {{ assessment.endDate   | date:'dd/MM/yyyy' }}
+    </div>
+  </mat-card-header>
+</mat-card>
+
+<mat-divider></mat-divider>
+
+<!-- Section 1 : réponses “avant” -->
+<div *ngIf="getPhaseResponse('avant')" class="section">
+  <h2>Réponses début de la formation</h2>
+  <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+    <p><strong>Q{{ i + 1 }}.</strong> {{ t.description }}</p>
+    <mat-radio-group [disabled]="true">
+      <mat-radio-button
+        *ngFor="let o of t.options"
+        [value]="o.score"
+        [checked]="isSelected(getPhaseResponse('avant')!, t._id, o.score)"
+      >
+        {{ o.text }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- Section 2 : réponses “après” -->
+<div *ngIf="getPhaseResponse('apres')" class="section">
+  <h2>Réponses fin de la formation</h2>
+  <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+    <p><strong>Q{{ i + 1 }}.</strong> {{ t.description }}</p>
+    <mat-radio-group [disabled]="true">
+      <mat-radio-button
+        *ngFor="let o of t.options"
+        [value]="o.score"
+        [checked]="isSelected(getPhaseResponse('apres')!, t._id, o.score)"
+      >
+        {{ o.text }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- Section 3 : correction -->
+<div class="section">
+  <h2>Correction</h2>
+  <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+    <p><strong>Q{{ i + 1 }}.</strong> {{ t.description }}</p>
+    <ul>
+      <li *ngFor="let o of t.options">
+        <mat-icon *ngIf="o.isCorrect">check_circle</mat-icon>
+        {{ o.text }}
+      </li>
+    </ul>
+  </div>
+</div>

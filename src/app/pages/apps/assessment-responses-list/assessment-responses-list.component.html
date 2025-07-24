@@ -26,9 +26,17 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let row">
-          <button mat-icon-button color="primary" matTooltip="Voir">
+          <!-- <button mat-icon-button color="primary" matTooltip="Voir">
             <mat-icon>visibility</mat-icon>
-          </button>
+          </button> -->
+         <button
+  mat-icon-button
+  color="primary"
+  matTooltip="Voir"
+  [routerLink]="[ row.assessmentId, row.userId ]"
+>
+  <mat-icon>visibility</mat-icon>
+</button>
           <button mat-icon-button color="warn" matTooltip="Supprimer">
             <mat-icon>delete</mat-icon>
           </button>
