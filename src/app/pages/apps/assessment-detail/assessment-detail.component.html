@@ -1,28 +1,34 @@
-<!-- src/app/pages/apps/assessment-detail/assessment-detail.component.html -->
-
 <mat-card class="assessment-card" *ngIf="assessment">
   <mat-card-header>
     <mat-card-title>{{ assessment.name }}</mat-card-title>
     <mat-card-subtitle>
       {{ adminMode
-         ? ('Type : ' + (assessment.type==='normal' ? 'Normal' : 'Avant / Après'))
-         : (assessment.type==='normal'
+         ? ('Type : ' + (assessment.type === 'normal' ? 'Normal' : 'Avant / Après'))
+         : (assessment.type === 'normal'
              ? 'Réponse unique'
-             : (phase==='avant'
+             : (phase === 'avant'
                  ? 'Phase «Avant»'
-                 : phase==='apres'
+                 : phase === 'apres'
                    ? 'Phase «Après»'
                    : 'Toutes réponses envoyées')) }}
     </mat-card-subtitle>
+
+    <!-- ✅ Affichage des dates si "avant_apres" -->
+    <ng-container *ngIf="assessment.type === 'avant_apres' && assessment.startDate && assessment.endDate">
+      <p class="mt-2 text-muted">
+        Formation : du {{ assessment.startDate | date:'dd/MM/yyyy' }} au {{ assessment.endDate | date:'dd/MM/yyyy' }}
+      </p>
+    </ng-container>
   </mat-card-header>
+
   <mat-divider></mat-divider>
 
-  <!-- mode admin -->
+  <!-- 👩‍💼 Mode admin -->
   <ng-container *ngIf="adminMode; else userBlock">
     <ng-container *ngFor="let t of assessment.tasks; let i = index">
       <mat-card class="question-card">
         <mat-card-header>
-          <mat-card-title>Q{{ i+1 }}. {{ t.description }}</mat-card-title>
+          <mat-card-title>Q{{ i + 1 }}. {{ t.description }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <mat-radio-group [disabled]="true" class="options-group">
@@ -43,13 +49,13 @@
     </div>
   </ng-container>
 
-  <!-- mode utilisateur -->
+  <!-- 🙋‍♂️ Mode utilisateur -->
   <ng-template #userBlock>
     <form (ngSubmit)="onSubmit()">
       <ng-container *ngFor="let t of assessment.tasks; let i = index">
         <mat-card class="question-card">
           <mat-card-header>
-            <mat-card-title>Q{{ i+1 }}. {{ t.description }}</mat-card-title>
+            <mat-card-title>Q{{ i + 1 }}. {{ t.description }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <mat-radio-group

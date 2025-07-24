@@ -91,18 +91,6 @@ export class AssessmentDetailComponent implements OnInit {
         this.svc.sendByEmail(this.assessment._id, userId).subscribe();
       });
   }
-
-  // onSubmit() {
-  //   if (this.disabledForm) return;
-  //   const payload = {
-  //     userId: this.userId,
-  //     phase:  this.phase,
-  //     answers: Object.entries(this.answers)
-  //       .map(([taskId, selected]) => ({ taskId, selected }))
-  //   };
-  //   this.svc.submitResponse(this.assessment._id, payload)
-  //     .subscribe(() => this.determinePhase());
-  // }
    onSubmit() {
     if (this.disabledForm) return;
 

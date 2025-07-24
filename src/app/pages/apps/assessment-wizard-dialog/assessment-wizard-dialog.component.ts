@@ -38,7 +38,9 @@ export class AssessmentWizardDialogComponent {
   local = {
     name:  '',
     type:  '' as 'normal' | 'avant_apres',
-    tasks: [] as Task[]
+    tasks: [] as Task[], 
+    startDate: '', // ← format YYYY-MM-DD
+    endDate: '' 
   };
 
   // Liste des deux types possibles

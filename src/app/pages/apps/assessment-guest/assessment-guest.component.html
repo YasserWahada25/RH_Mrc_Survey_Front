@@ -1,21 +1,45 @@
-<!-- src/app/pages/apps/assessment-guest/assessment-guest.component.html -->
-
 <mat-card class="assessment-card" *ngIf="assessment">
   <mat-card-header>
     <mat-card-title>{{ assessment.name }}</mat-card-title>
     <mat-card-subtitle>
-      {{ assessment.type==='normal'
+      {{ assessment.type === 'normal'
           ? 'Réponse unique'
-          : (phase==='avant'
+          : (phase === 'avant'
               ? 'Phase «Avant»'
-              : phase==='apres'
+              : phase === 'apres'
                 ? 'Phase «Après»'
                 : 'Toutes réponses envoyées') }}
     </mat-card-subtitle>
+
+    <!-- ✅ Affichage des dates si type avant_apres -->
+    <ng-container *ngIf="assessment.type === 'avant_apres' && assessment.startDate && assessment.endDate">
+      <p class="mt-2 text-muted">
+        Formation : du {{ assessment.startDate | date:'dd/MM/yyyy' }} au {{ assessment.endDate | date:'dd/MM/yyyy' }}
+      </p>
+    </ng-container>
   </mat-card-header>
+
   <mat-divider></mat-divider>
 
+  <!-- ✅ Formulaire de réponse -->
   <form (ngSubmit)="onSubmit()">
+    <!-- 🧍‍♂️ Informations utilisateur -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Prénom</mat-label>
+      <input matInput [(ngModel)]="firstName" name="firstName" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Nom</mat-label>
+      <input matInput [(ngModel)]="lastName" name="lastName" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" name="email" type="email" required />
+    </mat-form-field>
+
+    <!-- 🧠 Questions & réponses -->
     <ng-container *ngFor="let t of assessment.tasks; let i = index">
       <mat-card class="question-card">
         <mat-card-header>
@@ -40,6 +64,7 @@
       </mat-card>
     </ng-container>
 
+    <!-- 📤 Bouton de soumission -->
     <div class="submit-container">
       <button
         mat-raised-button

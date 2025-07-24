@@ -27,6 +27,19 @@
     </mat-select>
   </mat-form-field>
 
+  <div *ngIf="local.type === 'avant_apres'" class="mb-4">
+  <mat-form-field appearance="outline" class="w-100 mb-2">
+    <mat-label>Date début de formation</mat-label>
+    <input matInput [(ngModel)]="local.startDate" name="startDate" type="date" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Date fin de formation</mat-label>
+    <input matInput [(ngModel)]="local.endDate" name="endDate" type="date" required />
+  </mat-form-field>
+</div>
+
+
   <!-- 3) Tasks dynamiques -->
   <button mat-button color="primary" (click)="addTask()">
     <mat-icon>add</mat-icon> Nouvelle Question

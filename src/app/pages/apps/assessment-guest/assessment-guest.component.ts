@@ -9,6 +9,8 @@ import { MatButtonModule }                from '@angular/material/button';
 import { MatDividerModule }               from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute }                 from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule }     from '@angular/material/input';
 
 import { AssessmentService }              from 'src/app/services/assessment.service';
 
@@ -24,7 +26,9 @@ type Phase = 'normal' | 'avant' | 'apres' | 'done';
     MatRadioModule,
     MatButtonModule,
     MatDividerModule,
-    MatSnackBarModule
+    MatSnackBarModule, 
+    MatFormFieldModule, 
+    MatInputModule     
   ],
   templateUrl: './assessment-guest.component.html',
   styleUrls: ['./assessment-guest.component.css']
@@ -35,6 +39,9 @@ export class AssessmentGuestComponent implements OnInit {
   userId!: string;
   phase!: Phase;
   disabledForm = false;
+  firstName = '';
+  lastName  = '';
+  email     = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -75,11 +82,14 @@ export class AssessmentGuestComponent implements OnInit {
     if (this.disabledForm) return;
     const oldPhase = this.phase;
     const payload = {
-      userId: this.userId,
-      phase:  this.phase,
-      answers: Object.entries(this.answers)
-        .map(([taskId, selected]) => ({ taskId, selected }))
-    };
+  userId: this.userId,
+  phase: this.phase,
+  firstName: this.firstName,
+  lastName: this.lastName,
+  email: this.email,
+  answers: Object.entries(this.answers)
+    .map(([taskId, selected]) => ({ taskId, selected }))
+};
     this.svc.submitResponse(this.assessment._id, payload)
       .subscribe(() => {
         this.determinePhase();
