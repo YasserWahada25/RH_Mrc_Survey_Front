@@ -1,16 +1,19 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>
-      {{ userInfo.firstName }} {{ userInfo.lastName }} : {{ userInfo.email }}
-    </mat-card-title>
-    <mat-card-subtitle>
-      {{ assessment.name }}
-    </mat-card-subtitle>
+<mat-card class="info-card">
+  <div class="info-header">
+    <div class="user-info">
+      <div class="user-name">
+        <strong>{{ userInfo.firstName }} {{ userInfo.lastName }}</strong>
+        <span class="email"> : {{ userInfo.email }}</span>
+      </div>
+      <div class="assessment-name">
+        {{ assessment.name }}
+      </div>
+    </div>
     <div class="dates">
       Début : {{ assessment.startDate | date:'dd/MM/yyyy' }} —
-      Fin : {{ assessment.endDate   | date:'dd/MM/yyyy' }}
+      Fin : {{ assessment.endDate | date:'dd/MM/yyyy' }}
     </div>
-  </mat-card-header>
+  </div>
 </mat-card>
 
 <mat-divider></mat-divider>

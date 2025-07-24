@@ -24,7 +24,7 @@ import { AssessmentService }                      from 'src/app/services/assessm
     MatTooltipModule,
   ],
   templateUrl: './assessment-responses-list.component.html',
-  // styleUrls: ['./assessment-responses-list.component.css']  // si besoin
+   styleUrls: ['./assessment-responses-list.component.css'],
 })
 export class AssessmentResponsesListComponent implements OnInit {
   displayedColumns: string[] = [
