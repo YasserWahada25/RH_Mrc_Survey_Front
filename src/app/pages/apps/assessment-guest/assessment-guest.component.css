@@ -1,27 +1,57 @@
-/* src/app/pages/apps/assessment-guest/assessment-guest.component.css */
-
 .assessment-card {
-  max-width: 900px;
+  max-width: 960px;
   margin: 40px auto;
   padding: 24px;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.assessment-header {
+  margin-bottom: 32px;
+}
+
+.assessment-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.assessment-type,
+.assessment-dates,
+.assessment-phase {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.user-info-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.info-field {
+  width: 100%;
 }
 
 .question-card {
   margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .options-group {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 12px;
 }
 
 .option .mat-radio-label-content {
   white-space: normal;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .submit-container {
