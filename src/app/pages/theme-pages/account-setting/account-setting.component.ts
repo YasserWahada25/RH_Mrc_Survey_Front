@@ -50,10 +50,13 @@ export class AppAccountSettingComponent {
     });
   }
 
+  passwordChangeSuccess: boolean = false;
+
   changePassword() {
     if (this.passwordForm.invalid) return;
 
     const { currentPassword, newPassword, confirmPassword } = this.passwordForm.value;
+
     if (newPassword !== confirmPassword) {
       this.snackBar.open('❌ Les mots de passe ne correspondent pas', 'Fermer', { duration: 3000 });
       return;
@@ -66,10 +69,27 @@ export class AppAccountSettingComponent {
     ).subscribe({
       next: () => {
         this.snackBar.open('✅ Mot de passe modifié avec succès', 'Fermer', { duration: 3000 });
+        this.passwordChangeSuccess = true;
+
+        // ✅ Réinitialiser les champs immédiatement après succès
         this.passwordForm.reset();
+
+        // ✅ Nettoyer tous les états d’erreur pour enlever le rouge
+        Object.keys(this.passwordForm.controls).forEach(key => {
+          const control = this.passwordForm.get(key);
+          control?.setErrors(null);
+          control?.markAsPristine();
+          control?.markAsUntouched();
+          control?.updateValueAndValidity();
+        });
+        // ✅ Revenir à état normal après 3 secondes (vert -> neutre)
+        setTimeout(() => {
+          this.passwordChangeSuccess = false;
+        }, 3000);
       },
       error: err => {
         this.snackBar.open(`❌ ${err.error.message || 'Erreur serveur'}`, 'Fermer', { duration: 3000 });
+        this.passwordChangeSuccess = false;
       }
     });
   }

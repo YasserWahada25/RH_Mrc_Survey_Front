@@ -55,30 +55,27 @@
               }
             </div>
           </div>
-          <div class="b-t-1 p-24 d-none d-lg-flex align-items-center justify-content-between">
+          <!-- <div class="b-t-1 p-24 d-none d-lg-flex align-items-center justify-content-between">
             <span class="d-flex align-items-center mat-subtitle-1 f-s-16 f-w-500">
               <i-tabler name="help" class="icon-20 m-r-8"></i-tabler>Frequently
               Asked Questions
             </span>
             <a [routerLink]="['/theme-pages/faq']" mat-flat-button color="primary">Check</a>
-          </div>
+          </div> -->
         </div>
-        <div class="col-sm-4">
-          <div class="p-x-16 p-y-32">
-            <h4 class="f-s-18 f-w-600 mat-subtitle-1 m-b-16">Quick Links</h4>
-            @for(quicklink of quicklinks; track quicklink.title) {
-            <div class="text-hover-primary">
-              <a [routerLink]="[quicklink.link]"
-                class="hover-text text-decoration-none mat-body-1 f-w-600 d-block p-y-8">{{ quicklink.title }}</a>
+          <!-- <div class="col-sm-4">
+            <div class="p-x-16 p-y-32">
+              <h4 class="f-s-18 f-w-600 mat-subtitle-1 m-b-16">Quick Linkss</h4>
+              @for(quicklink of quicklinks; track quicklink.title) {
+              <div class="text-hover-primary">
+                <a [routerLink]="[quicklink.link]"
+                  class="hover-text text-decoration-none mat-body-1 f-w-600 d-block p-y-8">{{ quicklink.title }}</a>
+              </div>
+              }
             </div>
-            }
-          </div>
-        </div>
+          </div> -->
       </div>
     </mat-menu>
-    <a mat-button [routerLink]="['/apps/chat']">Chat</a>
-    <a mat-button [routerLink]="['/apps/calendar']">Calendar</a>
-    <a mat-button [routerLink]="['/apps/email/inbox']">Email</a>
   </div>
 
   <span class="flex-1-auto"></span>
@@ -108,16 +105,9 @@
   <!-- --------------------------------------------------------------- -->
   <!-- Notification Dropdown -->
   <!-- --------------------------------------------------------------- -->
-  <button mat-icon-button [matMenuTriggerFor]="notificationmenu" aria-label="Notifications">
-    <i-tabler class="d-flex" name="bell" matBadge="1" matBadgeColor="primary"></i-tabler>
-  </button>
+
   <mat-menu #notificationmenu="matMenu" class="topbar-dd cardWithShadow">
-    <div class="d-flex align-items-center p-x-32 p-y-16">
-      <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">Notifications</h6>
-      <span class="m-l-auto">
-        <span class="bg-primary text-white p-x-8 p-y-4 f-w-500 rounded f-s-12">5 new</span>
-      </span>
-    </div>
+    
 
     @for(notification of notifications; track notification.title) {
     <button mat-menu-item class="p-x-32 p-y-16">
@@ -180,22 +170,6 @@
           </div>
         </a>
         }
-
-        <!-- upgrade -->
-        <div class="p-24 overflow-hidden bg-light-primary rounded position-relative m-y-16">
-          <div class="d-flex align-items-center">
-            <div>
-              <h5 class="f-s-18 m-0 f-w-600 m-b-12 mat-subtitle-1">
-                Unlimited <br />
-                Access
-              </h5>
-              <button mat-flat-button color="primary">Upgrade</button>
-            </div>
-            <div class="m-l-auto">
-              <img src="/assets/images/backgrounds/unlimited-bg.png" alt="upgrade-bg" class="upgrade-bg" />
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="p-y-12 p-x-32">
