@@ -83,7 +83,7 @@
               >
             </div>
           </div>
-          <div class="col-sm-4">
+          <!-- <div class="col-sm-4">
             <div class="p-x-16 p-y-32">
               <h4 class="f-s-18 f-w-600 mat-subtitle-1 m-b-16">Quick Links</h4>
               @for(quicklink of quicklinks; track quicklink.title) {
@@ -96,12 +96,9 @@
               </div>
               }
             </div>
-          </div>
+          </div> -->
         </div>
       </mat-menu>
-      <a mat-button [routerLink]="['/apps/chat']">Chat</a>
-      <a mat-button [routerLink]="['/apps/calendar']">Calendar</a>
-      <a mat-button [routerLink]="['/apps/email/inbox']">Email</a>
     </div>
 
     <span class="flex-1-auto"></span>
@@ -245,29 +242,7 @@
             </div>
           </div>
         </a>
-        }
-
-        <!-- upgrade -->
-        <div
-          class="p-24 overflow-hidden bg-light-primary rounded position-relative m-y-16"
-        >
-          <div class="d-flex align-items-center">
-            <div>
-              <h5 class="f-s-18 m-0 f-w-600 m-b-12 mat-subtitle-1">
-                Unlimited <br />
-                Access
-              </h5>
-              <button mat-flat-button color="primary">Upgrade</button>
-            </div>
-            <div class="m-l-auto">
-              <img
-                src="/assets/images/backgrounds/unlimited-bg.png"
-                alt="upgrade-bg"
-                class="upgrade-bg"
-              />
-            </div>
-          </div>
-        </div>
+        }        
       </div>
 
       <div class="p-y-12 p-x-32">

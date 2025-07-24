@@ -6,9 +6,14 @@ import { DetailComponent } from './email/detail/detail.component';
 import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import { AppContactComponent } from './contact/contact.component';
+// import { AppContactComponent } from './contact/contact.component';
 import { AppNotesComponent } from './notes/notes.component';
+<<<<<<< HEAD
 import { AppTodoComponent } from './todo/todo.component';
+=======
+// import { AppTodoComponent } from './todo/todo.component';
+// import { AppPermissionComponent } from './permission/permission.component';
+>>>>>>> ed9119e (Template 24/07)
 import { PermissionComponent } from './permission/permission.component';
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
@@ -100,6 +105,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+<<<<<<< HEAD
       {
         path: 'todo',
         component: AppTodoComponent,
@@ -112,6 +118,10 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+=======
+      
+       {
+>>>>>>> ed9119e (Template 24/07)
         path: 'assessment',
         component: AssessmentListComponent,
         data: {
@@ -221,6 +231,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+<<<<<<< HEAD
       {
         path: 'contacts',
         component: AppContactComponent,
@@ -232,6 +243,21 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+=======
+      
+      //     {
+      //   path: 'quiz-disc/:linkId',
+      //   component: QuizDiscFromLinkComponent,
+      //   data: {
+      //     title: 'Quiz Disc Link',
+      //     urls: [
+      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      //       { title: 'Quiz Disc Link' },
+      //     ],
+      //   },
+      // },
+
+>>>>>>> ed9119e (Template 24/07)
       {
         path: 'blog/post',
         component: AppBlogsComponent,

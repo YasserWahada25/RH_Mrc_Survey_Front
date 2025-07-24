@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 
-import { DepartementService } from 'src/app/services/departement/departement.service';
+import { DepartementService } from 'src/app/services/departement.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({

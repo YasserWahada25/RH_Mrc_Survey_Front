@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 
-import { DepartementService } from 'src/app/services/departement/departement.service';
+import { DepartementService } from 'src/app/services/departement.service';
 import { AppDepartementDialogComponent } from './add/departement-dialog.component';
 
 @Component({
