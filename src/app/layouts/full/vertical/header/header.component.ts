@@ -39,6 +39,7 @@ interface apps {
   title: string;
   subtitle: string;
   link: string;
+  roles?: string[];
 }
 
 interface quicklinks {
@@ -180,20 +181,7 @@ export class HeaderComponent {
       subtitle: 'Account Settings',
       link: '/',
     },
-    {
-      id: 2,
-      img: '/assets/images/svgs/icon-inbox.svg',
-      title: 'My Inbox',
-      subtitle: 'Messages & Email',
-      link: '/apps/email/inbox',
-    },
-    {
-      id: 3,
-      img: '/assets/images/svgs/icon-tasks.svg',
-      title: 'My Tasks',
-      subtitle: 'To-do and Daily Tasks',
-      link: '/apps/taskboard',
-    },
+
   ];
 
   apps: apps[] = [
@@ -201,8 +189,9 @@ export class HeaderComponent {
     id: 1,
     img: '/assets/images/svgs/icon-dd-chat.svg',
     title: 'Quiz Disque',
-    subtitle: 'Quiz DISC Test',
+    subtitle: 'Quiz DISC Testt',
     link: '/apps/QuizDisque',
+    roles: ['owner']
   },
   {
     id: 2,
@@ -210,6 +199,7 @@ export class HeaderComponent {
     title: 'Credit Request',
     subtitle: 'Gestion des crédits',
     link: '/apps/CreditRequestOwner',
+    roles: ['owner']
   },
   {
     id: 3,
@@ -217,6 +207,7 @@ export class HeaderComponent {
     title: 'Generate Links',
     subtitle: 'Liens Quiz DISC',
     link: '/apps/generate-links',
+    roles: ['rh_admin']
   },
   {
     id: 6,

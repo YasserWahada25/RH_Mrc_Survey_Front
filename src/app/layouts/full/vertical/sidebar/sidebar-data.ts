@@ -35,16 +35,6 @@ export const navItems: NavItem[] = [
     roles: ['rh_admin']
   },
   {
-    displayName: 'Calendar',
-    iconName: 'calendar-event',
-    route: 'apps/calendar',
-  },
-  {
-    displayName: 'Contacts',
-    iconName: 'phone',
-    route: 'apps/contacts',
-  },
-  {
     displayName: 'Departement',
     iconName: 'building',
     route: 'apps/departement',
@@ -85,25 +75,10 @@ export const navItems: NavItem[] = [
     route: 'apps/todo',
   },
 
-  { navCap: 'Pages' },
+  { navCap: 'Compte' },
   {
     displayName: 'Account Setting',
     iconName: 'user-circle',
     route: 'theme-pages/account-setting',
-  },
-  {
-    displayName: 'Roll Base Access',
-    iconName: 'lock-access',
-    route: 'apps/permission',
-  },
-  {
-    displayName: 'Pricing',
-    iconName: 'currency-dollar',
-    route: 'theme-pages/pricing',
-  },
-  {
-    displayName: 'FAQ',
-    iconName: 'help',
-    route: 'theme-pages/faq',
   },
 ];
