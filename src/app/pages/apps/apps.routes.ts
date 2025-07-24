@@ -2,30 +2,30 @@
 
 import { Routes } from '@angular/router';
 
-import { AppChatComponent }             from './chat/chat.component';
-import { AppEmailComponent }            from './email/email.component';
-import { DetailComponent }              from './email/detail/detail.component';
-import { AppCoursesComponent }          from './courses/courses.component';
-import { AppCourseDetailComponent }     from './courses/course-detail/course-detail.component';
-import { AppEmployeeComponent }         from './employee/employee.component';
-import { AppBlogsComponent }            from './blogs/blogs.component';
-import { AppBlogDetailsComponent }      from './blogs/details/details.component';
-import { AppContactComponent }          from './contact/contact.component';
-import { AppNotesComponent }            from './notes/notes.component';
-import { AppTodoComponent }             from './todo/todo.component';
-import { AppPermissionComponent }       from './permission/permission.component';
-import { AppTaskboardComponent }        from './taskboard/taskboard.component';
+import { AppChatComponent } from './chat/chat.component';
+import { AppEmailComponent } from './email/email.component';
+import { DetailComponent } from './email/detail/detail.component';
+import { AppCoursesComponent } from './courses/courses.component';
+import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
+import { AppEmployeeComponent } from './employee/employee.component';
+import { AppBlogsComponent } from './blogs/blogs.component';
+import { AppBlogDetailsComponent } from './blogs/details/details.component';
+import { AppContactComponent } from './contact/contact.component';
+import { AppNotesComponent } from './notes/notes.component';
+import { AppTodoComponent } from './todo/todo.component';
+import { AppPermissionComponent } from './permission/permission.component';
+import { AppTaskboardComponent } from './taskboard/taskboard.component';
 
-import { DepartementComponent }         from './departement/departement.component';
-import { FormulaireListComponent }      from './formulairelist/formulairelist.component';
-import { FormulaireDetailComponent }    from './formulaire-detail/formulaire-detail.component';
-import { AppReponsesListComponent }     from './reponses/reponse-list/reponses-list.component';
-import { QuizDisqueComponent }          from './quiz-disque/quiz-disque.component';
+import { DepartementComponent } from './departement/departement.component';
+import { FormulaireListComponent } from './formulairelist/formulairelist.component';
+import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
+import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.component';
+import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
-import { RapportDoughnutPieComponent }  from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
-import { AssessmentListComponent }      from './assessmentlist/assessmentlist.component';
-import { AssessmentDetailComponent }    from './assessment-detail/assessment-detail.component';
-import { GuestLayoutComponent }         from './assessment-detail/guest-layout/guest-layout.component';
+import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
+import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
+import { AssessmentDetailComponent } from './assessment-detail/assessment-detail.component';
+import { GuestLayoutComponent } from './assessment-detail/guest-layout/guest-layout.component';
 
 export const AppsRoutes: Routes = [
   // --- 1) Route isolée pour les invités (guest) ---
@@ -36,9 +36,9 @@ export const AppsRoutes: Routes = [
       {
         path: '',
         component: AssessmentDetailComponent,
-        data: { guest: true }
-      }
-    ]
+        data: { guest: true },
+      },
+    ],
   },
 
   // --- 2) Toutes les autres routes de la plateforme ---
@@ -52,9 +52,9 @@ export const AppsRoutes: Routes = [
           title: 'Département',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Département' }
-          ]
-        }
+            { title: 'Département' },
+          ],
+        },
       },
       {
         path: 'chat',
@@ -63,9 +63,9 @@ export const AppsRoutes: Routes = [
           title: 'Chat',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Chat' }
-          ]
-        }
+            { title: 'Chat' },
+          ],
+        },
       },
       {
         path: 'notes',
@@ -74,14 +74,14 @@ export const AppsRoutes: Routes = [
           title: 'Notes',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Notes' }
-          ]
-        }
+            { title: 'Notes' },
+          ],
+        },
       },
       {
         path: 'email',
         redirectTo: 'email/inbox',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'email/:type',
@@ -90,8 +90,8 @@ export const AppsRoutes: Routes = [
           title: 'Email',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Email' }
-          ]
+            { title: 'Email' },
+          ],
         },
         children: [
           {
@@ -101,11 +101,11 @@ export const AppsRoutes: Routes = [
               title: 'Email Detail',
               urls: [
                 { title: 'Dashboard', url: '/dashboards/dashboard1' },
-                { title: 'Email Detail' }
-              ]
-            }
-          }
-        ]
+                { title: 'Email Detail' },
+              ],
+            },
+          },
+        ],
       },
       {
         path: 'permission',
@@ -114,9 +114,9 @@ export const AppsRoutes: Routes = [
           title: 'Roll Base Access',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Roll Base Access' }
-          ]
-        }
+            { title: 'Roll Base Access' },
+          ],
+        },
       },
       {
         path: 'todo',
@@ -125,9 +125,9 @@ export const AppsRoutes: Routes = [
           title: 'Todo App',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Todo App' }
-          ]
-        }
+            { title: 'Todo App' },
+          ],
+        },
       },
       {
         path: 'taskboard',
@@ -136,9 +136,9 @@ export const AppsRoutes: Routes = [
           title: 'Taskboard',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Taskboard' }
-          ]
-        }
+            { title: 'Taskboard' },
+          ],
+        },
       },
       {
         path: 'assessment',
@@ -147,9 +147,9 @@ export const AppsRoutes: Routes = [
           title: 'Assessment',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Assessment' }
-          ]
-        }
+            { title: 'Assessment' },
+          ],
+        },
       },
       {
         path: 'assessment/:id',
@@ -158,9 +158,16 @@ export const AppsRoutes: Routes = [
           title: 'Détail Assessment',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Détail Assessment' }
-          ]
-        }
+            { title: 'Détail Assessment' },
+          ],
+        },
+      },
+      {
+        path: 'assessment-responses',
+        loadComponent: () =>
+          import(
+            './assessment-responses-list/assessment-responses-list.component'
+          ).then((m) => m.AssessmentResponsesListComponent),
       },
       {
         path: 'formulaires',
@@ -169,9 +176,9 @@ export const AppsRoutes: Routes = [
           title: 'Formulaires',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Formulaires' }
-          ]
-        }
+            { title: 'Formulaires' },
+          ],
+        },
       },
       {
         path: 'formulaires/:id',
@@ -180,9 +187,9 @@ export const AppsRoutes: Routes = [
           title: 'Détail Formulaire',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Détail Formulaire' }
-          ]
-        }
+            { title: 'Détail Formulaire' },
+          ],
+        },
       },
       {
         path: 'reponses',
@@ -191,9 +198,9 @@ export const AppsRoutes: Routes = [
           title: 'Réponses',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Réponses' }
-          ]
-        }
+            { title: 'Réponses' },
+          ],
+        },
       },
       {
         path: 'reponses/:formId/:responseId',
@@ -202,9 +209,9 @@ export const AppsRoutes: Routes = [
           title: 'Détail Réponse',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Détail Réponse' }
-          ]
-        }
+            { title: 'Détail Réponse' },
+          ],
+        },
       },
       {
         path: 'rapport-formulaire',
@@ -213,9 +220,9 @@ export const AppsRoutes: Routes = [
           title: 'Rapport Formulaire',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Rapport Formulaire' }
-          ]
-        }
+            { title: 'Rapport Formulaire' },
+          ],
+        },
       },
       {
         path: 'QuizDisque',
@@ -224,9 +231,9 @@ export const AppsRoutes: Routes = [
           title: 'Quiz Disque',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Quiz Disque' }
-          ]
-        }
+            { title: 'Quiz Disque' },
+          ],
+        },
       },
       {
         path: 'CreditRequestOwner',
@@ -235,9 +242,9 @@ export const AppsRoutes: Routes = [
           title: 'Credit Request List',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Credit Request List' }
-          ]
-        }
+            { title: 'Credit Request List' },
+          ],
+        },
       },
       {
         path: 'contacts',
@@ -246,9 +253,9 @@ export const AppsRoutes: Routes = [
           title: 'Contacts',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Contacts' }
-          ]
-        }
+            { title: 'Contacts' },
+          ],
+        },
       },
       {
         path: 'courses',
@@ -257,9 +264,9 @@ export const AppsRoutes: Routes = [
           title: 'Courses',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Courses' }
-          ]
-        }
+            { title: 'Courses' },
+          ],
+        },
       },
       {
         path: 'courses/coursesdetail/:id',
@@ -268,9 +275,9 @@ export const AppsRoutes: Routes = [
           title: 'Course Detail',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Course Detail' }
-          ]
-        }
+            { title: 'Course Detail' },
+          ],
+        },
       },
       {
         path: 'blog/post',
@@ -279,9 +286,9 @@ export const AppsRoutes: Routes = [
           title: 'Posts',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Posts' }
-          ]
-        }
+            { title: 'Posts' },
+          ],
+        },
       },
       {
         path: 'blog/detail/:id',
@@ -290,9 +297,9 @@ export const AppsRoutes: Routes = [
           title: 'Blog Detail',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Blog Detail' }
-          ]
-        }
+            { title: 'Blog Detail' },
+          ],
+        },
       },
       {
         path: 'employee',
@@ -301,10 +308,10 @@ export const AppsRoutes: Routes = [
           title: 'Employee',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Employee' }
-          ]
-        }
-      }
-    ]
-  }
+            { title: 'Employee' },
+          ],
+        },
+      },
+    ],
+  },
 ];

@@ -19,12 +19,12 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Quiz Disque',
-    iconName: 'checklist',  
+    iconName: 'checklist',
     route: 'apps/QuizDisque',
   },
-    {
+  {
     displayName: 'Credit Request List',
-    iconName: 'layout',  
+    iconName: 'layout',
     route: 'apps/CreditRequestOwner',
   },
   {
@@ -47,11 +47,11 @@ export const navItems: NavItem[] = [
     iconName: 'certificate',
     route: 'apps/courses',
   },
-     {
-        displayName: 'Departement',
-        iconName: 'building',
-        route: 'apps/departement',
-      },
+  {
+    displayName: 'Departement',
+    iconName: 'building',
+    route: 'apps/departement',
+  },
   {
     displayName: 'Employee',
     iconName: 'brand-ctemplar',
@@ -62,21 +62,26 @@ export const navItems: NavItem[] = [
     iconName: 'note',
     route: 'apps/notes',
   },
-    {
+  {
     displayName: 'Assessment',
     iconName: 'file-invoice',
     route: 'apps/assessment',
+  },
+  {
+    displayName: 'Réponses Assessment',
+    iconName: 'file-search',
+    route: 'apps/assessment-responses',
   },
   {
     displayName: 'Formulaires',
     iconName: 'file-invoice',
     route: 'apps/formulaires',
   },
-{
-  displayName: 'Réponses',
-  iconName: 'message-2',   
-  route: 'apps/reponses',
-},
+  {
+    displayName: 'Réponses',
+    iconName: 'message-2',
+    route: 'apps/reponses',
+  },
   {
     displayName: 'Rapport Formulaire',
     iconName: 'chart-donut-3',
@@ -105,7 +110,8 @@ export const navItems: NavItem[] = [
       {
         displayName: 'Detail',
         iconName: 'point',
-        route: 'apps/blog/detail/Early Black Friday Amazon deals: cheap TVs, headphones, laptops',
+        route:
+          'apps/blog/detail/Early Black Friday Amazon deals: cheap TVs, headphones, laptops',
       },
     ],
   },
