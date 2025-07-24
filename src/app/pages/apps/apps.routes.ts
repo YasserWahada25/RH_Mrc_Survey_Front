@@ -26,8 +26,9 @@ import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/d
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
 import { AuthGuard } from '../../services/auth-guard.service';
+import { QuizResultsListRHComponent } from './quiz-results-listRH/quiz-results-listRH.component';
 
-// import { authGuard } from '../../guards/auth.guard'; // en haut du fichier
+
 
 
 export const AppsRoutes: Routes = [
@@ -108,6 +109,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
       {
         path: 'todo',
         component: AppTodoComponent,
@@ -119,6 +121,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
       {
         path: 'taskboard',
         component: AppTaskboardComponent,
@@ -174,6 +177,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
       {
         path: 'reponses/:formId/:responseId',
         component: FormulaireDetailComponent,
@@ -185,6 +189,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
       {
         path: 'rapport-formulaire',
         component: RapportDoughnutPieComponent,
@@ -196,6 +201,7 @@ export const AppsRoutes: Routes = [
           ]
         }
       },
+
       {
         path: 'QuizDisque',
         component: QuizDisqueComponent,
@@ -207,6 +213,19 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+
+            {
+        path: 'quiz-results',
+        component: QuizResultsListRHComponent,
+        data: {
+          title: 'Quiz Disque Results',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Quiz Disque Results' },
+          ],
+        },
+      },
+
 
 
       {
@@ -234,19 +253,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      
-      //     {
-      //   path: 'quiz-disc/:linkId',
-      //   component: QuizDiscFromLinkComponent,
-      //   data: {
-      //     title: 'Quiz Disc Link',
-      //     urls: [
-      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
-      //       { title: 'Quiz Disc Link' },
-      //     ],
-      //   },
-      // },
-
       
 
       

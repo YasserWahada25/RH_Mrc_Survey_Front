@@ -1,5 +1,3 @@
-// src/app/layouts/full/vertical/sidebar/sidebar-data.ts
-
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
@@ -37,6 +35,13 @@ export const navItems: NavItem[] = [
 
 
   },
+  {
+    displayName: 'Quiz Disque Results',
+    iconName:    'clipboard-list',
+    route:       'apps/quiz-results',
+    roles:       ['rh_admin']
+  },
+
   {
     displayName: 'Calendar',
     iconName:    'calendar-event',
