@@ -5,6 +5,7 @@ import { MatCardModule }                       from '@angular/material/card';
 import { MatDividerModule }                    from '@angular/material/divider';
 import { MatRadioModule }                      from '@angular/material/radio';
 import { MatIconModule }                       from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AssessmentService }                   from 'src/app/services/assessment.service';
 
 interface Answer { taskId: string; selected: any; }
@@ -29,7 +30,8 @@ export class AssessmentResponseDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private svc:   AssessmentService
+    private svc:   AssessmentService, 
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -57,6 +59,16 @@ export class AssessmentResponseDetailComponent implements OnInit {
         }
       });
   }
+
+    onSendResponses() {
+    const aid = this.route.snapshot.paramMap.get('assessmentId')!;
+    const uid = this.route.snapshot.paramMap.get('userId')!;
+    this.svc.sendResponsesEmail(aid, uid).subscribe({
+      next: () => this.snackBar.open('Email envoyé !', 'OK', { duration: 3000 }),
+      error: err => this.snackBar.open(`Erreur : ${err.message}`, 'OK', { duration: 5000 })
+    });
+  }
+
 
   isSelected(resp: { answers: Answer[] }, taskId: string, score: any) {
     const a = resp.answers.find(x => x.taskId === taskId);
