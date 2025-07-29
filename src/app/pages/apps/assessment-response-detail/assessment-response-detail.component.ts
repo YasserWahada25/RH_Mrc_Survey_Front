@@ -64,7 +64,8 @@ export class AssessmentResponseDetailComponent implements OnInit {
       next: ({ assessment, responses }) => {
         this.assessment = assessment;
         this.responses = responses;
-
+        console.log('Assessment:', assessment);
+        console.log('Responses:', responses);
         // Préremplissage des infos utilisateur depuis la phase 'avant'
         const avant = responses.find((r) => r.phase === 'avant');
         if (avant) {
@@ -82,14 +83,22 @@ export class AssessmentResponseDetailComponent implements OnInit {
     });
   }
 
-isSelected(
-  resp: { answers: Answer[] },
-  taskId: string,
-  optionId: string
-): boolean {
-  const ans = resp.answers.find(a => a.taskId === taskId);
-  return !!ans && ans.selected === optionId;
-}
+  isSelected(
+    resp: { answers: Answer[] },
+    taskId: string,
+    optionId: any // Accept both string and ObjectId
+  ): boolean {
+    const ans = resp.answers.find(a => a.taskId == taskId || a.taskId?.toString() == taskId?.toString());
+    const result = !!ans && ans.selected?.toString() === optionId?.toString();
+    console.log('isSelected:', { taskId, optionId, ans, result });
+    return result;
+  }
+
+  getSelectedOptionId(resp: any, taskId: string) {
+    if (!resp) return null;
+    const ans = resp.answers.find((a: any) => a.taskId == taskId || a.taskId?.toString() == taskId?.toString());
+    return ans ? ans.selected?.toString() : null;
+  }
 
   getPhaseResponse(phase: 'avant' | 'apres') {
     return this.responses.find((r) => r.phase === phase);

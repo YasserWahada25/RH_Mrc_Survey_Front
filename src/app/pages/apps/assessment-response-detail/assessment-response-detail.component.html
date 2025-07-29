@@ -26,11 +26,10 @@
       <p>
         <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
       </p>
-      <mat-radio-group [disabled]="true">
+      <mat-radio-group [value]="getSelectedOptionId(getPhaseResponse('avant'), t._id)" [disabled]="true">
         <mat-radio-button
           *ngFor="let o of t.options"
-          [checked]="isSelected(getPhaseResponse('avant')!, t._id, o._id)"
-        >
+          [value]="o._id">
           {{ o.text }}
         </mat-radio-button>
       </mat-radio-group>
@@ -46,11 +45,10 @@
       <p>
         <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
       </p>
-      <mat-radio-group [disabled]="true">
+      <mat-radio-group [value]="getSelectedOptionId(getPhaseResponse('apres'), t._id)" [disabled]="true">
         <mat-radio-button
           *ngFor="let o of t.options"
-          [checked]="isSelected(getPhaseResponse('apres')!, t._id, o._id)"
-        >
+          [value]="o._id">
           {{ o.text }}
         </mat-radio-button>
       </mat-radio-group>
