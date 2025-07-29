@@ -1,76 +1,87 @@
-<mat-card class="info-card">
-  <div class="info-header">
-    <div class="user-info">
-      <div class="user-name">
-        <strong>{{ userInfo.firstName }} {{ userInfo.lastName }}</strong>
-        <span class="email"> : {{ userInfo.email }}</span>
+<ng-container *ngIf="assessment && responses.length; else loading">
+  <mat-card class="info-card">
+    <div class="info-header">
+      <div class="user-info">
+        <div class="user-name">
+          <strong>{{ userInfo.firstName }} {{ userInfo.lastName }}</strong>
+          <span class="email">: {{ userInfo.email }}</span>
+        </div>
+        <div class="assessment-name">
+          {{ assessment.name }}
+        </div>
       </div>
-      <div class="assessment-name">
-        {{ assessment.name }}
+      <div class="dates">
+        Début : {{ assessment.startDate | date : "dd/MM/yyyy" }} — Fin :
+        {{ assessment.endDate | date : "dd/MM/yyyy" }}
       </div>
     </div>
-    <div class="dates">
-      Début : {{ assessment.startDate | date:'dd/MM/yyyy' }} —
-      Fin : {{ assessment.endDate | date:'dd/MM/yyyy' }}
+  </mat-card>
+
+  <mat-divider></mat-divider>
+
+  <!-- Réponses début de la formation -->
+  <div *ngIf="getPhaseResponse('avant')" class="section">
+    <h2>Réponses début de la formation</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+      </p>
+      <mat-radio-group [disabled]="true">
+        <mat-radio-button
+          *ngFor="let o of t.options"
+          [checked]="isSelected(getPhaseResponse('avant')!, t._id, o._id)"
+        >
+          {{ o.text }}
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
   </div>
-</mat-card>
 
-<mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-<!-- Section 1 : réponses “avant” -->
-<div *ngIf="getPhaseResponse('avant')" class="section">
-  <h2>Réponses début de la formation</h2>
-  <div *ngFor="let t of assessment.tasks; let i = index" class="question">
-    <p><strong>Q{{ i + 1 }}.</strong> {{ t.description }}</p>
-    <mat-radio-group [disabled]="true">
-      <mat-radio-button
-        *ngFor="let o of t.options"
-        [value]="o.score"
-        [checked]="isSelected(getPhaseResponse('avant')!, t._id, o.score)"
-      >
-        {{ o.text }}
-      </mat-radio-button>
-    </mat-radio-group>
+  <!-- Réponses fin de la formation -->
+  <div *ngIf="getPhaseResponse('apres')" class="section">
+    <h2>Réponses fin de la formation</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+      </p>
+      <mat-radio-group [disabled]="true">
+        <mat-radio-button
+          *ngFor="let o of t.options"
+          [checked]="isSelected(getPhaseResponse('apres')!, t._id, o._id)"
+        >
+          {{ o.text }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
   </div>
-</div>
 
-<mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-<!-- Section 2 : réponses “après” -->
-<div *ngIf="getPhaseResponse('apres')" class="section">
-  <h2>Réponses fin de la formation</h2>
-  <div *ngFor="let t of assessment.tasks; let i = index" class="question">
-    <p><strong>Q{{ i + 1 }}.</strong> {{ t.description }}</p>
-    <mat-radio-group [disabled]="true">
-      <mat-radio-button
-        *ngFor="let o of t.options"
-        [value]="o.score"
-        [checked]="isSelected(getPhaseResponse('apres')!, t._id, o.score)"
-      >
-        {{ o.text }}
-      </mat-radio-button>
-    </mat-radio-group>
+  <!-- Correction -->
+  <div class="section">
+    <h2>Correction</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+      </p>
+      <ul>
+        <li *ngFor="let o of t.options">
+          <mat-icon *ngIf="o.isCorrect">check_circle</mat-icon>
+          {{ o.text }}
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
 
-<mat-divider></mat-divider>
-
-<!-- Section 3 : correction -->
-<div class="section">
-  <h2>Correction</h2>
-  <div *ngFor="let t of assessment.tasks; let i = index" class="question">
-    <p><strong>Q{{ i + 1 }}.</strong> {{ t.description }}</p>
-    <ul>
-      <li *ngFor="let o of t.options">
-        <mat-icon *ngIf="o.isCorrect">check_circle</mat-icon>
-        {{ o.text }}
-      </li>
-    </ul>
-  </div>
-</div>
-  <div class="actions" style="text-align: center; margin-top: 20px;">
-   <button mat-raised-button color="primary" (click)="onSendResponses()">
-       Envoyer PDF des réponses
+  <div class="actions" style="text-align: center; margin-top: 20px">
+    <button mat-raised-button color="primary" (click)="onSendResponses()">
+      Envoyer PDF des réponses
     </button>
   </div>
+</ng-container>
+
+<ng-template #loading>
+  <p>Chargement des données…</p>
+</ng-template>

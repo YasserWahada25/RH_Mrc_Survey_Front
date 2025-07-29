@@ -1,21 +1,20 @@
 // src/app/pages/apps/assessment-wizard-dialog/assessment-wizard-dialog.component.ts
 
-import { Component }                     from '@angular/core';
-import { CommonModule }                  from '@angular/common';
-import { FormsModule }                   from '@angular/forms';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule }            from '@angular/material/form-field';
-import { MatInputModule }                from '@angular/material/input';
-import { MatSelectModule }               from '@angular/material/select';
-import { MatButtonModule }               from '@angular/material/button';
-import { MatIconModule }                 from '@angular/material/icon';
-import { MatDividerModule }              from '@angular/material/divider';
-import { MatCheckboxModule }             from '@angular/material/checkbox'; // ✅ Ajouté
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 interface Option {
   text: string;
-  score: number;
-  isCorrect: boolean; // ✅ Ajouté
+  isCorrect: boolean;
 }
 
 interface Task {
@@ -36,7 +35,7 @@ interface Task {
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatCheckboxModule // ✅ Ajouté
+    MatCheckboxModule
   ],
   templateUrl: './assessment-wizard-dialog.component.html',
   styles: []
@@ -59,7 +58,7 @@ export class AssessmentWizardDialogComponent {
   addTask() {
     this.local.tasks.push({
       description: '',
-      options: [{ text: '', score: 1, isCorrect: false }] // ✅ Ajouté
+      options: [{ text: '', isCorrect: false }]
     });
   }
 
@@ -68,7 +67,7 @@ export class AssessmentWizardDialogComponent {
   }
 
   addOption(taskIdx: number) {
-    this.local.tasks[taskIdx].options.push({ text: '', score: 1, isCorrect: false }); // ✅ Ajouté
+    this.local.tasks[taskIdx].options.push({ text: '', isCorrect: false });
   }
 
   removeOption(taskIdx: number, optIdx: number) {

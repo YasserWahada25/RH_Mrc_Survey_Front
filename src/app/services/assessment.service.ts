@@ -25,11 +25,12 @@ export class AssessmentService {
     return this.http.get<any>(`${this.api}/${id}`);
   }
 
-  findResponses(assessmentId: string, userId: string) {
-    return this.http.get<any[]>(
-      `${this.api}/${assessmentId}/responses?userId=${userId}`
-    );
-  }
+findResponses(assessmentId: string, userId: string) {
+  return this.http.get<any[]>(
+    `${this.api}/${assessmentId}/responses`,
+    { params: { userId } }
+  );
+}
 
   sendByEmail(assessmentId: string, userId: string) {
     return this.http.post(

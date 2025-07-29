@@ -1,14 +1,31 @@
-import { Component, OnInit }                   from '@angular/core';
-import { CommonModule }                        from '@angular/common';
-import { ActivatedRoute }                      from '@angular/router';
-import { MatCardModule }                       from '@angular/material/card';
-import { MatDividerModule }                    from '@angular/material/divider';
-import { MatRadioModule }                      from '@angular/material/radio';
-import { MatIconModule }                       from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AssessmentService }                   from 'src/app/services/assessment.service';
+// src/app/components/assessment-response-detail/assessment-response-detail.component.ts
 
-interface Answer { taskId: string; selected: any; }
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
+import { AssessmentService } from 'src/app/services/assessment.service';
+
+interface Answer {
+  taskId: string;
+  selected: string;
+}
+
+interface Resp {
+  phase: 'avant' | 'apres';
+  answers: Answer[];
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
 
 @Component({
   selector: 'app-assessment-response-detail',
@@ -18,64 +35,73 @@ interface Answer { taskId: string; selected: any; }
     MatCardModule,
     MatDividerModule,
     MatRadioModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    MatSnackBarModule,
   ],
   templateUrl: './assessment-response-detail.component.html',
-  styleUrls: ['./assessment-response-detail.component.css']
+  styleUrls: ['./assessment-response-detail.component.css'],
 })
 export class AssessmentResponseDetailComponent implements OnInit {
   assessment!: any;
-  responses: { phase: string; answers: Answer[] }[] = [];
+  responses: Resp[] = [];
   userInfo = { firstName: '', lastName: '', email: '' };
 
   constructor(
     private route: ActivatedRoute,
-    private svc:   AssessmentService, 
-    private snackBar: MatSnackBar
+    private svc: AssessmentService,
+    private snack: MatSnackBar
   ) {}
 
   ngOnInit() {
     const aid = this.route.snapshot.paramMap.get('assessmentId')!;
     const uid = this.route.snapshot.paramMap.get('userId')!;
 
-    // 1) charger assessment (nom + dates + tâches/options)
-    this.svc.getById(aid).subscribe(a => this.assessment = a);
+    forkJoin({
+      assessment: this.svc.getById(aid),
+      responses: this.svc.findResponses(aid, uid),
+    }).subscribe({
+      next: ({ assessment, responses }) => {
+        this.assessment = assessment;
+        this.responses = responses;
 
-    // 2) charger les réponses (phase avant + après)
-    this.svc.findResponses(aid, uid)
-      .subscribe(list => {
-        this.responses = list;
-        // préremplir userInfo si phase 'avant'
-        const avant = list.find(r => r.phase === 'avant');
+        // Préremplissage des infos utilisateur depuis la phase 'avant'
+        const avant = responses.find((r) => r.phase === 'avant');
         if (avant) {
-          // on a déjà les infos nom/prenom/email dans avant?
-          // si pas dans payload, appelle getUserInfo au besoin
-          // sinon :
           this.userInfo = {
-            firstName: avant['firstName'],
-            lastName:  avant['lastName'],
-            email:     avant['email']
+            firstName: avant.firstName!,
+            lastName: avant.lastName!,
+            email: avant.email!,
           };
         }
-      });
-  }
-
-    onSendResponses() {
-    const aid = this.route.snapshot.paramMap.get('assessmentId')!;
-    const uid = this.route.snapshot.paramMap.get('userId')!;
-    this.svc.sendResponsesEmail(aid, uid).subscribe({
-      next: () => this.snackBar.open('Email envoyé !', 'OK', { duration: 3000 }),
-      error: err => this.snackBar.open(`Erreur : ${err.message}`, 'OK', { duration: 5000 })
+      },
+      error: (err) =>
+        this.snack.open(`Erreur de chargement : ${err.message}`, 'OK', {
+          duration: 5000,
+        }),
     });
   }
 
+isSelected(
+  resp: { answers: Answer[] },
+  taskId: string,
+  optionId: string
+): boolean {
+  const ans = resp.answers.find(a => a.taskId === taskId);
+  return !!ans && ans.selected === optionId;
+}
 
-  isSelected(resp: { answers: Answer[] }, taskId: string, score: any) {
-    const a = resp.answers.find(x => x.taskId === taskId);
-    return a ? a.selected === score : false;
+  getPhaseResponse(phase: 'avant' | 'apres') {
+    return this.responses.find((r) => r.phase === phase);
   }
 
-  getPhaseResponse(phase: 'avant'|'apres') {
-    return this.responses.find(r => r.phase === phase);
+  onSendResponses() {
+    const aid = this.route.snapshot.paramMap.get('assessmentId')!;
+    const uid = this.route.snapshot.paramMap.get('userId')!;
+    this.svc.sendResponsesEmail(aid, uid).subscribe({
+      next: () => this.snack.open('Email envoyé !', 'OK', { duration: 3000 }),
+      error: (err) =>
+        this.snack.open(`Erreur : ${err.message}`, 'OK', { duration: 5000 }),
+    });
   }
 }

@@ -6,22 +6,13 @@
   <!-- Nom de l’assessment -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Nom de l’assessment</mat-label>
-    <input
-      matInput
-      [(ngModel)]="local.name"
-      name="name"
-      required
-    />
+    <input matInput [(ngModel)]="local.name" name="name" required />
   </mat-form-field>
 
   <!-- Type d’assessment -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Type d’assessment</mat-label>
-    <mat-select
-      [(ngModel)]="local.type"
-      name="type"
-      required
-    >
+    <mat-select [(ngModel)]="local.type" name="type" required>
       <mat-option [value]="'normal'">Normal</mat-option>
       <mat-option [value]="'avant_apres'">Avant / Après</mat-option>
     </mat-select>
@@ -56,18 +47,12 @@
     <!-- Description -->
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Description</mat-label>
-      <input
-        matInput
-        [(ngModel)]="t.description"
-        name="desc{{ti}}"
-        required
-      />
+      <input matInput [(ngModel)]="t.description" name="desc{{ti}}" required />
     </mat-form-field>
 
     <!-- Options -->
     <div class="d-flex align-items-center mb-1">
       <div class="flex-grow-1 font-weight-semibold">Option</div>
-      <div class="score-col font-weight-semibold">Score (1–5)</div>
       <div class="font-weight-semibold">Correcte ?</div>
     </div>
     <mat-divider class="mb-2"></mat-divider>
@@ -82,18 +67,6 @@
         />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="score-col me-2">
-        <input
-          matInput
-          type="number"
-          min="1"
-          max="5"
-          [(ngModel)]="o.score"
-          name="optScore{{ti}}_{{oi}}"
-        />
-      </mat-form-field>
-
-      <!-- ✅ Checkbox pour isCorrect -->
       <mat-checkbox
         [(ngModel)]="o.isCorrect"
         name="optCorrect{{ti}}_{{oi}}"

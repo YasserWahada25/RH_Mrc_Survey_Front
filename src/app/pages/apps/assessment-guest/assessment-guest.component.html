@@ -5,11 +5,22 @@
       <div class="title-block">
         <h1 class="assessment-title">{{ assessment.name }}</h1>
         <p class="assessment-type">
-          Type : {{ assessment.type === 'normal' ? 'Réponse unique' : 'Avant / Après' }}
+          Type :
+          {{
+            assessment.type === "normal" ? "Réponse unique" : "Avant / Après"
+          }}
         </p>
-        <ng-container *ngIf="assessment.type === 'avant_apres' && assessment.startDate && assessment.endDate">
+        <ng-container
+          *ngIf="
+            assessment.type === 'avant_apres' &&
+            assessment.startDate &&
+            assessment.endDate
+          "
+        >
           <p class="assessment-dates">
-            📅 Formation : du {{ assessment.startDate | date:'dd/MM/yyyy' }} au {{ assessment.endDate | date:'dd/MM/yyyy' }}
+            📅 Formation : du
+            {{ assessment.startDate | date : "dd/MM/yyyy" }} au
+            {{ assessment.endDate | date : "dd/MM/yyyy" }}
           </p>
         </ng-container>
         <ng-container *ngIf="phase === 'avant' || phase === 'apres'">
@@ -72,15 +83,11 @@
             <mat-card-content>
               <mat-radio-group
                 [(ngModel)]="answers[t._id]"
-                name="ans{{i}}"
+                name="ans{{ i }}"
                 class="options-group"
                 [disabled]="disabledForm"
               >
-                <mat-radio-button
-                  *ngFor="let o of t.options"
-                  [value]="o.score"
-                  class="option"
-                >
+                <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
                   {{ o.text }}
                 </mat-radio-button>
               </mat-radio-group>
