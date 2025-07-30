@@ -58,13 +58,6 @@ getGroupedResponses() {
   return this.http.get<any[]>(`${this.api}/grouped-responses`);
 }
 
-  /** POST /api/assessments/:id/send-responses?userId=... */
-  sendResponsesEmail(assessmentId: string, userId: string) {
-   return this.http.post(
-      `${this.api}/${assessmentId}/send-responses`,
-     null,
-     { params: { userId } }
-    );
-  }
+
 }
 

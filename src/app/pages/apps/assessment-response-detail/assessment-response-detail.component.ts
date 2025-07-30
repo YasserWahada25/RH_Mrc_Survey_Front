@@ -64,9 +64,6 @@ export class AssessmentResponseDetailComponent implements OnInit {
       next: ({ assessment, responses }) => {
         this.assessment = assessment;
         this.responses = responses;
-        console.log('Assessment:', assessment);
-        console.log('Responses:', responses);
-        // Préremplissage des infos utilisateur depuis la phase 'avant'
         const avant = responses.find((r) => r.phase === 'avant');
         if (avant) {
           this.userInfo = {
@@ -86,7 +83,7 @@ export class AssessmentResponseDetailComponent implements OnInit {
   isSelected(
     resp: { answers: Answer[] },
     taskId: string,
-    optionId: any // Accept both string and ObjectId
+    optionId: any 
   ): boolean {
     const ans = resp.answers.find(a => a.taskId == taskId || a.taskId?.toString() == taskId?.toString());
     const result = !!ans && ans.selected?.toString() === optionId?.toString();
@@ -104,13 +101,4 @@ export class AssessmentResponseDetailComponent implements OnInit {
     return this.responses.find((r) => r.phase === phase);
   }
 
-  onSendResponses() {
-    const aid = this.route.snapshot.paramMap.get('assessmentId')!;
-    const uid = this.route.snapshot.paramMap.get('userId')!;
-    this.svc.sendResponsesEmail(aid, uid).subscribe({
-      next: () => this.snack.open('Email envoyé !', 'OK', { duration: 3000 }),
-      error: (err) =>
-        this.snack.open(`Erreur : ${err.message}`, 'OK', { duration: 5000 }),
-    });
-  }
 }
