@@ -101,4 +101,15 @@ export class AssessmentResponseDetailComponent implements OnInit {
     return this.responses.find((r) => r.phase === phase);
   }
 
+  sendResponses() {
+  const aid = this.route.snapshot.paramMap.get('assessmentId')!;
+  const uid = this.route.snapshot.paramMap.get('userId')!;
+  this.svc.sendResponsesPdf(aid, uid).subscribe({
+    next: () =>
+      this.snack.open('PDF des réponses envoyé par email', 'OK', { duration: 5000 }),
+    error: err =>
+      this.snack.open(`Erreur envoi PDF : ${err.message}`, 'OK', { duration: 5000 })
+  });
+}
+
 }

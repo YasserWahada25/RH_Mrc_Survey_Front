@@ -58,6 +58,14 @@ getGroupedResponses() {
   return this.http.get<any[]>(`${this.api}/grouped-responses`);
 }
 
+/** Envoi du PDF des réponses par email */
+sendResponsesPdf(assessmentId: string, userId: string) {
+  return this.http.post(
+    `${this.api}/${assessmentId}/send-responses`,
+    { userId }
+  );
+}
+
 
 }
 
