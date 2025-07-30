@@ -21,9 +21,10 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-  registerRh(data: any) {
+  registerRh(data: FormData) {
     return this.http.post(`${this.BASE_URL}/register-rh`, data);
   }
+
 
   login(data: { email: string; password: string }): Observable<{ token: string; user: any }> {
     return this.http
