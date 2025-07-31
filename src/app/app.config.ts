@@ -3,38 +3,50 @@ import {
   provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core';
+
 import {
   HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
+  HTTP_INTERCEPTORS
 } from '@angular/common/http';
+
 import { routes } from './app.routes';
 import {
   provideRouter,
   withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
+
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideClientHydration } from '@angular/platform-browser';
+
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-// pour histogramme
-import { provideCharts } from 'ng2-charts'; // ✅ Ajout ici
+// Histogramme
+import { provideCharts } from 'ng2-charts';
 
-
-// icons
+// Icons
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
 
-// perfect scrollbar
+// Perfect scrollbar & Permissions
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxPermissionsModule } from 'ngx-permissions';
-//Import all material modules
+
+// Angular Material Modules
 import { MaterialModule } from './material.module';
+
+// Forms
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// Calendar
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+// Jwt Interceptor
+import { JwtInterceptor } from './services/jwt.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -55,6 +67,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideClientHydration(),
     provideAnimationsAsync(),
+
+    // Ajout du JwtInterceptor comme HTTP_INTERCEPTOR
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
 
     importProvidersFrom(
       FormsModule,

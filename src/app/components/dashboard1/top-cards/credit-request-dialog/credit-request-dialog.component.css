@@ -1,0 +1,13 @@
+.mat-dialog-container {
+  padding: 0 !important;
+  border-radius: 12px !important;
+}
+
+.mat-dialog-content {
+  padding: 24px 36px !important;
+  max-width: 100% !important;
+}
+
+mat-form-field {
+  font-size: 16px;
+}

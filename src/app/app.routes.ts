@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
+import { FormulaireDetailComponent } from './pages/apps/formulaire-detail/formulaire-detail.component';
+
 
 export const routes: Routes = [
   // Routes sans layout (auth, landing page)
@@ -99,6 +101,17 @@ export const routes: Routes = [
             (m) => m.ThemePagesRoutes
           ),
       },
+
+        {
+    path: 'formulaire/:id',
+    component: FormulaireDetailComponent,
+    data: {
+      title: 'Détail Formulaire',
+      urls: [
+        { title: 'Dashboard', url: '/dashboards/dashboard1' },
+        { title: 'Formulaire' }
+      ]
+    }  },
     ],
   },
 

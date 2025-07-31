@@ -5,12 +5,19 @@ import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { AuthService } from 'src/app/services/authentification.service';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-side-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule, FormsModule, ReactiveFormsModule,TranslateModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule
+  ],
   templateUrl: './side-login.component.html',
   styleUrls: ['./side-login.component.css'],
 })
@@ -42,12 +49,22 @@ export class AppSideLoginComponent {
 
     if (this.form.valid) {
       const loginData = {
-        email: this.form.value.uname!, 
+        email: this.form.value.uname!,
         password: this.form.value.password!
       };
 
+      console.log('Données envoyées :', loginData);
       this.authService.login(loginData).subscribe({
-        next: (res: any) => {
+        next: (res) => {
+          console.log('Réponse login : ', res);
+
+          if (!res || !res.token || !res.user) {
+            this.isError = true;
+            this.message = 'Réponse serveur invalide.';
+            this.isSubmitted = false;
+            return;
+          }
+
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.user.id);
           localStorage.setItem('userEmail', res.user.email);
@@ -56,7 +73,7 @@ export class AppSideLoginComponent {
 
           this.router.navigate(['/dashboards/dashboard1']);
         },
-        error: (err: any) => {
+        error: (err) => {
           this.isError = true;
           this.isSubmitted = false;
           this.message = err.error?.message || 'Erreur lors de la connexion';

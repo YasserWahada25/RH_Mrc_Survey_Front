@@ -1,0 +1,33 @@
+.text-success {
+  color: green;
+  font-weight: bold;
+}
+
+.text-danger {
+  color: red;
+  font-weight: bold;
+}
+
+.text-warning {
+  color: orange;
+  font-weight: bold;
+}
+
+.cardWithShadow {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-bold {
+  font-weight: bold;
+}
+
+
+.snackbar-success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.snackbar-error {
+  background-color: #f44336;
+  color: white;
+}
