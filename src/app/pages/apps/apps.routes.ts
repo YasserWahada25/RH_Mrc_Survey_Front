@@ -6,14 +6,7 @@ import { DetailComponent } from './email/detail/detail.component';
 import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
-// import { AppContactComponent } from './contact/contact.component';
 import { AppNotesComponent } from './notes/notes.component';
-<<<<<<< HEAD
-import { AppTodoComponent } from './todo/todo.component';
-=======
-// import { AppTodoComponent } from './todo/todo.component';
-// import { AppPermissionComponent } from './permission/permission.component';
->>>>>>> ed9119e (Template 24/07)
 import { PermissionComponent } from './permission/permission.component';
 import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
@@ -24,8 +17,8 @@ import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-cred
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
-import { AuthGuard } from '../../services/auth-guard.service';
 import { QuizResultsListRHComponent } from './quiz-results-listRH/quiz-results-listRH.component';
+import { AuthGuard } from '../../services/auth-guard.service';
 
 export const AppsRoutes: Routes = [
   {
@@ -105,23 +98,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-<<<<<<< HEAD
       {
-        path: 'todo',
-        component: AppTodoComponent,
-        data: {
-          title: 'Todo App',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Todo App' },
-          ],
-        },
-      },
-      {
-=======
-      
-       {
->>>>>>> ed9119e (Template 24/07)
         path: 'assessment',
         component: AssessmentListComponent,
         data: {
@@ -231,33 +208,6 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-<<<<<<< HEAD
-      {
-        path: 'contacts',
-        component: AppContactComponent,
-        data: {
-          title: 'Contacts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Contacts' },
-          ],
-        },
-      },
-=======
-      
-      //     {
-      //   path: 'quiz-disc/:linkId',
-      //   component: QuizDiscFromLinkComponent,
-      //   data: {
-      //     title: 'Quiz Disc Link',
-      //     urls: [
-      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
-      //       { title: 'Quiz Disc Link' },
-      //     ],
-      //   },
-      // },
-
->>>>>>> ed9119e (Template 24/07)
       {
         path: 'blog/post',
         component: AppBlogsComponent,
