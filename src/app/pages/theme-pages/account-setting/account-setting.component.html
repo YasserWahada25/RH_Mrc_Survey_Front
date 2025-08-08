@@ -20,20 +20,22 @@
                   <mat-card-subtitle class="mat-body-1">
                     Change your profile picture from here
                   </mat-card-subtitle>
-                  <div class="text-center m-t-24">
-                    <img [src]="logoPreview" class="rounded-circle" width="120" height="120"
-                      style="object-fit: cover" />
+                  <!-- Upload Logo -->
+<div class="text-center m-t-24">
+  <img [src]="logoPreview" class="rounded-circle" width="120" height="120" style="object-fit: cover" />
 
-                    <div class="m-t-24">
-                      <button mat-flat-button color="primary" class="m-r-8">
-                        Upload
-                      </button>
-                      <button mat-stroked-button color="warn">Reset</button>
-                    </div>
-                    <span class="f-s-14 m-t-24 d-block">
-                      Allowed JPG, GIF or PNG. Max size of 800K
-                    </span>
-                  </div>
+  <input type="file" hidden #fileInput (change)="onFileSelected($event)" accept="image/*" />
+
+  <div class="m-t-24">
+    <button mat-flat-button color="primary" class="m-r-8" (click)="fileInput.click()">Upload</button>
+    <button mat-stroked-button color="accent" [disabled]="!selectedFile" (click)="uploadLogo()">Valider</button>
+  </div>
+
+  <span class="f-s-14 m-t-24 d-block">
+    Allowed JPG, GIF or PNG. Max size of 800K
+  </span>
+</div>
+
                 </mat-card-content>
               </mat-card>
             </div>

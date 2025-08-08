@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,7 +36,7 @@ export class AppAccountSettingComponent {
   user = JSON.parse(localStorage.getItem('user') || '{}');
   passwordForm: FormGroup;
 
-  // ✅ Affiche le logo si défini, sinon image par défaut
+  selectedFile: File | null = null;
   logoPreview: string = this.user?.societe_logo
     ? `http://localhost:3033${this.user.societe_logo}`
     : '/assets/images/profile/user-1.jpg';
@@ -54,11 +53,42 @@ export class AppAccountSettingComponent {
     });
   }
 
-  passwordChangeSuccess: boolean = false;
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.logoPreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  uploadLogo() {
+    if (!this.selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('logo', this.selectedFile);
+
+    const token = localStorage.getItem('token');
+    this.http.patch('http://localhost:3033/api/users/update-logo', formData, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res: any) => {
+        this.snackBar.open('✅ Logo mis à jour avec succès', 'Fermer', { duration: 3000 });
+        this.user.societe_logo = res.logo;
+        localStorage.setItem('user', JSON.stringify(this.user));
+        this.logoPreview = `http://localhost:3033${res.logo}`;
+      },
+      error: err => {
+        this.snackBar.open(`❌ ${err.error.message || 'Erreur serveur'}`, 'Fermer', { duration: 3000 });
+      }
+    });
+  }
 
   changePassword() {
     if (this.passwordForm.invalid) return;
-
     const { currentPassword, newPassword, confirmPassword } = this.passwordForm.value;
 
     if (newPassword !== confirmPassword) {
@@ -73,22 +103,10 @@ export class AppAccountSettingComponent {
     ).subscribe({
       next: () => {
         this.snackBar.open('✅ Mot de passe modifié avec succès', 'Fermer', { duration: 3000 });
-        this.passwordChangeSuccess = true;
         this.passwordForm.reset();
-        Object.keys(this.passwordForm.controls).forEach(key => {
-          const control = this.passwordForm.get(key);
-          control?.setErrors(null);
-          control?.markAsPristine();
-          control?.markAsUntouched();
-          control?.updateValueAndValidity();
-        });
-        setTimeout(() => {
-          this.passwordChangeSuccess = false;
-        }, 3000);
       },
       error: err => {
         this.snackBar.open(`❌ ${err.error.message || 'Erreur serveur'}`, 'Fermer', { duration: 3000 });
-        this.passwordChangeSuccess = false;
       }
     });
   }
