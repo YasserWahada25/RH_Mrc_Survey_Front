@@ -147,7 +147,7 @@ export class FullComponent implements OnInit {
       subtitle: 'Create new course',
       link: '/apps/courses',
     },
-      {
+    {
       id: 9,
       img: '/assets/images/svgs/icon-dd-application.svg',
       title: 'departement',
@@ -198,6 +198,7 @@ export class FullComponent implements OnInit {
       link: '/theme-pages/treeview',
     },
   ];
+  societeLogo: string | null = null;
 
   constructor(
     private settings: CoreService,
@@ -213,6 +214,8 @@ export class FullComponent implements OnInit {
     if (user) {
       this.userName = user.nom; // ou user.nom si disponible
       this.userRole = user.type; // exemple: rh_admin, responsable, etc.
+      this.societeLogo = user.societe_logo ? `http://localhost:3033${user.societe_logo}` : null;
+
     }
     this.htmlElement = document.querySelector('html')!;
     this.layoutChangesSubscription = this.breakpointObserver
@@ -239,7 +242,7 @@ export class FullComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnDestroy() {
     this.layoutChangesSubscription.unsubscribe();
@@ -280,8 +283,8 @@ export class FullComponent implements OnInit {
     }
   }
   logout() {
-  this.authService.logout(); // supprime le token et réinitialise le subject
-  this.router.navigate(['/authentication/login']); // redirige vers login
-}
+    this.authService.logout(); // supprime le token et réinitialise le subject
+    this.router.navigate(['/authentication/login']); // redirige vers login
+  }
 
 }

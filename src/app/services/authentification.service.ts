@@ -8,6 +8,7 @@ interface JwtPayload {
   email: string;
   type: string; // rh_admin, owner, etc
   nom: string;
+  societe_logo?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -21,10 +22,9 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-  registerRh(data: FormData) {
+  registerRh(data: any) {
     return this.http.post(`${this.BASE_URL}/register-rh`, data);
   }
-
 
   login(data: { email: string; password: string }): Observable<{ token: string; user: any }> {
     return this.http

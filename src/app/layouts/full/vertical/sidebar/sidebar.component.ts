@@ -1,19 +1,19 @@
 // src/app/layouts/full/vertical/sidebar/sidebar.component.ts
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule }         from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService }          from 'src/app/services/authentification.service';
+import { AuthService } from 'src/app/services/authentification.service';
 
-import { navItems }             from './sidebar-data';
-import { NavItem }              from './nav-item/nav-item';          // <-- type NavItem
+import { navItems } from './sidebar-data';
+import { NavItem } from './nav-item/nav-item';          // <-- type NavItem
 
 // Modules et composants à importer
-import { MaterialModule }        from 'src/app/material.module';
-import { NgScrollbarModule }     from 'ngx-scrollbar';
-import { AppNavItemComponent }   from './nav-item/nav-item.component';
-import { BrandingComponent }     from './branding.component';
-import { TablerIconsModule }     from 'angular-tabler-icons';
+import { MaterialModule } from 'src/app/material.module';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { AppNavItemComponent } from './nav-item/nav-item.component';
+import { BrandingComponent } from './branding.component';
+import { TablerIconsModule } from 'angular-tabler-icons';
 
 @Component({
   selector: 'app-sidebar',
@@ -31,16 +31,19 @@ import { TablerIconsModule }     from 'angular-tabler-icons';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-  @Input()  showToggle      = true;
+  @Input() showToggle = true;
   @Output() toggleMobileNav = new EventEmitter<void>();
   @Output() toggleCollapsed = new EventEmitter<void>();
 
   public menuItems: NavItem[] = [];
+  public societeLogo: string | null = null; // ✅ Ajouté pour logo dynamique
+
 
   constructor(
     public auth: AuthService,  // public pour l’utiliser dans le template
     private router: Router
-  ) {}
+
+  ) { }
 
   ngOnInit(): void {
     const user = this.auth.getCurrentUser();
@@ -52,6 +55,9 @@ export class SidebarComponent implements OnInit {
       }
       return role !== null && item.roles.includes(role);
     });
+        if (user?.societe_logo) {
+      this.societeLogo = `http://localhost:3033${user.societe_logo}`;
+    }
   }
 
   logout(): void {

@@ -19,8 +19,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,        // ✅ obligatoire pour formGroup
-    MatSnackBarModule,          // ✅ obligatoire pour MatSnackBar
+    ReactiveFormsModule,
+    MatSnackBarModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -35,8 +35,12 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 })
 export class AppAccountSettingComponent {
   user = JSON.parse(localStorage.getItem('user') || '{}');
-
   passwordForm: FormGroup;
+
+  // ✅ Affiche le logo si défini, sinon image par défaut
+  logoPreview: string = this.user?.societe_logo
+    ? `http://localhost:3033${this.user.societe_logo}`
+    : '/assets/images/profile/user-1.jpg';
 
   constructor(
     private fb: FormBuilder,
@@ -70,11 +74,7 @@ export class AppAccountSettingComponent {
       next: () => {
         this.snackBar.open('✅ Mot de passe modifié avec succès', 'Fermer', { duration: 3000 });
         this.passwordChangeSuccess = true;
-
-        // ✅ Réinitialiser les champs immédiatement après succès
         this.passwordForm.reset();
-
-        // ✅ Nettoyer tous les états d’erreur pour enlever le rouge
         Object.keys(this.passwordForm.controls).forEach(key => {
           const control = this.passwordForm.get(key);
           control?.setErrors(null);
@@ -82,7 +82,6 @@ export class AppAccountSettingComponent {
           control?.markAsUntouched();
           control?.updateValueAndValidity();
         });
-        // ✅ Revenir à état normal après 3 secondes (vert -> neutre)
         setTimeout(() => {
           this.passwordChangeSuccess = false;
         }, 3000);

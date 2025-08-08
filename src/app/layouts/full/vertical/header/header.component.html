@@ -63,7 +63,7 @@
             <a [routerLink]="['/theme-pages/faq']" mat-flat-button color="primary">Check</a>
           </div> -->
         </div>
-          <!-- <div class="col-sm-4">
+        <!-- <div class="col-sm-4">
             <div class="p-x-16 p-y-32">
               <h4 class="f-s-18 f-w-600 mat-subtitle-1 m-b-16">Quick Linkss</h4>
               @for(quicklink of quicklinks; track quicklink.title) {
@@ -107,7 +107,7 @@
   <!-- --------------------------------------------------------------- -->
 
   <mat-menu #notificationmenu="matMenu" class="topbar-dd cardWithShadow">
-    
+
 
     @for(notification of notifications; track notification.title) {
     <button mat-menu-item class="p-x-32 p-y-16">
@@ -134,7 +134,9 @@
   <!-- profile Dropdown -->
   <!-- --------------------------------------------------------------- -->
   <button mat-icon-button [matMenuTriggerFor]="profilemenu" aria-label="Notifications">
-    <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover icon-35 profile-dd" width="35" />
+    <img *ngIf="societeLogo; else defaultLogo" [src]="societeLogo" class="rounded-circle object-cover" width="35"
+            alt="Logo société" />
+    <!-- <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover icon-35 profile-dd" width="35" /> -->
   </button>
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
     <ng-scrollbar class="position-relative" style="height: 647px">
@@ -142,7 +144,11 @@
         <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">User Profile</h6>
 
         <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
-          <img src="/assets/images/profile/user-1.jpg" class="rounded-circle" width="95" />
+          <img *ngIf="societeLogo; else defaultLogo" [src]="societeLogo" class="rounded-circle object-cover" width="95"
+            alt="Logo société" />
+          <ng-template #defaultLogo>
+            <img src="/assets/images/profile/user-1.jpg" class="rounded-circle" width="95" />
+          </ng-template>
           <div class="m-l-16">
             <h6 class="f-s-14 f-w-600 m-0 mat-subtitle-1">{{ userName }}</h6>
             <span class="f-s-14 d-block m-b-4">{{ userRole | titlecase }}</span>
