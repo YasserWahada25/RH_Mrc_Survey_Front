@@ -1,35 +1,83 @@
-.question-row-horizontal {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
-}
 
-.question-text {
-  font-size: 16px;
-  flex: 1;
-}
 
-.radio-buttons-inline {
-  display: flex;
-  gap: 8px;
-}
+.error-message { color:#b00020; font-weight:600; margin:20px; }
+.quiz-card { overflow: hidden; }
 
-.radio-label {
-  font-weight: bold;
-  margin-left: 4px;
+/* Header */
+.quiz-header {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:12px 16px;
 }
+.title .h { font-size:18px; font-weight:700; }
+.title .sub { font-size:12px; opacity:.7; }
+/* => titre aligné à gauche */
+.title.left { margin-right:auto; text-align:left; }
 
-.lots-progress {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 8px 0 16px;
+.participant { display:flex; align-items:center; gap:12px; }
+.avatar {
+  width:38px; height:38px; border-radius:50%; display:grid; place-items:center;
+  background:#e6f0ff; color:#264b8a; font-weight:700;
 }
-.question-row-horizontal { display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
-.question-text { flex:1; padding-right:12px; }
-.radio-buttons-inline { display:flex; gap:16px; align-items:center; }
-.lot-nav { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-.lot-counter { opacity: .8; }
-.submit-zone { margin-top:16px; display:flex; gap:12px; align-items:center; }
+.id-block .name-line { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.id-block .name { font-weight:700; }
+.id-block .email { opacity:.75; }
+.company { display:flex; align-items:center; gap:6px; font-size:13px; opacity:.85; }
+.i { font-size:16px; height:16px; width:16px; }
+
+/* Barre des lots */
+.lots-bar {
+  position: sticky; top: 0; z-index: 2; background: #fff; padding-top: 6px; margin-bottom: 8px;
+}
+.lot-chips {
+  display:flex; gap:8px; overflow-x:auto; padding:6px 2px 4px;
+  scroll-snap-type: x proximity;
+}
+.lot-chip { scroll-snap-align: start; }
+.lot-chip .check { font-size:18px; margin-left:4px; opacity:.9; }
+.lot-chip.done { border:1px solid #cde7d8; }
+.progress { height:4px; border-radius:4px; }
+
+/* Carte du lot */
+.lot-card { border:1px solid #eee; border-radius:12px; }
+
+/* Question row */
+.question-row {
+  display:grid; grid-template-columns: 1fr auto auto; gap:16px; align-items:center;
+  padding:14px 6px; border-bottom:1px dashed #eee;
+}
+.question-row:last-child { border-bottom:none; }
+.q-text { line-height:1.35; }
+
+.q-controls { display:flex; gap:12px; align-items:center; }
+/* cache le rond natif des radios */
+.pill .mdc-radio { display:none; }
+.pill .mdc-form-field { display:none; }
+/* pilules + / − */
+.pill.mat-mdc-radio-button {
+  --pill-bg:#f3f5f7;
+  padding:4px 12px; border-radius:999px; border:1px solid #e1e5ea; cursor:pointer;
+  display:inline-grid; place-items:center; min-width:42px; font-weight:700; user-select:none;
+}
+.pill.plus.mat-mdc-radio-checked   { background:#e6f7ee; border-color:#bfe7cf; }
+.pill.minus.mat-mdc-radio-checked  { background:#fdecea; border-color:#f5c2bd; }
+.pill.plus   { color:#0b7a3b; }
+.pill.minus  { color:#b71c1c; }
+
+/* Barre de navigation bas */
+.bottom-bar {
+  position: sticky; bottom: 0; background:#fff; z-index: 1;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 0; margin-top:8px; border-top:1px solid #eee;
+}
+.status { font-size:12px; opacity:.7; }
+
+/* Zone submit */
+.submit-area { display:flex; align-items:center; gap:12px; margin-top:8px; }
+
+/* Responsive */
+@media (max-width: 720px) {
+  .quiz-header { flex-direction:column; align-items:flex-start; }
+  .title.left { margin-right:0; }         /* garde le titre à gauche sur mobile */
+  .question-row { grid-template-columns: 1fr auto; }
+  .q-controls { gap:8px; }
+}
