@@ -12,7 +12,7 @@ import { ActivatedRoute }           from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AssessmentService }        from 'src/app/services/assessment.service';
-import { UserSelectDialogComponent } from './selectuser/user-select-dialog.component';
+import { EmailListDialogComponent } from './email-dialog/email-list-dialog.component';
 
 type Phase = 'normal'|'avant'|'apres'|'done';
 
@@ -27,8 +27,8 @@ type Phase = 'normal'|'avant'|'apres'|'done';
     MatButtonModule,
     MatDividerModule,
     MatDialogModule,
-     MatSnackBarModule,   
-    UserSelectDialogComponent
+    MatSnackBarModule,
+    EmailListDialogComponent
   ],
   templateUrl: './assessment-detail.component.html',
   styleUrls: ['./assessment-detail.component.css']
@@ -44,8 +44,8 @@ export class AssessmentDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private svc:   AssessmentService,
-    private dialog: MatDialog, 
-    private snackBar: MatSnackBar 
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -74,7 +74,7 @@ export class AssessmentDetailComponent implements OnInit {
         if (this.assessment.type === 'normal') {
           this.phase = list.length ? 'done' : 'normal';
         } else {
-          const donePhases = list.map(r => r.phase);
+          const donePhases = list.map((r: any) => r.phase);
           if (!donePhases.includes('avant')) this.phase = 'avant';
           else if (!donePhases.includes('apres')) this.phase = 'apres';
           else this.phase = 'done';
@@ -83,15 +83,27 @@ export class AssessmentDetailComponent implements OnInit {
       });
   }
 
+  // 🔽 Nouveau comportement "Envoyer par email"
   sendByEmail() {
-    this.dialog.open(UserSelectDialogComponent, { width: '400px' })
+    this.dialog.open(EmailListDialogComponent, { width: '520px' })
       .afterClosed()
-      .subscribe(userId => {
-        if (!userId) return;
-        this.svc.sendByEmail(this.assessment._id, userId).subscribe();
+      .subscribe((result: { emails: string[] } | undefined) => {
+        if (!result?.emails?.length) return;
+
+        this.svc.sendByEmailToMany(this.assessment._id, result.emails)
+          .subscribe({
+            next: () => {
+              this.snackBar.open('Email(s) envoyé(s) avec succès.', 'Fermer', { duration: 4000 });
+            },
+            error: (err) => {
+              const msg = err?.error?.error || 'Erreur lors de l’envoi des emails.';
+              this.snackBar.open(msg, 'Fermer', { duration: 5000 });
+            }
+          });
       });
   }
-   onSubmit() {
+
+  onSubmit() {
     if (this.disabledForm) return;
 
     const payload = {
@@ -104,7 +116,6 @@ export class AssessmentDetailComponent implements OnInit {
     this.svc.submitResponse(this.assessment._id, payload)
       .subscribe({
         next: () => {
-          // 1) Affiche le message adapté
           if (this.assessment.type === 'avant_apres') {
             if (this.phase === 'avant') {
               this.snackBar.open(
@@ -126,8 +137,6 @@ export class AssessmentDetailComponent implements OnInit {
               { duration: 4000 }
             );
           }
-
-          // 2) On recalcul la phase et désactive si besoin
           this.determinePhase();
         },
         error: err => {
