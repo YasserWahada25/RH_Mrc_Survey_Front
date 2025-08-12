@@ -13,7 +13,8 @@
         </p>
       </ng-container>
 
-      <ng-container *ngIf="!adminMode && phase === 'avant' || phase === 'apres'">
+      <!-- ⚠️ parenthèses nécessaires pour la bonne priorité logique -->
+      <ng-container *ngIf="!adminMode && (phase === 'avant' || phase === 'apres')">
         <p class="assessment-phase">Phase : «{{ phase | titlecase }}»</p>
       </ng-container>
     </div>

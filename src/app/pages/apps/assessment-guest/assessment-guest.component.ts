@@ -43,6 +43,9 @@ export class AssessmentGuestComponent implements OnInit {
   email = '';
   readOnlyUser = false;
 
+  // ⚠️ utilisé dans le template
+  adminMode = false;
+
   constructor(
     private route: ActivatedRoute,
     private svc: AssessmentService,
@@ -111,9 +114,12 @@ export class AssessmentGuestComponent implements OnInit {
   onSubmit() {
     if (this.disabledForm) return;
 
+    // On capture la phase au moment de la soumission
+    const currentPhase = this.phase;
+
     const payload = {
       userId: this.userId,
-      phase: this.phase,
+      phase: currentPhase,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
@@ -122,8 +128,33 @@ export class AssessmentGuestComponent implements OnInit {
         .map(([taskId, selected]) => ({ taskId, selected })),
     };
 
-    this.svc.submitResponse(this.assessment._id, payload).subscribe(() => {
-      this.determinePhaseAndLoadUserInfo();
+    this.svc.submitResponse(this.assessment._id, payload).subscribe({
+      next: () => {
+        // On met à jour l'état local (et désactive au besoin)
+        this.determinePhaseAndLoadUserInfo();
+        this.disabledForm = true;
+
+        // Message + fermeture quand l'utilisateur clique sur "OK"
+        if (currentPhase === 'avant') {
+          const ref = this.snack.open(
+            'Votre première réponse a été enregistrée. Vous pourrez répondre après la formation.',
+            'OK'
+          );
+          ref.onAction().subscribe(() => {
+            try { window.close(); } catch {}
+          });
+        } else if (currentPhase === 'apres' || currentPhase === 'normal') {
+          const ref = this.snack.open('Merci pour vos réponses.', 'OK');
+          ref.onAction().subscribe(() => {
+            try { window.close(); } catch {}
+          });
+        }
+      },
+      error: () => {
+        this.snack.open('Une erreur est survenue. Veuillez réessayer.', 'Fermer', {
+          duration: 5000,
+        });
+      },
     });
   }
 }

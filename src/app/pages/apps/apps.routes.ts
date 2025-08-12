@@ -26,7 +26,6 @@ import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/d
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 import { AssessmentDetailComponent } from './assessment-detail/assessment-detail.component';
 import { GuestLayoutComponent } from './assessment-detail/guest-layout/guest-layout.component';
-
 export const AppsRoutes: Routes = [
   // --- 1) Route invitée (guest) pour répondre ---
   {
@@ -107,6 +106,7 @@ export const AppsRoutes: Routes = [
           },
         ],
       },
+      
       {
         path: 'permission',
         component: AppPermissionComponent,
