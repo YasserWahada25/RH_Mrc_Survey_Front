@@ -19,11 +19,13 @@ export class QuizDiscPublicService {
     
   }
 
-  sendResultPdfByEmail(payload: {
-    email: string;
-    charts: { plus: string; minus: string; diff: string };
-    scores: { plus: any; minus: any };
-  }) {
-    return this.http.post(`${this.baseUrl}/send-pdf`, payload);
-  }
+sendResultPdfByEmail(payload: {
+  email: string;
+  charts: { plus: string; minus: string; diff: string };
+  scores: { plus: any; minus: any };
+  token: string; // <-- AJOUT
+}) {
+  return this.http.post(`${this.baseUrl}/send-pdf`, payload);
+}
+
 }

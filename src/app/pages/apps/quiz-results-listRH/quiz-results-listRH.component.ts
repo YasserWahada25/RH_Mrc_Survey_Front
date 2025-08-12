@@ -1,4 +1,3 @@
-// src/app/pages/apps/quiz-results-listRH/quiz-results-listRH.component.ts
 import { AfterViewInit, Component, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule }                        from '@angular/common';
 import { MatPaginator, MatPaginatorModule }    from '@angular/material/paginator';
@@ -8,11 +7,10 @@ import { MatFormFieldModule }                  from '@angular/material/form-fiel
 import { MatInputModule }                      from '@angular/material/input';
 import { MatIconModule }                       from '@angular/material/icon';
 import { MatButtonModule }                     from '@angular/material/button';
-
 import { TablerIconsModule }                   from 'angular-tabler-icons';
 
 import { QuizResultsService } from '../../../services/quiz-results.service';
-import { QuizResult          } from '../../../models/quiz-result.model';
+import { QuizResult } from '../../../models/quiz-result.model';
 
 @Component({
   selector: 'app-quiz-results-listRH',
@@ -26,20 +24,14 @@ import { QuizResult          } from '../../../models/quiz-result.model';
     MatTableModule,
     MatPaginatorModule,
     MatButtonModule,
-    TablerIconsModule    // pour <i-tabler>
+    TablerIconsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './quiz-results-listRH.component.html',
-  styleUrls: ['./quiz-results-listRH.component.scss'] 
-
+  styleUrls: ['./quiz-results-listRH.component.scss']
 })
 export class QuizResultsListRHComponent implements AfterViewInit {
-  displayedColumns = [
-    'beneficiaryEmail',
-    'dateTaken',
-    'action'
-
-  ];
+  displayedColumns = ['beneficiaryEmail', 'dateTaken', 'action'];
   dataSource = new MatTableDataSource<QuizResult>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -52,26 +44,52 @@ export class QuizResultsListRHComponent implements AfterViewInit {
   }
 
   loadData() {
-    this.quizService.getResults()
-      .subscribe((results: QuizResult[]) => {
-        this.dataSource.data = results;
-      });
+    this.quizService.getResults().subscribe((results: QuizResult[]) => {
+      this.dataSource.data = results;
+    });
   }
 
   applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
   }
 
-  /** Ouvre le PDF en aperçu */
+  /** Ouvrir le PDF dans un nouvel onglet (visionnage) */
   viewReport(token: string) {
-    window.open(`/reports/${token}.pdf`, '_blank');
+    this.quizService.previewReport(token).subscribe({
+      next: (resp) => {
+        const blob = new Blob([resp.body!], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(blob);
+        window.open(fileURL, '_blank', 'noopener'); // plus d'alert popup
+        setTimeout(() => URL.revokeObjectURL(fileURL), 60_000);
+      },
+      error: (err) => {
+        console.error('Preview error', err);
+        alert("Impossible d’afficher le PDF. Vérifiez que vous êtes connecté et que le serveur est accessible.");
+      }
+    });
   }
 
-  /** Force le téléchargement du PDF */
+  /** Télécharger le PDF (forcé) */
   downloadReport(token: string) {
-    const link = document.createElement('a');
-    link.href = `/reports/${token}.pdf`;
-    link.download = `quiz-disc-${token}.pdf`;
-    link.click();
+    this.quizService.downloadReport(token).subscribe({
+      next: (resp) => {
+        const blob = new Blob([resp.body!], { type: 'application/pdf' });
+        const cd = resp.headers.get('Content-Disposition') || '';
+        const match = /filename="?([^"]+)"?/.exec(cd);
+        const filename = match?.[1] || `quiz-disc-${token}.pdf`;
+
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      },
+      error: (err) => {
+        console.error('Download error', err);
+        alert('Téléchargement impossible. Vérifiez votre connexion et vos droits.');
+      }
+    });
   }
 }

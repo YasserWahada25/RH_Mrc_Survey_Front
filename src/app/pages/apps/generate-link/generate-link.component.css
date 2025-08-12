@@ -1,0 +1,8 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(160px, 1fr));
+  gap: 12px;
+}
+.row-actions { margin: 6px 0 0; display:flex; justify-content:flex-end; }
+.actions { margin-top: 8px; display:flex; gap:12px; align-items:center; }
+.w-100 { width: 100%; }

@@ -70,6 +70,7 @@ export class QuizResultDialogComponent implements OnInit {
       columnChartOptionsDiff: ChartOptions;
       scorePercentagesPlus: Record<number, number>;
       scorePercentagesMinus: Record<number, number>;
+      token: string; // <-- IMPORTANT
     }
   ) {}
 
@@ -109,7 +110,7 @@ export class QuizResultDialogComponent implements OnInit {
     });
   }
 
-  /** Exporte les charts en images puis envoie le PDF par mail */
+  /** Exporte les charts en images puis envoie le PDF par mail + sauvegarde serveur */
   public exportAndSendPdf(): void {
     Promise.all<DataURIResult>([
       this.plusChartRef.dataURI(),
@@ -122,27 +123,24 @@ export class QuizResultDialogComponent implements OnInit {
       const diffImg  = diffRes.imgURI  ?? await this.blobToBase64(diffRes.blob!);
 
       if (!plusImg || !minusImg || !diffImg) {
-        this.snackBar.open(
-          '⚠️ Impossible de récupérer toutes les images de graphique',
-          'OK',
-          { duration: 4000 }
-        );
+        this.snackBar.open('⚠️ Impossible de récupérer toutes les images de graphique', 'OK', { duration: 4000 });
         return;
       }
 
       const payload = {
         email: this.data.result.email ?? 'no-reply@exemple.com',
         charts: { plus: plusImg, minus: minusImg, diff: diffImg },
-        scores: { plus: this.data.result.plus, minus: this.data.result.minus }
+        scores: { plus: this.data.result.plus, minus: this.data.result.minus },
+        token: this.data.token // <-- ENVOI DU TOKEN
       };
 
       this.quizDiscService.sendResultPdfByEmail(payload).subscribe({
         next: () => {
-          this.snackBar.open('📩 Résultat envoyé par mail', 'OK', { duration: 4000 });
+          this.snackBar.open('📩 Résultat envoyé et enregistré', 'OK', { duration: 4000 });
         },
         error: err => {
           console.error('❌ Erreur backend :', err);
-          this.snackBar.open('❌ Échec de l’envoi du mail', 'OK', { duration: 4000 });
+          this.snackBar.open('❌ Échec de l’envoi/sauvegarde du PDF', 'OK', { duration: 4000 });
         }
       });
     })

@@ -20,3 +20,16 @@
   font-weight: bold;
   margin-left: 4px;
 }
+
+.lots-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+.question-row-horizontal { display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
+.question-text { flex:1; padding-right:12px; }
+.radio-buttons-inline { display:flex; gap:16px; align-items:center; }
+.lot-nav { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
+.lot-counter { opacity: .8; }
+.submit-zone { margin-top:16px; display:flex; gap:12px; align-items:center; }
