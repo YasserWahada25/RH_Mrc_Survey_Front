@@ -9,7 +9,7 @@ import { AppSalesOverviewComponent } from '../../../components/dashboard2/sales-
 import { AppTotalEarningsComponent } from '../../../components/dashboard2/total-earnings/total-earnings.component';
 import { AppSalesProfitComponent } from '../../../components/dashboard2/sales-profit/sales-profit.component';
 import { AppMonthlyEarningsTwoComponent } from '../../../components/dashboard2/monthly-earnings/monthly-earnings.component';
-import { AppWeeklyStatsComponent } from '../../../components/dashboard1/weekly-stats/weekly-stats.component';
+// import { AppWeeklyStatsComponent } from '../../../components/dashboard1/weekly-stats/weekly-stats.component';
 import { AppYearlySalesComponent } from '../../../components/dashboard2/yearly-sales/yearly-sales.component';
 import { AppPaymentGatewaysComponent } from '../../../components/dashboard2/payment-gateways/payment-gateways.component';
 import { AppRecentTransactionsComponent } from '../../../components/dashboard2/recent-transactions/recent-transactions.component';
@@ -27,7 +27,7 @@ import { AppProductPerformanceComponent } from '../../../components/dashboard2/p
     AppTotalEarningsComponent,
     AppSalesProfitComponent,
     AppMonthlyEarningsTwoComponent,
-    AppWeeklyStatsComponent,
+    // AppWeeklyStatsComponent,
     AppYearlySalesComponent,
     AppPaymentGatewaysComponent,
     AppRecentTransactionsComponent,

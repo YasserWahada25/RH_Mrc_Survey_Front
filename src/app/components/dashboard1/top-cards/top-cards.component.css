@@ -1,50 +1,79 @@
-.quiz-card-modern {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8eefc 100%);
+/* ---- Base card: same size & layout for both ---- */
+.card-base {
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.1);
-  border: 1px solid rgba(63, 81, 181, 0.15);
-  height: 100%;
-  min-height: 260px;
-  transition: all 0.3s ease;
-  position: relative;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  height: 260px;                /* ← identical height */
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  position: relative;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
-.quiz-card-modern:hover {
+.card-base:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(63, 81, 181, 0.15);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
+/* ---- Per-card skins (same look for both) ---- */
+.card-quiz {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eefc 100%);
+}
+.card-users {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eefc 100%);
+}
 
+/* ✅ Stop hover movement for the Utilisateurs card only */
+.card-users:hover {
+  transform: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important; /* same as base */
+}
+
+/* ---- Content layout ---- */
+.card-content {
+  padding: 32px;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.card-title   { color:#3f51b5; font-weight:600; margin-bottom:15px; }
+.card-subtitle{ color:#2e7d32; font-weight:600; margin-bottom:5px; font-size:14px; }
+.card-value   { color:#2e7d32; font-weight:600; font-size:24px; margin:0; }
+
+/* Icon bubble */
+.icon-circle {
+  margin: 0 auto 15px;
+  width: 50px; height: 50px; border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Top-right action */
 .request-button {
   position: absolute;
   top: 10px;
   right: 5px;
-  margin : 1px;
-  height : 25px ;
+  margin: 1px;
+  height: 25px;
   padding: 10px 12px !important;
   font-size: 0.8rem !important;
   text-transform: none;
-  background-color:rgb(91, 105, 187) !important;
-  color: #fff !important; 
+  background-color: rgb(91, 105, 187) !important;
+  color: #fff !important;
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
   cursor: pointer;
 }
+.request-button:hover { background-color: #1f2f87 !important; }
 
-.request-button:hover {
-  background-color: #1f2f87 !important; /* encore plus foncé au survol */
-}
-
-/* Ajoutez ceci temporairement */
-.quiz-title, .mat-subtitle-2, .mat-subtitle-1 {
-  color: red !important;
-  font-size: 20px !important;
-  background-color: yellow !important;
-}
-
+/* Infinity badge */
 .infinite {
-  color: #00897b; /* vert cyan profond */
+  color: #00897b;
   font-size: 26px;
 }

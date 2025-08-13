@@ -49,6 +49,7 @@ export const navItems: NavItem[] = [
     iconName: 'note',
     route: 'apps/notes',
   },
+
   {
     displayName: 'Assessment',
     iconName: 'file-invoice',
@@ -58,6 +59,11 @@ export const navItems: NavItem[] = [
     displayName: 'Formulaires',
     iconName: 'file-invoice',
     route: 'apps/formulaires',
+  },
+   {
+    displayName: 'Feed',
+    iconName: 'brand-facebook',   
+    route: 'apps/feed',
   },
   {
     displayName: 'Réponses',

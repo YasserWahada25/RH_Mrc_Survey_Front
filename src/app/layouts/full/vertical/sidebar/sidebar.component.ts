@@ -1,4 +1,3 @@
-// src/app/layouts/full/vertical/sidebar/sidebar.component.ts
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +7,6 @@ import { AuthService } from 'src/app/services/authentification.service';
 import { navItems } from './sidebar-data';
 import { NavItem } from './nav-item/nav-item';          // <-- type NavItem
 
-// Modules et composants à importer
 import { MaterialModule } from 'src/app/material.module';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AppNavItemComponent } from './nav-item/nav-item.component';
@@ -38,12 +36,10 @@ export class SidebarComponent implements OnInit {
   public menuItems: NavItem[] = [];
   public societeLogo: string | null = null; // ✅ Ajouté pour logo dynamique
 
-
   constructor(
     public auth: AuthService,  // public pour l’utiliser dans le template
     private router: Router
-
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const user = this.auth.getCurrentUser();
@@ -55,13 +51,15 @@ export class SidebarComponent implements OnInit {
       }
       return role !== null && item.roles.includes(role);
     });
-        if (user?.societe_logo) {
+
+    if (user?.societe_logo) {
       this.societeLogo = `http://localhost:3033${user.societe_logo}`;
     }
   }
 
-  logout(): void {
-    this.auth.logout();
+  // ✅ Appelle l’API backend /api/logout (avec Bearer) puis nettoie & redirige
+  async logout(): Promise<void> {
+    await this.auth.logoutWithApi();
     this.router.navigate(['/authentication/login']);
   }
 }

@@ -17,6 +17,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AuthService } from 'src/app/services/authentification.service';
+import { Router } from '@angular/router';
+
+const API_BASE = 'http://localhost:3033';
 
 interface notifications {
   id: number;
@@ -61,10 +64,14 @@ interface quicklinks {
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit {
-  userName: string = '';
-  userRole: string = '';
-  userEmail: string = '';
+  userName = '';
+  userRole = '';
+  userEmail = '';
+
+  /** company logo absolute url (if any) */
   societeLogo: string | null = null;
+  /** final picture used in the header (depends on role) */
+  avatarUrl = '/assets/images/profile/user-1.jpg';
 
   @Input() showToggle = true;
   @Input() toggleChecked = false;
@@ -82,50 +89,59 @@ export class HeaderComponent implements OnInit {
   };
 
   public languages: any[] = [
-    {
-      language: 'Français',
-      code: 'fr',
-      icon: '/assets/images/flag/icon-flag-fr.svg',
-    },
-    {
-      language: 'English',
-      code: 'en',
-      type: 'US',
-      icon: '/assets/images/flag/icon-flag-en.svg',
-    },
-    {
-      language: 'Español',
-      code: 'es',
-      icon: '/assets/images/flag/flag-for-spain-svgrepo-com.svg',
-    },
-    {
-      language: 'German',
-      code: 'de',
-      icon: '/assets/images/flag/flag-for-germany-svgrepo-com.svg',
-    },
-    {
-      language: 'العربية',
-      code: 'ar',
-      icon: '/assets/images/flag/flag-for-tunisia.svg',
-    },
+    { language: 'Français', code: 'fr', icon: '/assets/images/flag/icon-flag-fr.svg' },
+    { language: 'English', code: 'en', type: 'US', icon: '/assets/images/flag/icon-flag-en.svg' },
+    { language: 'Español', code: 'es', icon: '/assets/images/flag/flag-for-spain-svgrepo-com.svg' },
+    { language: 'German', code: 'de', icon: '/assets/images/flag/flag-for-germany-svgrepo-com.svg' },
+    { language: 'العربية', code: 'ar', icon: '/assets/images/flag/flag-for-tunisia.svg' },
   ];
 
   constructor(
     private vsidenav: CoreService,
     public dialog: MatDialog,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router 
   ) {
+    // initial load from current user
     const user = this.authService.getCurrentUser();
     if (user) {
-      this.userName = user.nom;
-      this.userRole = user.type;
-      this.userEmail = user.email;
-      if (user.societe_logo) {
-        this.societeLogo = `http://localhost:3033${user.societe_logo}`;
-      }
+      this.applyUserToHeader(user);
     }
+
+    // keep in sync when the current user payload changes (e.g., photo/logo updated)
+    this.authService.currentUser$.subscribe((u) => {
+      if (u) this.applyUserToHeader(u);
+    });
+
     translate.setDefaultLang('en');
+  }
+
+  // ✅ Utilise l’API backend puis nettoie & redirige
+  async logout(): Promise<void> {
+    await this.authService.logoutWithApi();
+    this.router.navigate(['/authentication/login']);
+  }
+
+  private applyUserToHeader(user: any) {
+    this.userName = user.nom;
+    this.userRole = user.type;
+    this.userEmail = user.email;
+
+    const personalPhoto = user?.photo ? `${API_BASE}${user.photo}` : null;
+    const companyLogo   = user?.societe_logo ? `${API_BASE}${user.societe_logo}` : null;
+
+    // Rule:
+    // - employe / responsable -> personal photo
+    // - owner / rh_admin      -> company logo
+    if (user.type === 'employe' || user.type === 'responsable') {
+      this.avatarUrl = personalPhoto || '/assets/images/profile/user-1.jpg';
+    } else {
+      this.avatarUrl = companyLogo || '/assets/images/profile/user-1.jpg';
+    }
+
+    // Keep societeLogo if you use it elsewhere
+    this.societeLogo = companyLogo;
   }
 
   ngOnInit(): void {
@@ -206,9 +222,8 @@ export class HeaderComponent implements OnInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);
-
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      // ...
     });
   }
 
@@ -245,16 +260,8 @@ export class HeaderComponent implements OnInit {
   apps: apps[] = [];
 
   quicklinks: quicklinks[] = [
-    {
-      id: 1,
-      title: 'Pricing Page',
-      link: '/theme-pages/pricing',
-    },
-    {
-      id: 2,
-      title: 'Authentication Design',
-      link: '/authentication/login',
-    },
+    { id: 1, title: 'Pricing Page', link: '/theme-pages/pricing' },
+    { id: 2, title: 'Authentication Design', link: '/authentication/login' },
   ];
 }
 

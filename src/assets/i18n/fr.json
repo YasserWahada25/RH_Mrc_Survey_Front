@@ -138,6 +138,7 @@
     "REQUIRED_EMAIL": "Email requis",
     "INVALID_EMAIL": "Email invalide",
     "MOT_DE_PASSE": "Mot de passe",
+    "CONFIRMER_MDP": "Confirmer le mot de passe",
     "REQUIRED_MDP": "Mot de passe requis",
     "SIGN_UP": "S'inscrire",
     "SIGN_IN": "Se connecter",

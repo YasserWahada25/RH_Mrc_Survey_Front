@@ -10,37 +10,61 @@
           </div>
           Account
         </ng-template>
+
         <mat-card-content class="p-y-24 b-t-1">
           <div class="row">
-            <!-- Change Profile -->
-            <div class="col-sm-6">
+
+            <!-- If OWNER/RH_ADMIN => Logo uploader -->
+            <div class="col-sm-6" *ngIf="isRhOrOwner; else personalPhotoBlock">
               <mat-card class="cardWithShadow">
                 <mat-card-content class="p-y-24">
-                  <mat-card-title>Change Profile</mat-card-title>
+                  <mat-card-title>Logo de la société</mat-card-title>
                   <mat-card-subtitle class="mat-body-1">
-                    Change your profile picture from here
+                    Mettre à jour le logo de votre société
                   </mat-card-subtitle>
-                  <!-- Upload Logo -->
-<div class="text-center m-t-24">
-  <img [src]="logoPreview" class="rounded-circle" width="120" height="120" style="object-fit: cover" />
 
-  <input type="file" hidden #fileInput (change)="onFileSelected($event)" accept="image/*" />
-
-  <div class="m-t-24">
-    <button mat-flat-button color="primary" class="m-r-8" (click)="fileInput.click()">Upload</button>
-    <button mat-stroked-button color="accent" [disabled]="!selectedFile" (click)="uploadLogo()">Valider</button>
-  </div>
-
-  <span class="f-s-14 m-t-24 d-block">
-    Allowed JPG, GIF or PNG. Max size of 800K
-  </span>
-</div>
-
+                  <div class="text-center m-t-24">
+                    <img [src]="logoPreview" class="rounded-circle" width="120" height="120" style="object-fit: cover" />
+                    <input type="file" hidden #logoInput (change)="onLogoSelected($event)" accept="image/*" />
+                    <div class="m-t-24">
+                      <button mat-flat-button color="primary" class="m-r-8" (click)="logoInput.click()">Upload</button>
+                      <button mat-stroked-button color="accent" [disabled]="!selectedLogo" (click)="uploadLogo()">Valider</button>
+                    </div>
+                    <span class="f-s-14 m-t-24 d-block">
+                      Allowed JPG, GIF or PNG. Max size of 800K
+                    </span>
+                  </div>
                 </mat-card-content>
               </mat-card>
             </div>
 
-            <!-- Change Password -->
+            <!-- If EMPLOYE/RESPONSABLE => Personal photo uploader -->
+            <ng-template #personalPhotoBlock>
+              <div class="col-sm-6">
+                <mat-card class="cardWithShadow">
+                  <mat-card-content class="p-y-24">
+                    <mat-card-title>Photo de profil</mat-card-title>
+                    <mat-card-subtitle class="mat-body-1">
+                      Mettre à jour votre photo de profil
+                    </mat-card-subtitle>
+
+                    <div class="text-center m-t-24">
+                      <img [src]="photoPreview" class="rounded-circle" width="120" height="120" style="object-fit: cover" />
+                      <input type="file" hidden #photoInput (change)="onPhotoSelected($event)" accept="image/*" />
+                      <div class="m-t-24">
+                        <button mat-flat-button color="primary" class="m-r-8" (click)="photoInput.click()">Upload</button>
+                        <button mat-stroked-button color="accent" [disabled]="!selectedPhoto" (click)="uploadMyPhoto()">Valider</button>
+                      </div>
+                      <span class="f-s-14 m-t-24 d-block">
+                        Allowed JPG, GIF or PNG. Max size of 800K
+                      </span>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </ng-template>
+
+            <!-- Change Password (identique) -->
             <div class="col-sm-6">
               <mat-card class="cardWithShadow">
                 <mat-card-content class="p-y-24">
@@ -50,34 +74,23 @@
                   </mat-card-subtitle>
 
                   <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="m-t-24">
-                    <!-- Current Password -->
-                    <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">
-                      Current Password
-                    </mat-label>
+                    <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Current Password</mat-label>
                     <mat-form-field appearance="outline" class="w-100" color="primary">
                       <input matInput type="password" formControlName="currentPassword" />
                     </mat-form-field>
 
-                    <!-- New Password -->
-                    <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">
-                      New Password
-                    </mat-label>
+                    <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">New Password</mat-label>
                     <mat-form-field appearance="outline" class="w-100" color="primary">
                       <input matInput type="password" formControlName="newPassword" />
                     </mat-form-field>
 
-                    <!-- Confirm Password -->
-                    <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">
-                      Confirm Password
-                    </mat-label>
+                    <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Confirm Password</mat-label>
                     <mat-form-field appearance="outline" class="w-100" color="primary">
                       <input matInput type="password" formControlName="confirmPassword" />
                     </mat-form-field>
 
                     <div class="text-right m-t-16">
-                      <button mat-flat-button color="primary" type="submit" [disabled]="passwordForm.invalid">
-                        Valider
-                      </button>
+                      <button mat-flat-button color="primary" type="submit" [disabled]="passwordForm.invalid">Valider</button>
                     </div>
                   </form>
                 </mat-card-content>
@@ -95,28 +108,18 @@
 
                   <div class="row m-t-24">
                     <div class="col-sm-6">
-                      <!-- Your Name -->
-                      <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">
-                        Your Name
-                      </mat-label>
+                      <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Your Name</mat-label>
                       <mat-form-field appearance="outline" class="w-100" color="primary">
                         <input matInput type="text" [value]="user.nom" disabled />
                       </mat-form-field>
 
-                      <!-- Email -->
-                      <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">
-                        Email
-                      </mat-label>
+                      <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Email</mat-label>
                       <mat-form-field appearance="outline" class="w-100" color="primary">
                         <input matInput type="email" [value]="user.email" disabled />
                       </mat-form-field>
                     </div>
-
                     <div class="col-sm-6">
-                      <!-- Nom de la société -->
-                      <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">
-                        Société
-                      </mat-label>
+                      <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Société</mat-label>
                       <mat-form-field appearance="outline" class="w-100" color="primary">
                         <input matInput type="text" [value]="user.societe" disabled />
                       </mat-form-field>
@@ -125,6 +128,7 @@
                 </mat-card-content>
               </mat-card>
             </div>
+
           </div>
         </mat-card-content>
       </mat-tab>

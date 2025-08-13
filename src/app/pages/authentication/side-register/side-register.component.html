@@ -75,6 +75,20 @@
                 </mat-error>
               </mat-form-field>
 
+                  <!-- Confirmer le mot de passe -->
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.CONFIRMER_MDP' | translate }}
+              </mat-label>
+              <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
+                <input [type]="hideConfirm ? 'password' : 'text'" matInput formControlName="confirmPassword" class="f-s-12" />
+              
+                <mat-error *ngIf="f['confirmPassword'].touched && (f['confirmPassword'].invalid || form.errors?.['passwordMismatch'])" class="f-s-10">
+                  <div *ngIf="f['confirmPassword'].errors?.['required']">{{ 'FORM.REQUIRED_MDP' | translate }}</div>
+                  <div *ngIf="form.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</div>
+                </mat-error>
+              </mat-form-field>
+
+
               <!-- Logo société -->
               <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
                 {{ 'FORM.LOGO' | translate }}
