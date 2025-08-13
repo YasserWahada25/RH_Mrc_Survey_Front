@@ -7,6 +7,7 @@ import { MatFormFieldModule }                  from '@angular/material/form-fiel
 import { MatInputModule }                      from '@angular/material/input';
 import { MatIconModule }                       from '@angular/material/icon';
 import { MatButtonModule }                     from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule }      from '@angular/material/snack-bar'; // ⬅️ NEW
 import { TablerIconsModule }                   from 'angular-tabler-icons';
 
 import { QuizResultsService } from '../../../services/quiz-results.service';
@@ -24,6 +25,7 @@ import { QuizResult } from '../../../models/quiz-result.model';
     MatTableModule,
     MatPaginatorModule,
     MatButtonModule,
+    MatSnackBarModule,     // ⬅️ NEW
     TablerIconsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -31,12 +33,16 @@ import { QuizResult } from '../../../models/quiz-result.model';
   styleUrls: ['./quiz-results-listRH.component.scss']
 })
 export class QuizResultsListRHComponent implements AfterViewInit {
-  displayedColumns = ['beneficiaryEmail', 'dateTaken', 'action'];
+  displayedColumns = ['prenom', 'nom', 'societe', 'beneficiaryEmail', 'dateTaken', 'action'];
+
   dataSource = new MatTableDataSource<QuizResult>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private quizService: QuizResultsService) {}
+  constructor(
+    private quizService: QuizResultsService,
+    private snack: MatSnackBar, // ⬅️ NEW
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -53,23 +59,21 @@ export class QuizResultsListRHComponent implements AfterViewInit {
     this.dataSource.filter = value.trim().toLowerCase();
   }
 
-  /** Ouvrir le PDF dans un nouvel onglet (visionnage) */
   viewReport(token: string) {
     this.quizService.previewReport(token).subscribe({
       next: (resp) => {
         const blob = new Blob([resp.body!], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(blob);
-        window.open(fileURL, '_blank', 'noopener'); // plus d'alert popup
+        window.open(fileURL, '_blank', 'noopener');
         setTimeout(() => URL.revokeObjectURL(fileURL), 60_000);
       },
       error: (err) => {
         console.error('Preview error', err);
-        alert("Impossible d’afficher le PDF. Vérifiez que vous êtes connecté et que le serveur est accessible.");
+        this.snack.open('Impossible d’afficher le PDF.', 'OK', { duration: 3000 });
       }
     });
   }
 
-  /** Télécharger le PDF (forcé) */
   downloadReport(token: string) {
     this.quizService.downloadReport(token).subscribe({
       next: (resp) => {
@@ -88,7 +92,18 @@ export class QuizResultsListRHComponent implements AfterViewInit {
       },
       error: (err) => {
         console.error('Download error', err);
-        alert('Téléchargement impossible. Vérifiez votre connexion et vos droits.');
+        this.snack.open('Téléchargement impossible.', 'OK', { duration: 3000 });
+      }
+    });
+  }
+
+  /** ⬇️ NEW: envoi au bénéficiaire */
+  sendToBeneficiary(row: QuizResult) {
+    this.quizService.sendReportToBeneficiary(row.reportToken, row.beneficiaryEmail).subscribe({
+      next: () => this.snack.open('Rapport envoyé au bénéficiaire 🎉', 'OK', { duration: 3000 }),
+      error: (err) => {
+        console.error('Send error', err);
+        this.snack.open('Échec de l’envoi du rapport.', 'OK', { duration: 3000 });
       }
     });
   }

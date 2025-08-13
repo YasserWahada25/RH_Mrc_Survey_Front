@@ -16,7 +16,6 @@ export class QuizDiscPublicService {
 
   constructor(private http: HttpClient) {}
 
-  // ⬇️ nouvelle méthode (tu peux garder l’ancienne pour compat)
   getBeneficiaireInfo(token: string) {
     return this.http.get<BeneficiaireInfo>(`${this.baseUrl}/${token}`);
   }
@@ -25,6 +24,16 @@ export class QuizDiscPublicService {
     return this.http.post(`${this.baseUrl}/${token}`, { answers, utilisateur });
   }
 
+  /** ⬇️ NOUVEAU: Sauvegarde PDF (avec charts) côté serveur, sans email auto */
+  savePdfWithCharts(payload: {
+    charts: { plus: string; minus: string; diff: string };
+    scores: { plus: any; minus: any };
+    token: string;
+  }) {
+    return this.http.post(`${this.baseUrl}/save-pdf`, payload);
+  }
+
+  /** (Conservé pour l’étape 4) envoi manuel par RH */
   sendResultPdfByEmail(payload: {
     email: string;
     charts: { plus: string; minus: string; diff: string };

@@ -38,7 +38,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 })
 export class QuizDiscPublicComponent implements OnInit {
   token = '';
-  // ➜ nouvelles propriétés affichées
   beneficiaireEmail = '';
   beneficiaireNom = '';
   beneficiairePrenom = '';
@@ -72,7 +71,6 @@ export class QuizDiscPublicComponent implements OnInit {
           return;
         }
 
-        // mapping infos bénéficiaire
         this.beneficiaireEmail = data.email || '';
         this.beneficiaireNom = data.nom || '';
         this.beneficiairePrenom = data.prenom || '';
@@ -129,7 +127,6 @@ export class QuizDiscPublicComponent implements OnInit {
     if (this.currentLotIndex > 0) this.currentLotIndex--;
   }
 
-  // --- résultat (inchangé) ---
   calculateScorePercentages(result: any) {
     const totalPlus = [1, 2, 3, 4].reduce((sum, i) => sum + (result.plus[i] || 0), 0);
     const totalMinus = [1, 2, 3, 4].reduce((sum, i) => sum + (result.minus[i] || 0), 0);
@@ -166,40 +163,48 @@ export class QuizDiscPublicComponent implements OnInit {
     };
   }
 
-  createChartOptions(title: string, data: number[], labels: string[], isDiff = false) {
-    const colors = isDiff
-      ? data.map((val) => (val >= 0 ? '#4CAF50' : '#F44336'))
-      : ['#FF4C4C', '#FFD700', '#4CAF50', '#2196F3'];
+createChartOptions(title: string, data: number[], labels: string[], isDiff = false) {
+  const baseColors = ['#FF4C4C', '#FFD700', '#4CAF50', '#2196F3'];
+  const colors = baseColors; 
 
-    return {
-      series: [
-        {
-          name: title,
-          data: data.map((val, idx) => ({
-            x: labels[idx],
-            y: val,
-            fillColor: colors[idx % colors.length],
-          })),
-        },
-      ],
-      chart: { type: 'bar', height: 300 },
-      xaxis: { categories: labels },
-      yaxis: { min: isDiff ? -100 : 0, max: 100, title: { text: 'Pourcentage (%)' } },
-      tooltip: { enabled: true },
-      dataLabels: { enabled: true },
-      plotOptions: { bar: { columnWidth: '50%', distributed: true } },
-      colors,
-    };
-  }
+  return {
+    series: [{
+      name: title,
+      data: data.map((val, idx) => ({
+        x: labels[idx],
+        y: val,
+        fillColor: colors[idx % colors.length]
+      }))
+    }],
+    chart: {
+      type: 'bar',
+      height: 300,
+      toolbar: { show: false }
+    },
+    xaxis: { categories: labels },
+    yaxis: {
+      min: isDiff ? -100 : 0,
+      max: 100,
+      title: { text: '  Pourcentage (%)  ' }
+    },
+    tooltip: { enabled: true },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: number) => `${val}%` 
+    },
+    plotOptions: { bar: { columnWidth: '50%', distributed: true } },
+    colors
+  };
+}
 
-  submitQuiz() {
+
+submitQuiz() {
     const formattedAnswers = this.answers.map((ans, i) => ({
       lotId: this.lots[i].id,
       plusIndex: ans.plusIndex ?? -1,
       minusIndex: ans.minusIndex ?? -1,
     }));
 
-    // on continue d'envoyer l'email comme identifiant utilisateur
     this.publicService.submitQuiz(this.token, formattedAnswers, this.beneficiaireEmail).subscribe({
       next: (res: any) => {
         if (!res || !res.plus || !res.minus) {
@@ -227,7 +232,8 @@ export class QuizDiscPublicComponent implements OnInit {
         alert('Erreur lors de la soumission du quiz.');
       },
     });
-  }
+}
+
 completedLotsCount() {
   return this.answers?.filter(a => a.plusIndex !== null && a.minusIndex !== null).length || 0;
 }

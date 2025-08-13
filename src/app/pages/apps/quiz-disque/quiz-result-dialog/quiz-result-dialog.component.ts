@@ -2,6 +2,7 @@ import {
   Component,
   Inject,
   OnInit,
+  AfterViewInit,
   ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,7 +24,12 @@ import { QuizDiscPublicService } from 'src/app/services/quiz-disc-public.service
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
-  chart: ApexChart & { events?: { animationEnd: () => void } };
+  chart: ApexChart & {
+    events?: {
+      mounted?: () => void;        // ✅ appelé quand le chart est rendu (même sans animation)
+      animationEnd?: () => void;   // pour compat
+    }
+  };
   xaxis: ApexXAxis;
   yaxis: ApexYAxis;
   tooltip: ApexTooltip;
@@ -38,16 +44,11 @@ type DataURIResult = { imgURI?: string; blob?: Blob };
 @Component({
   selector: 'app-quiz-result-dialog',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    NgApexchartsModule
-  ],
+  imports: [CommonModule, MatButtonModule, MatSnackBarModule, NgApexchartsModule],
   templateUrl: './quiz-result-dialog.component.html',
   styleUrls: ['./quiz-result-dialog.component.css']
 })
-export class QuizResultDialogComponent implements OnInit {
+export class QuizResultDialogComponent implements OnInit, AfterViewInit {
   plusChartOptions!: ChartOptions;
   minusChartOptions!: ChartOptions;
   diffChartOptions!: ChartOptions;
@@ -57,6 +58,8 @@ export class QuizResultDialogComponent implements OnInit {
   @ViewChild('diffChart',  { static: false }) diffChartRef!: ChartComponent;
 
   private chartsReadyCount = 0;
+  isSaving = false;          
+  private hasSavedOnce = false;
 
   constructor(
     private quizDiscService: QuizDiscPublicService,
@@ -70,84 +73,112 @@ export class QuizResultDialogComponent implements OnInit {
       columnChartOptionsDiff: ChartOptions;
       scorePercentagesPlus: Record<number, number>;
       scorePercentagesMinus: Record<number, number>;
-      token: string; // <-- IMPORTANT
+      token: string;
     }
   ) {}
 
   ngOnInit(): void {
-    this.plusChartOptions  = { ...this.data.columnChartOptionsPlus };
+    this.plusChartOptions  = { ...this.data.columnChartOptionsPlus  };
     this.minusChartOptions = { ...this.data.columnChartOptionsMinus };
-    this.diffChartOptions  = { ...this.data.columnChartOptionsDiff };
+    this.diffChartOptions  = { ...this.data.columnChartOptionsDiff  };
+
+    const EXPORT_W = 1200, EXPORT_H = 600;
+    const tune = (opts: ChartOptions) => {
+      opts.chart = {
+        ...opts.chart,
+        width: EXPORT_W,
+        height: EXPORT_H,
+        background: '#ffffff',
+        animations: { enabled: false }  
+      };
+      opts.dataLabels = { ...opts.dataLabels, style: { fontSize: '16px' } as any };
+      return opts;
+    };
+    this.plusChartOptions  = tune(this.plusChartOptions);
+    this.minusChartOptions = tune(this.minusChartOptions);
+    this.diffChartOptions  = tune(this.diffChartOptions);
 
     const markReady = () => {
       this.chartsReadyCount++;
-      if (this.chartsReadyCount === 3) {
-        this.exportAndSendPdf();
-      }
+      if (this.chartsReadyCount === 3) this.savePdfOnly();
     };
 
-    this.plusChartOptions.chart.events  = {
-      ...this.plusChartOptions.chart.events,
-      animationEnd: markReady
+    const attach = (opts: ChartOptions) => {
+      const ev = opts.chart?.events || {};
+      opts.chart = { ...(opts.chart || {}), events: { ...ev, mounted: markReady, animationEnd: markReady } };
     };
-    this.minusChartOptions.chart.events = {
-      ...this.minusChartOptions.chart.events,
-      animationEnd: markReady
-    };
-    this.diffChartOptions.chart.events  = {
-      ...this.diffChartOptions.chart.events,
-      animationEnd: markReady
-    };
+    attach(this.plusChartOptions);
+    attach(this.minusChartOptions);
+    attach(this.diffChartOptions);
   }
 
-  /** Convertit un Blob en data URI base64 */
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (!this.hasSavedOnce) this.savePdfOnly();
+    }, 1200);
+  }
+
   private blobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror   = reject;
+      reader.onerror = reject;
       reader.readAsDataURL(blob);
     });
   }
 
-  /** Exporte les charts en images puis envoie le PDF par mail + sauvegarde serveur */
-  public exportAndSendPdf(): void {
+  private async toDataUrl(res: DataURIResult): Promise<string> {
+    if (res.imgURI) return res.imgURI;
+    if (res.blob)   return await this.blobToBase64(res.blob);
+    throw new Error('Aucune image exportée par le chart');
+  }
+
+  /** Sauvegarde le PDF côté serveur  */
+  private savePdfOnly(): void {
+    if (this.isSaving || this.hasSavedOnce) return;
+    if (!this.plusChartRef || !this.minusChartRef || !this.diffChartRef) return;
+
+    this.isSaving = true;
+
     Promise.all<DataURIResult>([
       this.plusChartRef.dataURI(),
       this.minusChartRef.dataURI(),
       this.diffChartRef.dataURI()
     ])
-    .then(async ([plusRes, minusRes, diffRes]) => {
-      const plusImg  = plusRes.imgURI  ?? await this.blobToBase64(plusRes.blob!);
-      const minusImg = minusRes.imgURI ?? await this.blobToBase64(minusRes.blob!);
-      const diffImg  = diffRes.imgURI  ?? await this.blobToBase64(diffRes.blob!);
+      .then(async ([plusRes, minusRes, diffRes]) => {
+        const payload = {
+          charts: {
+            plus:  await this.toDataUrl(plusRes),
+            minus: await this.toDataUrl(minusRes),
+            diff:  await this.toDataUrl(diffRes)
+          },
+          scores: { plus: this.data.result.plus, minus: this.data.result.minus },
+          token: this.data.token
+        };
 
-      if (!plusImg || !minusImg || !diffImg) {
-        this.snackBar.open('⚠️ Impossible de récupérer toutes les images de graphique', 'OK', { duration: 4000 });
-        return;
-      }
-
-      const payload = {
-        email: this.data.result.email ?? 'no-reply@exemple.com',
-        charts: { plus: plusImg, minus: minusImg, diff: diffImg },
-        scores: { plus: this.data.result.plus, minus: this.data.result.minus },
-        token: this.data.token // <-- ENVOI DU TOKEN
-      };
-
-      this.quizDiscService.sendResultPdfByEmail(payload).subscribe({
-        next: () => {
-          this.snackBar.open('📩 Résultat envoyé et enregistré', 'OK', { duration: 4000 });
-        },
-        error: err => {
-          console.error('❌ Erreur backend :', err);
-          this.snackBar.open('❌ Échec de l’envoi/sauvegarde du PDF', 'OK', { duration: 4000 });
-        }
+        this.quizDiscService.savePdfWithCharts(payload).subscribe({
+          next: () => {
+            this.hasSavedOnce = true;
+            this.isSaving = false;
+            this.snackBar.open('📄 PDF enregistré pour le RH-admin', 'OK', { duration: 3000 });
+          },
+          error: (e) => {
+            console.error('❌ save-pdf error:', e);
+            this.isSaving = false;
+            this.snackBar.open('❌ Échec de la sauvegarde du PDF', 'OK', { duration: 4000 });
+          }
+        });
+      })
+      .catch(err => {
+        console.error('❌ export charts error:', err);
+        this.isSaving = false;
+        this.snackBar.open('❌ Erreur lors de la préparation des graphiques', 'OK', { duration: 4000 });
       });
-    })
-    .catch(err => {
-      console.error('❌ Erreur lors de la génération du PDF :', err);
-      this.snackBar.open('❌ Erreur lors de la préparation du PDF', 'OK', { duration: 4000 });
-    });
+  }
+
+  /** Bouton manuel */
+  public exportAndSendPdf(): void {
+    this.savePdfOnly();
   }
 
   close(): void {
