@@ -26,14 +26,12 @@ export const navItems: NavItem[] = [
     iconName: 'link',
     route: 'apps/generate-links',
     roles: ['rh_admin']
-
   },
   {
     displayName: 'Quiz Disque Results',
     iconName: 'clipboard-list',
     route: 'apps/quiz-results',
     roles: ['rh_admin']
->>>>>>> yasser
   },
   {
     displayName: 'Calendar',
