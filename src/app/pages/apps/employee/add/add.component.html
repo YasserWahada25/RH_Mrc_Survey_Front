@@ -19,16 +19,33 @@
       <mat-label>{{ 'USER_DIALOG.PASSWORD_LABEL' | translate }}</mat-label>
       <input matInput name="mot_de_passe" [(ngModel)]="local_data.mot_de_passe" type="password" required />
     </mat-form-field>
+    
 
     <!-- Role Field -->
-<mat-form-field appearance="outline" class="w-100">
-  <mat-label>Rôle</mat-label>
-  <mat-select [(ngModel)]="local_data.type" name="type" required [disabled]="isResponsable">
-    <mat-option value="employe">Employé</mat-option>
-    <mat-option value="responsable">Responsable</mat-option>
-    <mat-option value="rh_admin">RH Admin</mat-option>
-  </mat-select>
-</mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Rôle</mat-label>
+      <mat-select [(ngModel)]="local_data.type" name="type" required [disabled]="isResponsable">
+        <mat-option value="employe">Employé</mat-option>
+        <mat-option value="responsable">Responsable</mat-option>
+        <mat-option value="rh_admin">RH Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Photo upload -->
+    <div class="m-t-12">
+      <div class="text-center">
+        <img *ngIf="preview" [src]="preview" width="120" height="120" class="rounded-circle" style="object-fit: cover" />
+      </div>
+
+      <div class="d-flex gap-8 m-t-12">
+        <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
+        <button mat-stroked-button type="button" (click)="fileInput.click()">
+          Choisir une image
+        </button>
+        <span class="mat-body-2">JPG/PNG/GIF — max 800KB</span>
+      </div>
+    </div>
+
 
     <!-- Action Buttons -->
     <div class="d-flex justify-content-end m-t-16">

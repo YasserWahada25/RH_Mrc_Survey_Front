@@ -1,0 +1,5 @@
+.card.soft { border-radius: 16px; box-shadow: 0 6px 24px rgba(0,0,0,.06); }
+.card-body { padding: 18px; }
+.text-muted { color:#7d8a96; }
+.skeleton { height: 240px; border-radius: 12px; background: linear-gradient(90deg,#f5f7fa,#eef1f5,#f5f7fa); animation: sh 1.2s infinite; }
+@keyframes sh { 0% { background-position: 0% } 100% { background-position: 100% } }

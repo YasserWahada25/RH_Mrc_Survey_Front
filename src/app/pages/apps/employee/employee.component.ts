@@ -21,6 +21,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+const API_BASE = 'http://localhost:3033';
 
 export interface Employee {
   id: number;
@@ -35,6 +36,7 @@ export interface Employee {
   password?: string;
   _id?: string;
   acces?: boolean;
+  photo?: string | null;   // <— utile
 }
 
 @Component({
@@ -97,61 +99,62 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+ fetchEmployees(): void {
+    const token = localStorage.getItem('token');
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    this.currentUser = currentUser;
 
-fetchEmployees(): void {
-  const token = localStorage.getItem('token');
-  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-  this.currentUser = currentUser;
-
-  if (!token) {
-    console.error('❌ Aucun token trouvé. L’utilisateur n’est pas authentifié.');
-    return;
-  }
-
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-  const isResponsable = currentUser?.type === 'responsable';
-  const isRhAdmin = currentUser?.type === 'rh_admin';
-  const isEmploye = currentUser?.type === 'employe';
-
-  if (isResponsable && currentUser?.acces === false) {
-    alert('🚫 Votre compte est désactivé. Veuillez contacter un administrateur.');
-    return;
-  }
-
-  const url = isEmploye
-    ? 'http://localhost:3033/api/users/accessible'
-    : isResponsable
-      ? 'http://localhost:3033/api/users/responsable/employes'
-      : 'http://localhost:3033/api/users';
-
-  console.log('🌐 URL utilisée pour fetchEmployees:', url);
-
-  this.http.get<any[]>(url, { headers }).subscribe({
-    next: (users) => {
-      const transformed = users.map((user, index) => ({
-        id: index + 1,
-        _id: user._id,
-        Name: user.nom || 'N/A',
-        Position: user.type || 'N/A',
-        Email: user.email || 'N/A',
-        added_by: user.addedBy || 'Système',
-        status: user.acces ? 'Activé' : 'Désactivé',
-        acces: user.acces,
-        DateOfJoining: new Date(user.createdAt || Date.now()),
-        imagePath: 'assets/images/profile/user-1.jpg',
-        nom: user.nom,
-        email: user.email,
-        type: user.type
-      }));
-
-      this.dataSource.data = transformed;
-    },
-    error: (err) => {
-      console.error('❌ Erreur lors de la récupération des utilisateurs :', err);
+    if (!token) {
+      console.error('❌ Aucun token trouvé. L’utilisateur n’est pas authentifié.');
+      return;
     }
-  });
-}
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    const isResponsable = currentUser?.type === 'responsable';
+    const isRhAdmin = currentUser?.type === 'rh_admin';
+    const isEmploye = currentUser?.type === 'employe';
+
+    if (isResponsable && currentUser?.acces === false) {
+      alert('🚫 Votre compte est désactivé. Veuillez contacter un administrateur.');
+      return;
+    }
+
+    const url = isEmploye
+      ? 'http://localhost:3033/api/users/accessible'
+      : isResponsable
+        ? 'http://localhost:3033/api/users/responsable/employes'
+        : 'http://localhost:3033/api/users';
+
+    this.http.get<any[]>(url, { headers }).subscribe({
+      next: (users) => {
+        const transformed = users.map((user, index) => {
+          const photoUrl = user.photo ? `${API_BASE}${user.photo}` : 'assets/images/profile/user-1.jpg';
+          return {
+            id: index + 1,
+            _id: user._id,
+            Name: user.nom || 'N/A',
+            Position: user.type || 'N/A',
+            Email: user.email || 'N/A',
+            added_by: user.addedBy || 'Système',
+            status: user.acces ? 'Activé' : 'Désactivé',
+            acces: user.acces,
+            DateOfJoining: new Date(user.createdAt || Date.now()),
+            imagePath: photoUrl,             // <— affichera l’avatar (ou défaut)
+            nom: user.nom,
+            email: user.email,
+            type: user.type,
+            photo: user.photo || null
+          };
+        });
+
+        this.dataSource.data = transformed;
+      },
+      error: (err) => {
+        console.error('❌ Erreur lors de la récupération des utilisateurs :', err);
+      }
+    });
+  }
 
 
 

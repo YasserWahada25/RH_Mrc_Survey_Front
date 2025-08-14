@@ -3,13 +3,13 @@
     <div class="col-lg-7 col-xl-8 bg-gredient p-0">
       <div class="p-24 h-10">
         @if(options.theme === 'light') {
-          <a [routerLink]="['/dashboards/dashboard1']">
-            <img src="./assets/images/logos/dark-logo.svg" class="align-middle m-2" alt="logo" />
-          </a>
+        <a [routerLink]="['/dashboards/dashboard1']">
+          <img src="./assets/images/logos/dark-logo.svg" class="align-middle m-2" alt="logo" />
+        </a>
         } @if(options.theme === 'dark') {
-          <a [routerLink]="['/dashboards/dashboard1']">
-            <img src="./assets/images/logos/light-logo.svg" class="align-middle m-2" alt="logo" />
-          </a>
+        <a [routerLink]="['/dashboards/dashboard1']">
+          <img src="./assets/images/logos/light-logo.svg" class="align-middle m-2" alt="logo" />
+        </a>
         }
 
         <div class="align-items-center justify-content-center img-height d-none d-lg-flex">
@@ -24,7 +24,6 @@
           <div class="mx-auto" style="max-width: 100%;">
             <h4 class="f-w-700 f-s-20 m-0">{{ 'WELCOME' | translate }}</h4>
             <span class="f-s-12 d-block mat-body-1 m-t-4">{{ 'YOUR_ADMIN_DASHBOARD' | translate }}</span>
-
             <form class="m-t-16" [formGroup]="form" (ngSubmit)="submit()">
               <!-- Nom -->
               <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
@@ -44,6 +43,9 @@
               </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput formControlName="nomSociete" class="f-s-12" />
+                <mat-error *ngIf="f['nomSociete'].touched && f['nomSociete'].invalid" class="f-s-10">
+                  <div *ngIf="f['nomSociete'].errors?.['required']">{{ 'FORM.REQUIRED_SOCIETE' | translate }}</div>
+                </mat-error>
               </mat-form-field>
 
               <!-- Téléphone -->
@@ -52,6 +54,9 @@
               </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
                 <input matInput formControlName="tel" class="f-s-12" />
+                <mat-error *ngIf="f['tel'].touched && f['tel'].invalid" class="f-s-10">
+                  <div *ngIf="f['tel'].errors?.['required']">{{ 'FORM.REQUIRED_TEL' | translate }}</div>
+                </mat-error>
               </mat-form-field>
 
               <!-- Email -->
@@ -62,6 +67,7 @@
                 <input matInput type="email" formControlName="email" class="f-s-12" />
                 <mat-error *ngIf="f['email'].touched && f['email'].invalid" class="f-s-10">
                   <div *ngIf="f['email'].errors?.['required']">{{ 'FORM.REQUIRED_EMAIL' | translate }}</div>
+                  <div *ngIf="f['email'].errors?.['email']">{{ 'FORM.INVALID_EMAIL' | translate }}</div>
                 </mat-error>
               </mat-form-field>
 
@@ -70,13 +76,70 @@
                 {{ 'FORM.MOT_DE_PASSE' | translate }}
               </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
-                <input matInput type="password" formControlName="password" class="f-s-12" />
+                <input [type]="hidePassword ? 'password' : 'text'" matInput formControlName="password" class="f-s-12" />
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword"
+                  [attr.aria-label]="'Toggle password visibility'">
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+
+                <!-- Hint des règles -->
+                <mat-hint align="start" class="f-s-10 text-muted">
+                  Au moins 8 caractères, 1 majuscule et 1 caractère spécial.
+                </mat-hint>
+
+                <!-- Erreurs -->
                 <mat-error *ngIf="f['password'].touched && f['password'].invalid" class="f-s-10">
                   <div *ngIf="f['password'].errors?.['required']">{{ 'FORM.REQUIRED_MDP' | translate }}</div>
+                  <div *ngIf="f['password'].errors?.['minlength']">Minimum 8 caractères.</div>
+                  <div *ngIf="f['password'].errors?.['pattern']">
+                    Inclure au moins 1 lettre majuscule et 1 caractère spécial.
+                  </div>
                 </mat-error>
               </mat-form-field>
 
-              <button mat-flat-button color="primary" class="w-100 compact-button m-t-8" [disabled]="!form.valid">
+              <!-- Confirmer le mot de passe -->
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.CONFIRMER_MDP' | translate }}
+              </mat-label>
+              <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
+                <input [type]="hideConfirm ? 'password' : 'text'" matInput formControlName="confirmPassword"
+                  class="f-s-12" />
+                <button mat-icon-button matSuffix type="button" (click)="hideConfirm = !hideConfirm"
+                  [attr.aria-label]="'Toggle confirm visibility'">
+                  <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+
+                <mat-error
+                  *ngIf="f['confirmPassword'].touched && (f['confirmPassword'].invalid || form.errors?.['passwordMismatch'])"
+                  class="f-s-10">
+                  <div *ngIf="f['confirmPassword'].errors?.['required']">{{ 'FORM.REQUIRED_MDP' | translate }}</div>
+                  <div *ngIf="form.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</div>
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Logo société -->
+              <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
+                {{ 'FORM.LOGO' | translate }}
+              </mat-label>
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()">
+                  <mat-icon class="mr-2">upload</mat-icon>
+                  {{ selectedLogoName || ('FORM.CHOOSE_LOGO' | translate) }}
+                </button>
+                <input #fileInput type="file" hidden (change)="onLogoSelected($event)" accept="image/*" />
+              </div>
+
+              <!-- Prévisualisation -->
+              <div *ngIf="logoPreviewUrl" class="mb-3 text-center">
+                <img [src]="logoPreviewUrl" alt="Logo preview" style="max-height: 100px; border-radius: 8px;" />
+              </div>
+              <div *ngIf="logoError" class="text-danger f-s-10 mb-2">
+                {{ logoError }}
+              </div>
+
+              <!-- Bouton submit -->
+              <button mat-flat-button color="primary" class="w-100 compact-button m-t-8"
+                [disabled]="!form.valid || !!logoError">
                 <span class="f-s-12">{{ 'FORM.SIGN_UP' | translate }}</span>
               </button>
             </form>

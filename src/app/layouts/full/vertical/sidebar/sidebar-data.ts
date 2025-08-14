@@ -7,11 +7,6 @@ export const navItems: NavItem[] = [
     iconName: 'aperture',
     route: '/dashboards/dashboard1',
   },
-  {
-    displayName: 'eCommerce',
-    iconName: 'shopping-cart',
-    route: '/dashboards/dashboard2',
-  },
 
   { navCap: 'Apps' },
 
@@ -19,19 +14,19 @@ export const navItems: NavItem[] = [
     displayName: 'Credit Request List',
     iconName: 'layout',
     route: 'apps/CreditRequestOwner',
-    roles: ['owner']
+    roles: ['owner'],
   },
   {
     displayName: 'Generate Links Quiz Disque',
     iconName: 'link',
     route: 'apps/generate-links',
-    roles: ['rh_admin']
+    roles: ['rh_admin'],
   },
   {
     displayName: 'Quiz Disque Results',
     iconName: 'clipboard-list',
     route: 'apps/quiz-results',
-    roles: ['rh_admin']
+    roles: ['rh_admin'],
   },
   {
     displayName: 'Calendar',
@@ -54,11 +49,6 @@ export const navItems: NavItem[] = [
     route: 'apps/employee',
   },
   {
-    displayName: 'Notes',
-    iconName: 'note',
-    route: 'apps/notes',
-  },
-  {
     displayName: 'Assessment',
     iconName: 'file-invoice',
     route: 'apps/assessment',
@@ -78,31 +68,11 @@ export const navItems: NavItem[] = [
     iconName: 'chart-donut-3',
     route: 'apps/rapport-formulaire',
   },
-  {
-    displayName: 'ToDo',
-    iconName: 'edit',
-    route: 'apps/todo',
-  },
 
   { navCap: 'Compte' },
   {
     displayName: 'Account Setting',
     iconName: 'user-circle',
     route: 'theme-pages/account-setting',
-  },
-  {
-    displayName: 'Roll Base Access',
-    iconName: 'lock-access',
-    route: 'apps/permission',
-  },
-  {
-    displayName: 'Pricing',
-    iconName: 'currency-dollar',
-    route: 'theme-pages/pricing',
-  },
-  {
-    displayName: 'FAQ',
-    iconName: 'help',
-    route: 'theme-pages/faq',
   },
 ];

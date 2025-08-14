@@ -1,0 +1,26 @@
+<div class="card soft">
+  <div class="card-body">
+    <h5 class="mb-1">Quiz DISC — Sent vs Responded</h5>
+    <p class="text-muted mb-3">Liens envoyés par mail & réponses</p>
+
+    <div *ngIf="loading" class="skeleton">Loading…</div>
+
+    <apx-chart
+      *ngIf="!loading"
+      [series]="series"
+      [chart]="chartOptions.chart"
+      [labels]="chartOptions.labels"
+      [dataLabels]="chartOptions.dataLabels"
+      [legend]="chartOptions.legend"
+      [responsive]="chartOptions.responsive"
+      [fill]="chartOptions.fill"
+      [stroke]="chartOptions.stroke">
+    </apx-chart>
+
+    <div class="mt-3 grid-3">
+      <div><strong>{{ totalSent }}</strong><div class="muted">Sent</div></div>
+      <div><strong>{{ totalResponded }}</strong><div class="muted">Responded</div></div>
+      <div><strong>{{ pending }}</strong><div class="muted">Pending</div></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="card soft">
+  <div class="card-body">
+    <h5 class="mb-1">Demandes de crédits — Évolution mensuelle</h5>
+    <p class="text-muted mb-3">Répartition Pending / Approved / Rejected</p>
+
+    <div *ngIf="loading" class="skeleton">Loading…</div>
+
+    <apx-chart *ngIf="!loading"
+      [series]="series"
+      [chart]="chart"
+      [xaxis]="xaxis"
+      [legend]="legend"
+      [dataLabels]="dataLabels"
+      [grid]="grid"
+      [tooltip]="tooltip">
+    </apx-chart>
+  </div>
+</div>

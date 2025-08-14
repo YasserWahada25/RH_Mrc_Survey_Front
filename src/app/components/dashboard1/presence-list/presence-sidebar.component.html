@@ -1,0 +1,59 @@
+<!-- fixed Facebook-like right sidebar -->
+<aside class="fb-sidebar cardWithShadow">
+  <div class="header">
+    <div class="title">Contacts</div>
+    <button mat-icon-button aria-label="refresh" (click)="fetchPresence()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div class="sub">
+    <span class="dot online"></span>
+    <span class="text">En ligne: {{ online.length }}</span>
+    <span class="sep">•</span>
+    <span class="text">Hors ligne: {{ offline.length }}</span>
+  </div>
+
+  <div class="body" *ngIf="!loading && !error">
+    <!-- online first -->
+    <div class="group" *ngIf="online.length">
+      <div class="group-title">En ligne</div>
+      <ul class="list">
+        <li class="item" *ngFor="let u of online; trackBy: trackById">
+          <div class="avatar">
+            <img [src]="avatar(u)" alt="avatar" />
+            <span class="badge dot online"></span>
+          </div>
+          <div class="meta">
+            <div class="name" [matTooltip]="u.nom">{{ u.nom }}</div>
+            <div class="hint">En ligne</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- offline -->
+    <div class="group" *ngIf="offline.length">
+      <div class="group-title">Hors ligne</div>
+      <ul class="list">
+        <li class="item" *ngFor="let u of offline; trackBy: trackById">
+          <div class="avatar">
+            <img [src]="avatar(u)" alt="avatar" />
+            <span class="badge dot offline"></span>
+          </div>
+          <div class="meta">
+            <div class="name" [matTooltip]="u.nom">{{ u.nom }}</div>
+            <div class="hint">Vu {{ u.lastActiveAgo || 'récemment' }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="empty" *ngIf="!online.length && !offline.length">
+      Aucun contact à afficher.
+    </div>
+  </div>
+
+  <div class="state" *ngIf="loading">Chargement…</div>
+  <div class="state error" *ngIf="error">{{ error }}</div>
+</aside>

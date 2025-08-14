@@ -32,4 +32,27 @@
       </mat-card-content>
     </mat-card>
   </div>
+   <!-- CARTE 2 : Utilisateurs (total) -->
+  <div class="col-lg-2 col-sm-4 col-6">
+    <mat-card class="card-base card-users">
+      <mat-card-content class="card-content">
+
+        <h3 class="card-title">Utilisateurs</h3>
+
+        <div class="icon-circle">
+          <img src="/assets/images/profile/user.png"
+               alt="users" width="36" height="36"
+               style="display:block;" onerror="this.style.display='none'">
+        </div>
+
+        <h4 class="card-subtitle">Total (accès)</h4>
+        <h6 class="card-value">
+          {{ usersCount === null ? '—' : usersCount }}
+        </h6>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
 </div>
+

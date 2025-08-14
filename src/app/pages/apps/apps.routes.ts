@@ -230,6 +230,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+    
     ],
   },
 ];
