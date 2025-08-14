@@ -14,12 +14,7 @@ export const navItems: NavItem[] = [
   },
 
   { navCap: 'Apps' },
-  {
-    displayName: 'Quiz Disque',
-    iconName: 'checklist',
-    route: 'apps/QuizDisque',
-    roles: ['owner']
-  },
+
   {
     displayName: 'Credit Request List',
     iconName: 'layout',

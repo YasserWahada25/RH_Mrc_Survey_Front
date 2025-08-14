@@ -12,7 +12,6 @@ import { DepartementComponent } from './departement/departement.component';
 import { FormulaireListComponent } from './formulairelist/formulairelist.component';
 import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
 import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.component';
-import { QuizDisqueComponent } from './quiz-disque/quiz-disque.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
 import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
@@ -164,17 +163,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'QuizDisque',
-        component: QuizDisqueComponent,
-        data: {
-          title: 'Quiz Disque',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Quiz Disque' },
-          ],
-        },
-      },
+
       {
         path: 'quiz-results',
         component: QuizResultsListRHComponent,

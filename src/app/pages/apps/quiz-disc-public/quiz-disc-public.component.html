@@ -2,15 +2,21 @@
   {{ errorMessage }}
 </div>
 
+<!-- ✅ Message de succès après soumission -->
+<mat-card *ngIf="quizSubmitted" class="quiz-card success-card">
+  <mat-card-content>
+    ✅ Le rapport a été généré pour le RH-admin responsable. Merci pour votre participation.
+  </mat-card-content>
+</mat-card>
+
+<!-- Formulaire du quiz -->
 <mat-card *ngIf="!isInvalidLink && !quizSubmitted" class="quiz-card">
-  <!-- HEADER -->
   <mat-card-header class="quiz-header">
     <div class="title left">
       <div class="h">Quiz DISC – Accès Public</div>
       <div class="sub">Lot {{ currentLotIndex + 1 }} / {{ lots.length }}</div>
     </div>
 
-    <!-- Participant à droite -->
     <div class="participant">
       <div class="avatar">{{ (beneficiairePrenom || ' ').charAt(0) }}{{ (beneficiaireNom || ' ').charAt(0) }}</div>
       <div class="id-block">
@@ -26,8 +32,7 @@
   </mat-card-header>
 
   <mat-card-content>
-
-    <!-- Barre des lots (scrollable + sticky) -->
+    <!-- Barre des lots -->
     <div class="lots-bar">
       <mat-chip-listbox class="lot-chips" [multiple]="false">
         <mat-chip-option
@@ -53,10 +58,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        <div
-          *ngFor="let q of lots[currentLotIndex]?.questions; let j = index"
-          class="question-row">
-
+        <div *ngFor="let q of lots[currentLotIndex]?.questions; let j = index" class="question-row">
           <div class="q-text"><strong>{{ q.text }}</strong></div>
 
           <div class="q-controls">
@@ -82,14 +84,12 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Barre de navigation (sticky bas) -->
+    <!-- Navigation -->
     <div class="bottom-bar">
       <button mat-stroked-button (click)="prevLot()" [disabled]="currentLotIndex === 0">Précédent</button>
-
       <div class="status">
         <span>{{ completedLotsCount() }} / {{ lots.length }} lots complétés</span>
       </div>
-
       <button mat-flat-button color="primary"
               (click)="nextLot()"
               [disabled]="currentLotIndex === lots.length - 1 || !lotCompleted(currentLotIndex)">
@@ -105,6 +105,53 @@
         Répondez au moins un <b>+</b> et un <b>−</b> pour chaque lot avant de soumettre.
       </small>
     </div>
-
   </mat-card-content>
 </mat-card>
+
+<!-- ✅ Hôte hors-écran pour export charts (rendu seulement si les options existent) -->
+<div class="offscreen-export" *ngIf="expChartsVisible">
+
+  <ng-container *ngIf="plusChartExp as cfgPlus">
+    <apx-chart
+      #plusExp
+      [series]="cfgPlus.series"
+      [chart]="cfgPlus.chart"
+      [xaxis]="cfgPlus.xaxis"
+      [yaxis]="cfgPlus.yaxis"
+      [tooltip]="cfgPlus.tooltip"
+      [dataLabels]="cfgPlus.dataLabels"
+      [plotOptions]="cfgPlus.plotOptions"
+      [colors]="cfgPlus.colors || []">
+    </apx-chart>
+  </ng-container>
+
+  <ng-container *ngIf="minusChartExp as cfgMinus">
+    <apx-chart
+      #minusExp
+      [series]="cfgMinus.series"
+      [chart]="cfgMinus.chart"
+      [xaxis]="cfgMinus.xaxis"
+      [yaxis]="cfgMinus.yaxis"
+      [tooltip]="cfgMinus.tooltip"
+      [dataLabels]="cfgMinus.dataLabels"
+      [plotOptions]="cfgMinus.plotOptions"
+      [colors]="cfgMinus.colors || []">
+    </apx-chart>
+  </ng-container>
+
+  <ng-container *ngIf="diffChartExp as cfgDiff">
+    <apx-chart
+      #diffExp
+      [series]="cfgDiff.series"
+      [chart]="cfgDiff.chart"
+      [xaxis]="cfgDiff.xaxis"
+      [yaxis]="cfgDiff.yaxis"
+      [tooltip]="cfgDiff.tooltip"
+      [dataLabels]="cfgDiff.dataLabels"
+      [plotOptions]="cfgDiff.plotOptions"
+      [colors]="cfgDiff.colors || []">
+    </apx-chart>
+  </ng-container>
+
+</div>
+
