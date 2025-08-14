@@ -1,4 +1,4 @@
-.question-row {
+/* .question-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,7 +19,6 @@
   gap: 16px;
 }
 
-/* ✅ Style du cercle */
 ::ng-deep .custom-radio .mat-radio-outer-circle {
   border-color: black !important;
 }
@@ -30,9 +29,8 @@
   border-color: black !important;
 }
 
-/* ✅ Agrandissement du + / - */
 ::ng-deep .custom-radio .radio-label {
   font-size: 24px !important;
   font-weight: bold;
   line-height: 1;
-}
+} */

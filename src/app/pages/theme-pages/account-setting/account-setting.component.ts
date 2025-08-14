@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 
@@ -19,8 +19,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,        // ✅ obligatoire pour formGroup
-    MatSnackBarModule,          // ✅ obligatoire pour MatSnackBar
+    ReactiveFormsModule,       // requis pour formGroup
+    MatSnackBarModule,         // requis pour MatSnackBar
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -29,7 +29,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
     MatIconModule,
     TablerIconsModule,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   templateUrl: './account-setting.component.html',
 })
@@ -37,6 +37,7 @@ export class AppAccountSettingComponent {
   user = JSON.parse(localStorage.getItem('user') || '{}');
 
   passwordForm: FormGroup;
+  passwordChangeSuccess = false;
 
   constructor(
     private fb: FormBuilder,
@@ -50,8 +51,6 @@ export class AppAccountSettingComponent {
     });
   }
 
-  passwordChangeSuccess: boolean = false;
-
   changePassword() {
     if (this.passwordForm.invalid) return;
 
@@ -63,7 +62,9 @@ export class AppAccountSettingComponent {
     }
 
     const token = localStorage.getItem('token');
-    this.http.patch('http://localhost:3033/api/users/change-password',
+
+    this.http.patch(
+      'http://localhost:3033/api/users/change-password',
       { currentPassword, newPassword },
       { headers: { Authorization: `Bearer ${token}` } }
     ).subscribe({
@@ -71,26 +72,24 @@ export class AppAccountSettingComponent {
         this.snackBar.open('✅ Mot de passe modifié avec succès', 'Fermer', { duration: 3000 });
         this.passwordChangeSuccess = true;
 
-        // ✅ Réinitialiser les champs immédiatement après succès
+        // Reset propre du formulaire et des états
         this.passwordForm.reset();
-
-        // ✅ Nettoyer tous les états d’erreur pour enlever le rouge
-        Object.keys(this.passwordForm.controls).forEach(key => {
+        Object.keys(this.passwordForm.controls).forEach((key) => {
           const control = this.passwordForm.get(key);
           control?.setErrors(null);
           control?.markAsPristine();
           control?.markAsUntouched();
           control?.updateValueAndValidity();
         });
-        // ✅ Revenir à état normal après 3 secondes (vert -> neutre)
+
         setTimeout(() => {
           this.passwordChangeSuccess = false;
         }, 3000);
       },
-      error: err => {
-        this.snackBar.open(`❌ ${err.error.message || 'Erreur serveur'}`, 'Fermer', { duration: 3000 });
+      error: (err) => {
+        this.snackBar.open(`❌ ${err?.error?.message || 'Erreur serveur'}`, 'Fermer', { duration: 3000 });
         this.passwordChangeSuccess = false;
-      }
+      },
     });
   }
 }

@@ -32,7 +32,6 @@
         (closedStart)="onSidenavClosedStart()"
         class="sidebarNav"
       >
-        <!-- Un seul appel à votre composant sidebar -->
         <app-sidebar
           (toggleMobileNav)="sidenav.toggle()"
           [showToggle]="isOver"
@@ -170,9 +169,7 @@
                       <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text">
                         {{ appdd.title }}
                       </h5>
-                      <span class="mat-body-1 f-s-12">{{
-                        appdd.subtitle
-                      }}</span>
+                      <span class="mat-body-1 f-s-12">{{ appdd.subtitle }}</span>
                     </div>
                   </a>
                 </div>
@@ -184,10 +181,11 @@
             @for (quicklink of quicklinks; track quicklink.title) {
               <div class="text-hover-primary">
                 <a
-                  [routerLink]="['quicklink.link']"
+                  [routerLink]="[quicklink.link]"
                   class="hover-text text-decoration-none mat-body-1 f-w-600 d-block p-y-8"
-                  >{{ quicklink.title }}</a
                 >
+                  {{ quicklink.title }}
+                </a>
               </div>
             }
           </div>
@@ -195,6 +193,7 @@
       </mat-accordion>
 <<<<<<< HEAD
 
+      <!-- Les liens rapides fixes -->
       <div class="p-x-24">
         <a
           [routerLink]="['/apps/calendar']"

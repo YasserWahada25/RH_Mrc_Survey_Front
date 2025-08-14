@@ -1,18 +1,64 @@
 <mat-card class="cardWithShadow theme-card">
   <mat-card-title>📨 Générer des liens Quiz DISC</mat-card-title>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Liste des emails (un par ligne)</mat-label>
-        <textarea matInput formControlName="emails" rows="6" placeholder="email1@example.com&#10;email2@example.com"></textarea>
-      </mat-form-field>
+  <mat-card-content [formGroup]="form">
+    <div formArrayName="recipients">
+      <div *ngFor="let group of recipientsFA.controls; let i = index" [formGroupName]="i" class="recipient-row">
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+        <div class="grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="nom" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Prénom</mat-label>
+            <input matInput formControlName="prenom" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Courriel</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="group.get('email')?.invalid && group.get('email')?.touched">
+              Email invalide
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Société</mat-label>
+            <input matInput formControlName="societe" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Âge</mat-label>
+            <input matInput type="number" formControlName="age" />
+            <mat-hint>10–100</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Message à inclure</mat-label>
+          <textarea matInput rows="8" formControlName="message"></textarea>
+        </mat-form-field>
+
+        <div class="row-actions">
+          <button mat-stroked-button color="warn" type="button" (click)="removeRecipient(i)" [disabled]="recipientsFA.length === 1">
+            Supprimer
+          </button>
+        </div>
+
+        <mat-divider class="m-y-12" *ngIf="i < recipientsFA.length - 1"></mat-divider>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-button type="button" (click)="addRecipient()"> + Nouveau Répondant</button>
+
+      <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="loading">
         <mat-icon *ngIf="!loading">send</mat-icon>
         <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
         <span *ngIf="!loading">Envoyer</span>
       </button>
-    </form>
+    </div>
 
     <mat-divider class="m-y-16"></mat-divider>
 
@@ -20,7 +66,7 @@
       <h4>{{ response.message }}</h4>
       <mat-list dense>
         <mat-list-item *ngFor="let link of response.links">
-          📧 {{ link.email_beneficiaire }} — 🔗 {{ link.token_unique }}
+          📧 {{ link.prenom }} {{ link.nom }} &lt;{{ link.email_beneficiaire }}&gt; — 🔗 {{ link.token_unique }}
         </mat-list-item>
       </mat-list>
     </div>

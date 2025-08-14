@@ -1,45 +1,157 @@
-
-<div *ngIf="isInvalidLink" class="error-message" style="color: red; font-weight: bold; margin: 20px;">
+<div *ngIf="isInvalidLink" class="error-message">
   {{ errorMessage }}
 </div>
 
-<!-- Formulaire uniquement si lien valide -->
-<mat-card *ngIf="!isInvalidLink && !quizSubmitted" class="cardWithShadow theme-card">
-  <mat-card-header>
-    <mat-card-title class="m-b-0">Quiz DISC - Accès Public</mat-card-title>
-  </mat-card-header>
-
-  <mat-card-content class="b-t-1">
-    <div class="m-b-16">📧 Participant : <strong>{{ beneficiaireEmail }}</strong></div>
-
-    <ng-container *ngFor="let lot of lots; let i = index">
-      <mat-card class="b-1 m-b-16 shadow-none">
-        <mat-card-content>
-          <div *ngFor="let q of lot.questions; let j = index" class="question-row-horizontal">
-            <div class="question-text">
-              <strong>{{ q.text }}</strong>
-            </div>
-
-            <div class="radio-buttons-inline">
-              <mat-radio-group [(ngModel)]="answers[i].plusIndex" (change)="setPlus(i, j)">
-                <mat-radio-button class="custom-radio" [value]="j">
-                  <span class="radio-label">+</span>
-                </mat-radio-button>
-              </mat-radio-group>
-
-              <mat-radio-group [(ngModel)]="answers[i].minusIndex" (change)="setMinus(i, j)">
-                <mat-radio-button class="custom-radio" [value]="j">
-                  <span class="radio-label">-</span>
-                </mat-radio-button>
-              </mat-radio-group>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </ng-container>
-
-    <button mat-raised-button color="primary" (click)="submitQuiz()">
-      Soumettre le Quiz
-    </button>
+<!-- ✅ Message de succès après soumission -->
+<mat-card *ngIf="quizSubmitted" class="quiz-card success-card">
+  <mat-card-content>
+    ✅ Le rapport a été généré pour le RH-admin responsable. Merci pour votre participation.
   </mat-card-content>
 </mat-card>
+
+<!-- Formulaire du quiz -->
+<mat-card *ngIf="!isInvalidLink && !quizSubmitted" class="quiz-card">
+  <mat-card-header class="quiz-header">
+    <div class="title left">
+      <div class="h">Quiz DISC – Accès Public</div>
+      <div class="sub">Lot {{ currentLotIndex + 1 }} / {{ lots.length }}</div>
+    </div>
+
+    <div class="participant">
+      <div class="avatar">{{ (beneficiairePrenom || ' ').charAt(0) }}{{ (beneficiaireNom || ' ').charAt(0) }}</div>
+      <div class="id-block">
+        <div class="name-line">
+          <span class="name">{{ beneficiairePrenom }} {{ beneficiaireNom }}</span>
+          <span class="email" *ngIf="beneficiaireEmail">&lt;{{ beneficiaireEmail }}&gt;</span>
+        </div>
+        <div class="company" *ngIf="beneficiaireSociete">
+          <mat-icon inline class="i">business</mat-icon>{{ beneficiaireSociete }}
+        </div>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Barre des lots -->
+    <div class="lots-bar">
+      <mat-chip-listbox class="lot-chips" [multiple]="false">
+        <mat-chip-option
+          *ngFor="let _ of lots; let i = index"
+          [selected]="i === currentLotIndex"
+          [color]="i === currentLotIndex ? 'primary' : undefined"
+          (click)="goToLot(i)"
+          [matTooltip]="'Aller au lot ' + (i+1)"
+          class="lot-chip"
+          [class.done]="lotCompleted(i)"
+          [disableRipple]="false">
+          <span>Lot {{ i + 1 }}</span>
+          <mat-icon *ngIf="lotCompleted(i)" class="check">check_circle</mat-icon>
+        </mat-chip-option>
+      </mat-chip-listbox>
+      <mat-progress-bar mode="determinate" [value]="progressPercent()" class="progress"></mat-progress-bar>
+    </div>
+
+    <!-- Lot courant -->
+    <mat-card class="lot-card" *ngIf="lots.length">
+      <mat-card-header>
+        <mat-card-title>Lot {{ currentLotIndex + 1 }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngFor="let q of lots[currentLotIndex]?.questions; let j = index" class="question-row">
+          <div class="q-text"><strong>{{ q.text }}</strong></div>
+
+          <div class="q-controls">
+            <!-- + -->
+            <mat-radio-group
+              [(ngModel)]="answers[currentLotIndex].plusIndex"
+              (change)="setPlus(currentLotIndex, j)"
+              [name]="'plusLot' + currentLotIndex"
+              aria-label="Choix plus">
+              <mat-radio-button class="pill plus" [value]="j">+</mat-radio-button>
+            </mat-radio-group>
+
+            <!-- - -->
+            <mat-radio-group
+              [(ngModel)]="answers[currentLotIndex].minusIndex"
+              (change)="setMinus(currentLotIndex, j)"
+              [name]="'minusLot' + currentLotIndex"
+              aria-label="Choix moins">
+              <mat-radio-button class="pill minus" [value]="j">−</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Navigation -->
+    <div class="bottom-bar">
+      <button mat-stroked-button (click)="prevLot()" [disabled]="currentLotIndex === 0">Précédent</button>
+      <div class="status">
+        <span>{{ completedLotsCount() }} / {{ lots.length }} lots complétés</span>
+      </div>
+      <button mat-flat-button color="primary"
+              (click)="nextLot()"
+              [disabled]="currentLotIndex === lots.length - 1 || !lotCompleted(currentLotIndex)">
+        Suivant
+      </button>
+    </div>
+
+    <div class="submit-area">
+      <button mat-raised-button color="accent" (click)="submitQuiz()" [disabled]="!allLotsCompleted()">
+        Soumettre le Quiz
+      </button>
+      <small *ngIf="!allLotsCompleted()">
+        Répondez au moins un <b>+</b> et un <b>−</b> pour chaque lot avant de soumettre.
+      </small>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- ✅ Hôte hors-écran pour export charts (rendu seulement si les options existent) -->
+<div class="offscreen-export" *ngIf="expChartsVisible">
+
+  <ng-container *ngIf="plusChartExp as cfgPlus">
+    <apx-chart
+      #plusExp
+      [series]="cfgPlus.series"
+      [chart]="cfgPlus.chart"
+      [xaxis]="cfgPlus.xaxis"
+      [yaxis]="cfgPlus.yaxis"
+      [tooltip]="cfgPlus.tooltip"
+      [dataLabels]="cfgPlus.dataLabels"
+      [plotOptions]="cfgPlus.plotOptions"
+      [colors]="cfgPlus.colors || []">
+    </apx-chart>
+  </ng-container>
+
+  <ng-container *ngIf="minusChartExp as cfgMinus">
+    <apx-chart
+      #minusExp
+      [series]="cfgMinus.series"
+      [chart]="cfgMinus.chart"
+      [xaxis]="cfgMinus.xaxis"
+      [yaxis]="cfgMinus.yaxis"
+      [tooltip]="cfgMinus.tooltip"
+      [dataLabels]="cfgMinus.dataLabels"
+      [plotOptions]="cfgMinus.plotOptions"
+      [colors]="cfgMinus.colors || []">
+    </apx-chart>
+  </ng-container>
+
+  <ng-container *ngIf="diffChartExp as cfgDiff">
+    <apx-chart
+      #diffExp
+      [series]="cfgDiff.series"
+      [chart]="cfgDiff.chart"
+      [xaxis]="cfgDiff.xaxis"
+      [yaxis]="cfgDiff.yaxis"
+      [tooltip]="cfgDiff.tooltip"
+      [dataLabels]="cfgDiff.dataLabels"
+      [plotOptions]="cfgDiff.plotOptions"
+      [colors]="cfgDiff.colors || []">
+    </apx-chart>
+  </ng-container>
+
+</div>
+

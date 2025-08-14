@@ -1,5 +1,3 @@
-// src/app/layouts/full/vertical/sidebar/sidebar-data.ts
-
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
@@ -16,12 +14,7 @@ export const navItems: NavItem[] = [
   },
 
   { navCap: 'Apps' },
-  {
-    displayName: 'Quiz Disque',
-    iconName: 'checklist',
-    route: 'apps/QuizDisque',
-    roles: ['owner']
-  },
+
   {
     displayName: 'Credit Request List',
     iconName: 'layout',
@@ -33,6 +26,14 @@ export const navItems: NavItem[] = [
     iconName: 'link',
     route: 'apps/generate-links',
     roles: ['rh_admin']
+
+  },
+  {
+    displayName: 'Quiz Disque Results',
+    iconName: 'clipboard-list',
+    route: 'apps/quiz-results',
+    roles: ['rh_admin']
+>>>>>>> yasser
   },
   {
     displayName: 'Calendar',
@@ -85,7 +86,7 @@ export const navItems: NavItem[] = [
     route: 'apps/todo',
   },
 
-  { navCap: 'Pages' },
+  { navCap: 'Compte' },
   {
     displayName: 'Account Setting',
     iconName: 'user-circle',

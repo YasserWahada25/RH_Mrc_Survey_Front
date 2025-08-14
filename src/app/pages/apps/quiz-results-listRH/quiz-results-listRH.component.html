@@ -1,0 +1,70 @@
+<!-- src/app/pages/apps/quiz-results-listRH/quiz-results-listRH.component.html -->
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <!-- barre de recherche inchangée -->
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+
+        <!-- Prénom -->
+        <ng-container matColumnDef="prenom">
+          <th mat-header-cell *matHeaderCellDef>Prénom</th>
+          <td mat-cell *matCellDef="let r">{{ r.prenom || '—' }}</td>
+        </ng-container>
+
+        <!-- Nom -->
+        <ng-container matColumnDef="nom">
+          <th mat-header-cell *matHeaderCellDef>Nom</th>
+          <td mat-cell *matCellDef="let r">{{ r.nom || '—' }}</td>
+        </ng-container>
+
+        <!-- Société -->
+        <ng-container matColumnDef="societe">
+          <th mat-header-cell *matHeaderCellDef>Société</th>
+          <td mat-cell *matCellDef="let r">{{ r.societe || '—' }}</td>
+        </ng-container>
+        
+        <!-- Email Bénéficiaire -->
+        <ng-container matColumnDef="beneficiaryEmail">
+          <th mat-header-cell *matHeaderCellDef>Email Bénéficiaire</th>
+          <td mat-cell *matCellDef="let r">{{ r.beneficiaryEmail }}</td>
+        </ng-container>
+
+        <!-- Date -->
+        <ng-container matColumnDef="dateTaken">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let r">{{ r.dateTaken | date:'short' }}</td>
+        </ng-container>
+
+        <!-- ACTION (Visualiser + Télécharger) -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let r" class="d-flex align-items-center">
+            <!-- Visualiser -->
+            <button mat-icon-button (click)="viewReport(r.reportToken)" matTooltip="Visualiser">
+              <i-tabler name="eye" class="icon-18"></i-tabler>
+            </button>
+            <!-- Télécharger -->
+            <button mat-icon-button (click)="downloadReport(r.reportToken)" matTooltip="Télécharger">
+              <i-tabler name="download" class="icon-18"></i-tabler>
+            </button>
+
+            <button mat-icon-button (click)="sendToBeneficiary(r)" matTooltip="Envoyer au bénéficiaire">
+              <i-tabler name="send" class="icon-18"></i-tabler>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Rangées -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row        *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
