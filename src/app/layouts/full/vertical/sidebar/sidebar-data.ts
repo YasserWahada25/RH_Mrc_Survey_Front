@@ -28,20 +28,13 @@ export const navItems: NavItem[] = [
     route: 'apps/quiz-results',
     roles: ['rh_admin'],
   },
-  {
-    displayName: 'Calendar',
-    iconName: 'calendar-event',
-    route: 'apps/calendar',
-  },
-  {
-    displayName: 'Contacts',
-    iconName: 'phone',
-    route: 'apps/contacts',
-  },
+
   {
     displayName: 'Departement',
     iconName: 'building',
     route: 'apps/departement',
+    roles: ['rh_admin'],
+
   },
   {
     displayName: 'Employee',
