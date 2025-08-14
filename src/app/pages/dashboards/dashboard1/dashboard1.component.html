@@ -1,18 +1,39 @@
 <app-top-cards></app-top-cards>
 
-<div class="row">
-  <!-- <div class="col-lg-8">
-    <app-revenue-updates></app-revenue-updates>
-  </div> -->
-  <div class="col-lg-4">
-    <div class="row">
-    
+<!-- ===================== RH-ADMIN + EMPLOYEE + RESPONSABLE VIEW ===================== -->
+<ng-container *ngIf="isRhAdmin || isEmployee || isResponsable; else ownerBlock">
+  <div class="row g-3">
+    <div class="col-xl-4 col-lg-5 col-md-12">
+      <app-quiz-sent-chart></app-quiz-sent-chart>
+      <div class="mt-3">
+        <app-monthly-trend-chart></app-monthly-trend-chart>
+      </div>
     </div>
-  </div>
-  <div class="col-lg-4">
-    <div class="row">
 
+    <div class="col-xl-4 col-lg-7 col-md-12">
+      <app-quiz-response-chart></app-quiz-response-chart>
     </div>
   </div>
-</div>
+</ng-container>
+
+<!-- ===================== OWNER VIEW (as the ELSE block) ===================== -->
+<ng-template #ownerBlock>
+  <ng-container *ngIf="isOwner; else noRole">
+    <div class="row g-3">
+      <div class="col-xxl-6 col-xl-7 col-lg-8 col-md-12">
+        <app-owner-credit-status-donut></app-owner-credit-status-donut>
+        <div class="mt-3">
+          <app-owner-credit-status-trend></app-owner-credit-status-trend>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #noRole>
+  <div class="alert alert-info mt-3" role="alert">
+    Aucune vue dédiée pour votre rôle. Contactez l’administrateur si besoin.
+  </div>
+</ng-template>
+
 <app-presence-sidebar></app-presence-sidebar>

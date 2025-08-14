@@ -29,7 +29,11 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   private authHeaders() {
-    const token = localStorage.getItem('token');
+      const token =
+    localStorage.getItem('token') ||
+    localStorage.getItem('access_token') ||
+    sessionStorage.getItem('token') ||
+    sessionStorage.getItem('access_token');
     if (!token) throw new Error('Token manquant');
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }

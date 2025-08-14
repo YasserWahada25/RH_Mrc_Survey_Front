@@ -9,11 +9,7 @@ export const navItems: NavItem[] = [
     iconName: 'aperture',
     route: '/dashboards/dashboard1',
   },
-  {
-    displayName: 'eCommerce',
-    iconName: 'shopping-cart',
-    route: '/dashboards/dashboard2',
-  },
+  
 
   { navCap: 'Apps' },
   {
@@ -44,11 +40,6 @@ export const navItems: NavItem[] = [
     iconName: 'brand-ctemplar',
     route: 'apps/employee',
   },
-  {
-    displayName: 'Notes',
-    iconName: 'note',
-    route: 'apps/notes',
-  },
 
   {
     displayName: 'Assessment',
@@ -60,11 +51,6 @@ export const navItems: NavItem[] = [
     iconName: 'file-invoice',
     route: 'apps/formulaires',
   },
-   {
-    displayName: 'Feed',
-    iconName: 'brand-facebook',   
-    route: 'apps/feed',
-  },
   {
     displayName: 'Réponses',
     iconName: 'message-2',
@@ -74,11 +60,6 @@ export const navItems: NavItem[] = [
     displayName: 'Rapport Formulaire',
     iconName: 'chart-donut-3',
     route: 'apps/rapport-formulaire',
-  },
-  {
-    displayName: 'ToDo',
-    iconName: 'edit',
-    route: 'apps/todo',
   },
 
   { navCap: 'Compte' },

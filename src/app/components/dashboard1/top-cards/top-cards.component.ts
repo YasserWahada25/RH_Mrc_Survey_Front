@@ -45,7 +45,7 @@ export class AppTopCardsComponent implements OnInit {
     if (currentUser?.type === 'rh_admin' || currentUser?.type === 'owner') {
       this.loadUsersCountAll();          // GET /api/users
     } else if (currentUser?.type === 'responsable' || currentUser?.type === 'employe') {
-      this.loadUsersCountAccessible();   // GET /api/users/accessible
+      this.loadUsersCountAccessible();   // GET /api/users/accessible  (fallback en cas de 403)
     } else {
       this.usersCount = null;
     }
@@ -103,7 +103,28 @@ export class AppTopCardsComponent implements OnInit {
     this.userService.getAccessibleUsers().subscribe({
       next: (users) => this.usersCount = users.length,
       error: (err) => {
+        // ➕ AJOUT : fallback silencieux pour les 403 (responsable / employé)
+        if (err?.status === 403) {
+          this.loadUsersCountFromPresence(); // lit /api/users/presence
+          return;
+        }
         console.error('Erreur chargement utilisateurs (accessible)', err);
+        this.usersCount = null;
+      }
+    });
+  }
+
+  // ➕ AJOUT : fallback via /api/users/presence (autorisé pour tout user authentifié)
+  private loadUsersCountFromPresence(): void {
+    this.userService.getPresence().subscribe({
+      next: (data: any) => {
+        // compat : { online:[], offline:[] } ou { counts:{online,offline}, online:[], offline:[] }
+        const online = Array.isArray(data?.online) ? data.online.length : (data?.counts?.online ?? 0);
+        const offline = Array.isArray(data?.offline) ? data.offline.length : (data?.counts?.offline ?? 0);
+        this.usersCount = (online || 0) + (offline || 0);
+      },
+      error: (err) => {
+        console.error('Erreur chargement presence', err);
         this.usersCount = null;
       }
     });

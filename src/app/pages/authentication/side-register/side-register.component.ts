@@ -102,7 +102,6 @@ export class AppSideRegisterComponent {
   }
 
   submit() {
-    // Empêche submit si invalid
     if (this.form.invalid || this.logoError) return;
 
     const formData = new FormData();
