@@ -34,8 +34,8 @@ type Phase = 'normal' | 'avant' | 'apres' | 'done';
 export class AssessmentGuestComponent implements OnInit {
   assessment!: any;
   answers: Record<string, string | null> = {};
-  userId!: string;          // reste utilisé (inclus dans l’URL)
-  token: string | null = null; // ✅ nouveau : usage unique
+  userId!: string;
+  token = '';
   phase!: Phase;
   disabledForm = false;
 
@@ -43,6 +43,9 @@ export class AssessmentGuestComponent implements OnInit {
   lastName = '';
   email = '';
   readOnlyUser = false;
+
+  // affichage d’un bandeau si tout est déjà soumis (après/normal)
+  alreadyCompleted = false;
 
   // ⚠️ utilisé dans le template
   adminMode = false;
@@ -55,34 +58,23 @@ export class AssessmentGuestComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.userId = this.route.snapshot.queryParamMap.get('uid') || ''; // on garde uid
-    this.token = this.route.snapshot.queryParamMap.get('token');       // ✅ on lit le token
-
-    if (!this.token) {
-      this.snack.open('Lien invalide : token manquant.', 'Fermer', { duration: 6000 });
-      this.disabledForm = true;
-      return;
-    }
-    if (!this.userId) {
-      // On peut rester strict ici pour garder la compatibilité avec ton backend qui attend userId
-      this.snack.open('Lien invalide : utilisateur manquant.', 'Fermer', { duration: 6000 });
-      this.disabledForm = true;
-      return;
-    }
+    this.userId = this.route.snapshot.queryParamMap.get('uid') || '';
+    this.token = this.route.snapshot.queryParamMap.get('token') || '';
+    this.adminMode = !this.userId; // si pas d'uid, on est dans un aperçu admin
 
     this.svc.getById(id).subscribe((a) => {
       this.assessment = a;
       this.initAnswers();
-      this.determinePhaseAndLoadUserInfo();
+      if (!this.adminMode) {
+        this.determinePhaseAndLoadUserInfo();
+      }
     });
   }
 
   /** Initialise (ou ré-initialise) le map des réponses à null */
   initAnswers() {
     this.answers = {};
-    if (this.assessment?.tasks?.length) {
-      this.assessment.tasks.forEach((t: any) => (this.answers[t._id] = null));
-    }
+    this.assessment.tasks.forEach((t: any) => (this.answers[t._id] = null));
   }
 
   /**
@@ -110,6 +102,7 @@ export class AssessmentGuestComponent implements OnInit {
       }
 
       this.disabledForm = this.phase === 'done';
+      this.alreadyCompleted = this.phase === 'done';
     });
   }
 
@@ -121,25 +114,20 @@ export class AssessmentGuestComponent implements OnInit {
         this.email = data.email;
         this.readOnlyUser = true;
       },
-      error: (err) => {
-        console.warn('❌ Impossible de charger les infos de la phase "avant" :', err);
+      error: () => {
+        // silencieux: si pas trouvé, l'utilisateur remplit manuellement
       },
     });
   }
 
   onSubmit() {
     if (this.disabledForm) return;
-    if (!this.token) {
-      this.snack.open('Lien invalide : token manquant.', 'Fermer', { duration: 5000 });
-      return;
-    }
 
-    // On capture la phase au moment de la soumission
-    const currentPhase = this.phase;
+    const currentPhase = this.phase; // au moment de la soumission
 
     const payload = {
-      token: this.token, // ✅ indispensable pour usage unique
       userId: this.userId,
+      token: this.token, // ✅ important : lien à usage unique
       phase: currentPhase,
       firstName: this.firstName,
       lastName: this.lastName,
@@ -151,26 +139,47 @@ export class AssessmentGuestComponent implements OnInit {
 
     this.svc.submitResponse(this.assessment._id, payload).subscribe({
       next: () => {
-        // On met à jour l'état local (et désactive au besoin)
         this.determinePhaseAndLoadUserInfo();
         this.disabledForm = true;
 
-        // Message + fermeture quand l'utilisateur clique sur "OK"
+        // Messages adaptés
         if (currentPhase === 'avant') {
           const ref = this.snack.open(
-            'Votre première réponse a été enregistrée. Vous pourrez répondre après la formation.',
+            'Votre première réponse a été enregistrée. Vous recevrez un second lien pour la phase APRÈS.',
             'OK'
           );
-          ref.onAction().subscribe(() => { try { window.close(); } catch {} });
+          ref.onAction().subscribe(() => {
+            try {
+              window.close();
+            } catch {}
+          });
         } else if (currentPhase === 'apres' || currentPhase === 'normal') {
-          const ref = this.snack.open('Merci pour vos réponses.', 'OK');
-          ref.onAction().subscribe(() => { try { window.close(); } catch {} });
+          this.alreadyCompleted = true;
+          const ref = this.snack.open(
+            'Vous avez déjà rempli vos réponses. Vous recevrez votre score par email.',
+            'OK'
+          );
+          ref.onAction().subscribe(() => {
+            try {
+              window.close();
+            } catch {}
+          });
         }
       },
       error: (err) => {
-        const msg = (err?.error?.error || err?.message || '').toString();
-        // Messages courants côté backend : "Lien déjà utilisé." / "Token invalide." etc.
-        this.snack.open(`Soumission impossible: ${msg || 'Erreur inconnue'}`, 'Fermer', { duration: 6000 });
+        const msg: string = err?.error?.error || 'Une erreur est survenue. Veuillez réessayer.';
+        // si token déjà utilisé / phase déjà soumise
+        if (err?.status === 409 || /déjà/i.test(msg)) {
+          this.alreadyCompleted = true;
+          this.disabledForm = true;
+          this.snack.open(
+            'Vous avez déjà rempli vos réponses. Vous recevrez votre score par email.',
+            'OK',
+            { duration: 6000 }
+          );
+        } else {
+          this.snack.open(msg, 'Fermer', { duration: 5000 });
+        }
       },
     });
   }
