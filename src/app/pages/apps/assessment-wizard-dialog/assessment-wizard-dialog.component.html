@@ -9,6 +9,18 @@
     <input matInput [(ngModel)]="local.name" name="name" required />
   </mat-form-field>
 
+  <!-- 👇👇👇  AJOUT : Entreprise -->
+<mat-form-field appearance="outline" class="w-100 mb-4">
+  <mat-label>Entreprise</mat-label>
+  <input matInput [(ngModel)]="local.company" name="company" required  />
+</mat-form-field>
+
+<!-- 👇👇👇  AJOUT : Nom du formateur -->
+<mat-form-field appearance="outline" class="w-100 mb-4">
+  <mat-label>Nom du formateur</mat-label>
+  <input matInput [(ngModel)]="local.trainerName" name="trainerName" required  />
+</mat-form-field>
+
   <!-- Type d’assessment -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Type d’assessment</mat-label>
@@ -92,7 +104,7 @@
     mat-flat-button
     color="primary"
     (click)="finish()"
-    [disabled]="!local.name.trim() || !local.type"
+    [disabled]="!local.name.trim() || !local.type || !local.company.trim() || !local.trainerName.trim()"
   >
     Enregistrer
   </button>

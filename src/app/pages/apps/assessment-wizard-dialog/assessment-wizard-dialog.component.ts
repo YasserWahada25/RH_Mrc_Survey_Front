@@ -46,7 +46,9 @@ export class AssessmentWizardDialogComponent {
     type: '' as 'normal' | 'avant_apres',
     tasks: [] as Task[],
     startDate: '',
-    endDate: ''
+    endDate: '', 
+    company: '',
+    trainerName: ''
   };
 
   types: Array<'normal' | 'avant_apres'> = ['normal', 'avant_apres'];
