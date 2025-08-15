@@ -6,20 +6,11 @@
         <h1 class="assessment-title">{{ assessment.name }}</h1>
         <p class="assessment-type">
           Type :
-          {{
-            assessment.type === "normal" ? "Réponse unique" : "Avant / Après"
-          }}
+          {{ assessment.type === "normal" ? "Réponse unique" : "Avant / Après" }}
         </p>
-        <ng-container
-          *ngIf="
-            assessment.type === 'avant_apres' &&
-            assessment.startDate &&
-            assessment.endDate
-          "
-        >
+        <ng-container *ngIf="assessment.type === 'avant_apres' && assessment.startDate && assessment.endDate">
           <p class="assessment-dates">
-            📅 Formation : du
-            {{ assessment.startDate | date : "dd/MM/yyyy" }} au
+            📅 Formation : du {{ assessment.startDate | date : "dd/MM/yyyy" }} au
             {{ assessment.endDate | date : "dd/MM/yyyy" }}
           </p>
         </ng-container>
@@ -40,36 +31,17 @@
       <div class="user-info-form">
         <mat-form-field appearance="outline" class="info-field">
           <mat-label>Prénom</mat-label>
-          <input
-            matInput
-            [(ngModel)]="firstName"
-            name="firstName"
-            required
-            [readonly]="readOnlyUser"
-          />
+          <input matInput [(ngModel)]="firstName" name="firstName" required [readonly]="readOnlyUser" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="info-field">
           <mat-label>Nom</mat-label>
-          <input
-            matInput
-            [(ngModel)]="lastName"
-            name="lastName"
-            required
-            [readonly]="readOnlyUser"
-          />
+          <input matInput [(ngModel)]="lastName" name="lastName" required [readonly]="readOnlyUser" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="info-field">
           <mat-label>Email</mat-label>
-          <input
-            matInput
-            [(ngModel)]="email"
-            name="email"
-            type="email"
-            required
-            [readonly]="readOnlyUser"
-          />
+          <input matInput [(ngModel)]="email" name="email" type="email" required [readonly]="readOnlyUser" />
         </mat-form-field>
       </div>
 
@@ -98,12 +70,7 @@
 
       <!-- BOUTON -->
       <div class="submit-container">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="disabledForm"
-        >
+        <button mat-raised-button color="primary" type="submit" [disabled]="disabledForm">
           Soumettre
         </button>
       </div>

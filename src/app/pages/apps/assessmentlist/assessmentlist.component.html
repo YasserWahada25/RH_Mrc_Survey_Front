@@ -2,15 +2,16 @@
   <mat-card-content class="p-16">
     <div class="d-flex align-items-center">
       <mat-form-field appearance="outline" class="flex-fill me-3 search-field">
-        <mat-label>Search assessments</mat-label>
+        <mat-label>Rechercher un assessment</mat-label>
         <input
           matInput
-          placeholder="Type to filter…"
+          placeholder="Nom, type, entreprise, formateur…"
           (keyup)="applyFilter($any($event.target).value)" />
-        <button mat-icon-button matSuffix><mat-icon>search</mat-icon></button>
+        <button mat-icon-button matSuffix aria-label="search"><mat-icon>search</mat-icon></button>
       </mat-form-field>
+
       <button mat-flat-button color="primary" class="add-btn" (click)="openWizard()">
-        <mat-icon>add</mat-icon> Add Assessment
+        <mat-icon>add</mat-icon> Créer un assessment
       </button>
     </div>
   </mat-card-content>
@@ -27,11 +28,48 @@
           <td mat-cell *matCellDef="let a" class="f-s-14">{{ a.name }}</td>
         </ng-container>
 
+        <!-- Entreprise -->
+        <ng-container matColumnDef="company">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Entreprise</th>
+          <td mat-cell *matCellDef="let a" class="f-s-14">
+            {{ a.company || '—' }}
+          </td>
+        </ng-container>
+
+        <!-- Formateur -->
+        <ng-container matColumnDef="trainerName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Formateur</th>
+          <td mat-cell *matCellDef="let a" class="f-s-14">
+            {{ a.trainerName || '—' }}
+          </td>
+        </ng-container>
+
         <!-- Type -->
         <ng-container matColumnDef="type">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
           <td mat-cell *matCellDef="let a" class="f-s-14">
-            {{ a.type==='normal' ? 'Normal' : 'Avant / Après' }}
+            <span [ngClass]="{
+              'badge badge-normal': a.type === 'normal',
+              'badge badge-avant': a.type !== 'normal'
+            }">
+              {{ a.type === 'normal' ? 'Normal' : 'Avant / Après' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Période (si avant_apres) -->
+        <ng-container matColumnDef="dates">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Période</th>
+          <td mat-cell *matCellDef="let a" class="f-s-14">
+            <ng-container *ngIf="a.type === 'avant_apres'; else noDates">
+              <ng-container *ngIf="a.startDate || a.endDate; else dash">
+                <span *ngIf="a.startDate">{{ a.startDate | date:'dd/MM/yyyy' }}</span>
+                <span *ngIf="a.startDate && a.endDate"> → </span>
+                <span *ngIf="a.endDate">{{ a.endDate | date:'dd/MM/yyyy' }}</span>
+              </ng-container>
+              <ng-template #dash>—</ng-template>
+            </ng-container>
+            <ng-template #noDates>—</ng-template>
           </td>
         </ng-container>
 
@@ -42,19 +80,23 @@
             <button mat-icon-button color="warn" matTooltip="Supprimer" (click)="delete(a)">
               <mat-icon>delete</mat-icon>
             </button>
-            <!-- ← ici on navigue vers le détail -->
-            <button mat-icon-button color="primary" matTooltip="Voir"
-                    [routerLink]="['/apps/assessment', a._id]">
+
+            <!-- Détail de l'assessment (gestion des invitations, aperçu questions, etc.) -->
+            <button
+              mat-icon-button
+              color="primary"
+              matTooltip="Voir le détail"
+              [routerLink]="['/apps/assessment', a._id]">
               <mat-icon>visibility</mat-icon>
             </button>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row        *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

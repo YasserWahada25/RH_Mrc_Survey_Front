@@ -19,8 +19,11 @@ interface Answer {
   selected: string;
 }
 
+// 👇 on inclut 'normal' pour couvrir les assessments à une seule phase
+type RespPhase = 'avant' | 'apres' | 'normal';
+
 interface Resp {
-  phase: 'avant' | 'apres';
+  phase: RespPhase;
   answers: Answer[];
   firstName?: string;
   lastName?: string;
@@ -43,8 +46,8 @@ interface Resp {
   styleUrls: ['./assessment-response-detail.component.css'],
 })
 export class AssessmentResponseDetailComponent implements OnInit {
-  assessment!: any;          // contient tasks[], options[], score sur chaque task
-  responses: Resp[] = [];    // [{ phase:'avant'|'apres', answers:[] }]
+  assessment!: any;          // contient tasks[], options[], score par task
+  responses: Resp[] = [];    // [{ phase:'avant'|'apres'|'normal', answers:[] }]
   userInfo = { firstName: '', lastName: '', email: '' };
 
   constructor(
@@ -65,12 +68,17 @@ export class AssessmentResponseDetailComponent implements OnInit {
         this.assessment = assessment;
         this.responses = responses;
 
-        const avant = responses.find((r) => r.phase === 'avant');
-        if (avant) {
+        // on prend d'abord 'avant', sinon 'apres', sinon 'normal'
+        const first =
+          responses.find((r) => r.phase === 'avant') ||
+          responses.find((r) => r.phase === 'apres') ||
+          responses.find((r) => r.phase === 'normal');
+
+        if (first) {
           this.userInfo = {
-            firstName: avant.firstName || '',
-            lastName: avant.lastName || '',
-            email: avant.email || '',
+            firstName: first.firstName || '',
+            lastName:  first.lastName  || '',
+            email:     first.email     || '',
           };
         }
       },
@@ -81,7 +89,12 @@ export class AssessmentResponseDetailComponent implements OnInit {
     });
   }
 
-  // ------- Sélections existantes (inchangé) -------
+  // ------- Helpers affichage -------
+  hasPhase(phase: RespPhase): boolean {
+    return !!this.responses.find(r => r.phase === phase);
+  }
+
+  // ------- Sélections existantes -------
   isSelected(resp: { answers: Answer[] }, taskId: string, optionId: any): boolean {
     const ans = resp.answers.find(
       (a) => a.taskId == taskId || a.taskId?.toString() == taskId?.toString()
@@ -98,7 +111,7 @@ export class AssessmentResponseDetailComponent implements OnInit {
     return ans ? ans.selected?.toString() : null;
   }
 
-  getPhaseResponse(phase: 'avant' | 'apres') {
+  getPhaseResponse(phase: RespPhase) {
     return this.responses.find((r) => r.phase === phase);
   }
 
@@ -123,12 +136,12 @@ export class AssessmentResponseDetailComponent implements OnInit {
   }
 
   /** La réponse est-elle correcte pour la phase donnée ? */
-  isCorrect(phase: 'avant' | 'apres', task: any): boolean {
+  isCorrect(phase: RespPhase, task: any): boolean {
     return this.isCorrectForResponse(this.getPhaseResponse(phase), task);
   }
 
   /** Score obtenu sur une question pour la phase (score ou 0) */
-  getQuestionScore(phase: 'avant' | 'apres', task: any): number {
+  getQuestionScore(phase: RespPhase, task: any): number {
     return this.isCorrect(phase, task) ? this.getTaskScore(task) : 0;
   }
 
@@ -142,7 +155,7 @@ export class AssessmentResponseDetailComponent implements OnInit {
   }
 
   /** Score total obtenu pour une phase */
-  getTotalScore(phase: 'avant' | 'apres'): number {
+  getTotalScore(phase: RespPhase): number {
     if (!this.assessment?.tasks?.length) return 0;
     return this.assessment.tasks.reduce(
       (sum: number, t: any) => sum + this.getQuestionScore(phase, t),
@@ -151,14 +164,14 @@ export class AssessmentResponseDetailComponent implements OnInit {
   }
 
   /** Pourcentage (règle de 3) pour une phase */
-  getPercent(phase: 'avant' | 'apres'): number {
+  getPercent(phase: RespPhase): number {
     const max = this.maxScore;
     if (max <= 0) return 0;
     const total = this.getTotalScore(phase);
     return Math.round((total / max) * 100);
   }
 
-  // ------- Envoi PDF (inchangé) -------
+  // ------- Envoi PDF -------
   sendResponses() {
     const aid = this.route.snapshot.paramMap.get('assessmentId')!;
     const uid = this.route.snapshot.paramMap.get('userId')!;

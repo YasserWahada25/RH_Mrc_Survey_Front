@@ -9,11 +9,11 @@
 
       <ng-container *ngIf="assessment.type === 'avant_apres' && assessment.startDate && assessment.endDate">
         <p class="assessment-dates">
-          📅 Formation : du {{ assessment.startDate | date:'dd/MM/yyyy' }} au {{ assessment.endDate | date:'dd/MM/yyyy' }}
+          📅 Formation : du {{ assessment.startDate | date: 'dd/MM/yyyy' }} au
+          {{ assessment.endDate | date: 'dd/MM/yyyy' }}
         </p>
       </ng-container>
 
-      <!-- ⚠️ parenthèses nécessaires pour la bonne priorité logique -->
       <ng-container *ngIf="!adminMode && (phase === 'avant' || phase === 'apres')">
         <p class="assessment-phase">Phase : «{{ phase | titlecase }}»</p>
       </ng-container>
@@ -21,6 +21,49 @@
 
     <!-- 👨‍💼 MODE ADMIN -->
     <ng-container *ngIf="adminMode; else userForm">
+      <!-- ========== Envoi par email ========== -->
+      <div class="section">
+        <h3>Invitations</h3>
+
+        <!-- 1) Premier envoi : PHASE AVANT -->
+        <div class="invite-block">
+          <div class="invite-title">1) Phase AVANT</div>
+          <button mat-raised-button color="accent" (click)="sendPhaseAvant()">
+            Envoyer invitations (phase AVANT)
+          </button>
+        </div>
+
+        <!-- 2) Deuxième envoi : PHASE APRÈS (liste + ✅) -->
+        <div class="invite-block" *ngIf="assessment.type === 'avant_apres'">
+          <div class="invite-title">
+            2) Phase APRÈS
+            <span class="hint">(aux mêmes emails que la phase AVANT)</span>
+          </div>
+
+          <div *ngIf="loadingInvitees">Chargement des destinataires…</div>
+          <div *ngIf="!loadingInvitees && !inviteesAvant.length" class="muted">
+            Aucune invitation envoyée pour la phase AVANT pour le moment.
+          </div>
+
+          <ul class="emails-list" *ngIf="inviteesAvant.length">
+            <li *ngFor="let it of inviteesAvant">
+              <span class="status">{{ it.hasAvant ? '✅' : '•' }}</span>
+              <span class="email">{{ it.email }}</span>
+            </li>
+          </ul>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="sendPhaseApres()"
+            [disabled]="!inviteesAvant.length"
+          >
+            Envoyer invitations (phase APRÈS)
+          </button>
+        </div>
+      </div>
+
+      <!-- Aperçu questions (lecture seule) -->
       <div class="questions-list">
         <ng-container *ngFor="let t of assessment.tasks; let i = index">
           <mat-card class="question-card">
@@ -29,21 +72,13 @@
             </mat-card-header>
             <mat-card-content>
               <mat-radio-group [disabled]="true" class="options-group">
-                <mat-radio-button
-                  *ngFor="let o of t.options"
-                  [value]="o.score"
-                >
+                <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
                   {{ o.text }}
                 </mat-radio-button>
               </mat-radio-group>
             </mat-card-content>
           </mat-card>
         </ng-container>
-      </div>
-      <div class="submit-container">
-        <button mat-raised-button color="accent" (click)="sendByEmail()">
-          Envoyer par email
-        </button>
       </div>
     </ng-container>
 
@@ -59,14 +94,12 @@
               <mat-card-content>
                 <mat-radio-group
                   [(ngModel)]="answers[t._id]"
-                  name="ans{{i}}"
+                  name="ans{{ i }}"
                   class="options-group"
                   [disabled]="disabledForm"
                 >
-                  <mat-radio-button
-                    *ngFor="let o of t.options"
-                    [value]="o.score"
-                  >
+                  <!-- ❗️ on envoie l'ID de l'option -->
+                  <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
                     {{ o.text }}
                   </mat-radio-button>
                 </mat-radio-group>
@@ -75,12 +108,7 @@
           </ng-container>
         </div>
         <div class="submit-container">
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="disabledForm"
-          >
+          <button mat-raised-button color="primary" type="submit" [disabled]="disabledForm">
             Soumettre
           </button>
         </div>

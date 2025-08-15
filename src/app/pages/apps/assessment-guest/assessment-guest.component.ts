@@ -34,7 +34,8 @@ type Phase = 'normal' | 'avant' | 'apres' | 'done';
 export class AssessmentGuestComponent implements OnInit {
   assessment!: any;
   answers: Record<string, string | null> = {};
-  userId!: string;
+  userId!: string;          // reste utilisé (inclus dans l’URL)
+  token: string | null = null; // ✅ nouveau : usage unique
   phase!: Phase;
   disabledForm = false;
 
@@ -54,7 +55,20 @@ export class AssessmentGuestComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.userId = this.route.snapshot.queryParamMap.get('uid')!;
+    this.userId = this.route.snapshot.queryParamMap.get('uid') || ''; // on garde uid
+    this.token = this.route.snapshot.queryParamMap.get('token');       // ✅ on lit le token
+
+    if (!this.token) {
+      this.snack.open('Lien invalide : token manquant.', 'Fermer', { duration: 6000 });
+      this.disabledForm = true;
+      return;
+    }
+    if (!this.userId) {
+      // On peut rester strict ici pour garder la compatibilité avec ton backend qui attend userId
+      this.snack.open('Lien invalide : utilisateur manquant.', 'Fermer', { duration: 6000 });
+      this.disabledForm = true;
+      return;
+    }
 
     this.svc.getById(id).subscribe((a) => {
       this.assessment = a;
@@ -66,7 +80,9 @@ export class AssessmentGuestComponent implements OnInit {
   /** Initialise (ou ré-initialise) le map des réponses à null */
   initAnswers() {
     this.answers = {};
-    this.assessment.tasks.forEach((t: any) => (this.answers[t._id] = null));
+    if (this.assessment?.tasks?.length) {
+      this.assessment.tasks.forEach((t: any) => (this.answers[t._id] = null));
+    }
   }
 
   /**
@@ -113,11 +129,16 @@ export class AssessmentGuestComponent implements OnInit {
 
   onSubmit() {
     if (this.disabledForm) return;
+    if (!this.token) {
+      this.snack.open('Lien invalide : token manquant.', 'Fermer', { duration: 5000 });
+      return;
+    }
 
     // On capture la phase au moment de la soumission
     const currentPhase = this.phase;
 
     const payload = {
+      token: this.token, // ✅ indispensable pour usage unique
       userId: this.userId,
       phase: currentPhase,
       firstName: this.firstName,
@@ -140,20 +161,16 @@ export class AssessmentGuestComponent implements OnInit {
             'Votre première réponse a été enregistrée. Vous pourrez répondre après la formation.',
             'OK'
           );
-          ref.onAction().subscribe(() => {
-            try { window.close(); } catch {}
-          });
+          ref.onAction().subscribe(() => { try { window.close(); } catch {} });
         } else if (currentPhase === 'apres' || currentPhase === 'normal') {
           const ref = this.snack.open('Merci pour vos réponses.', 'OK');
-          ref.onAction().subscribe(() => {
-            try { window.close(); } catch {}
-          });
+          ref.onAction().subscribe(() => { try { window.close(); } catch {} });
         }
       },
-      error: () => {
-        this.snack.open('Une erreur est survenue. Veuillez réessayer.', 'Fermer', {
-          duration: 5000,
-        });
+      error: (err) => {
+        const msg = (err?.error?.error || err?.message || '').toString();
+        // Messages courants côté backend : "Lien déjà utilisé." / "Token invalide." etc.
+        this.snack.open(`Soumission impossible: ${msg || 'Erreur inconnue'}`, 'Fermer', { duration: 6000 });
       },
     });
   }
