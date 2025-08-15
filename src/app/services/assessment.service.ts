@@ -119,4 +119,13 @@ export class AssessmentService {
     if (phase) params = params.set('phase', phase);
     return this.http.get<Invitee[]>(`${this.api}/${assessmentId}/invitees`, { params });
   }
+
+
+  update(id: string, assessment: any): Observable<any> {
+  return this.http.put(`${this.api}/${id}`, assessment);
+}
+
+duplicate(id: string): Observable<any> {
+  return this.http.post(`${this.api}/${id}/duplicate`, {});
+}
 }

@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Créer un assessment</h2>
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
 
 <mat-dialog-content class="wizard-content">
   <!-- Nom -->
@@ -16,23 +16,13 @@
   <!-- Formateur -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Nom du formateur</mat-label>
-    <input
-      matInput
-      [(ngModel)]="local.trainerName"
-      name="trainerName"
-      required
-    />
+    <input matInput [(ngModel)]="local.trainerName" name="trainerName" required />
   </mat-form-field>
 
   <!-- Type -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Type d’assessment</mat-label>
-    <mat-select
-      [(ngModel)]="local.type"
-      name="type"
-      required
-      (selectionChange)="onTypeChange()"
-    >
+    <mat-select [(ngModel)]="local.type" name="type" required (selectionChange)="onTypeChange()">
       <mat-option [value]="'normal'">Normal</mat-option>
       <mat-option [value]="'avant_apres'">Avant / Après</mat-option>
     </mat-select>
@@ -96,15 +86,10 @@
 
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Description</mat-label>
-      <input
-        matInput
-        [(ngModel)]="t.description"
-        name="desc{{ ti }}"
-        required
-      />
+      <input matInput [(ngModel)]="t.description" name="desc{{ ti }}" required />
     </mat-form-field>
 
-    <!-- 👇👇👇 AJOUT : Score -->
+    <!-- Score -->
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Score de la question</mat-label>
       <input
@@ -124,24 +109,12 @@
     </div>
     <mat-divider class="mb-2"></mat-divider>
 
-    <div
-      *ngFor="let o of t.options; let oi = index"
-      class="row-cell mb-2 d-flex align-items-center"
-    >
+    <div *ngFor="let o of t.options; let oi = index" class="row-cell mb-2 d-flex align-items-center">
       <mat-form-field appearance="outline" class="flex-grow-1 me-2">
-        <input
-          matInput
-          placeholder="Texte"
-          [(ngModel)]="o.text"
-          name="optText{{ ti }}_{{ oi }}"
-        />
+        <input matInput placeholder="Texte" [(ngModel)]="o.text" name="optText{{ ti }}_{{ oi }}" />
       </mat-form-field>
 
-      <mat-checkbox
-        [(ngModel)]="o.isCorrect"
-        name="optCorrect{{ ti }}_{{ oi }}"
-        style="margin-right: 12px"
-      >
+      <mat-checkbox [(ngModel)]="o.isCorrect" name="optCorrect{{ ti }}_{{ oi }}" style="margin-right: 12px">
       </mat-checkbox>
 
       <button mat-icon-button color="warn" (click)="removeOption(ti, oi)">
@@ -167,11 +140,10 @@
       !local.type ||
       !local.company.trim() ||
       !local.trainerName.trim() ||
-      (local.type === 'avant_apres' &&
-        (!local.startDate || !local.endDate || !areDatesValid))
+      (local.type === 'avant_apres' && (!local.startDate || !local.endDate || !areDatesValid))
     "
   >
-    Enregistrer
+    {{ primaryLabel }}
   </button>
   <button mat-stroked-button color="warn" (click)="cancel()">Annuler</button>
 </mat-dialog-actions>

@@ -1,19 +1,20 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { CommonModule }                           from '@angular/common';
-import { FormsModule }                            from '@angular/forms';
-import { MatDialog, MatDialogModule }             from '@angular/material/dialog';
-import { MatFormFieldModule }                     from '@angular/material/form-field';
-import { MatInputModule }                         from '@angular/material/input';
-import { MatButtonModule }                        from '@angular/material/button';
-import { MatIconModule }                          from '@angular/material/icon';
-import { MatTableDataSource, MatTableModule }     from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule }       from '@angular/material/paginator';
-import { MatTooltipModule }                       from '@angular/material/tooltip';
-import { MatCardModule }                          from '@angular/material/card';
-import { RouterModule }                           from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { RouterModule } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { AssessmentWizardDialogComponent }        from '../assessment-wizard-dialog/assessment-wizard-dialog.component';
-import { AssessmentService }                      from 'src/app/services/assessment.service';
+import { AssessmentWizardDialogComponent } from '../assessment-wizard-dialog/assessment-wizard-dialog.component';
+import { AssessmentService } from 'src/app/services/assessment.service';
 
 type AssessmentRow = {
   _id: string;
@@ -40,9 +41,11 @@ type AssessmentRow = {
     MatPaginatorModule,
     MatTooltipModule,
     MatCardModule,
-    RouterModule // ← nécessaire pour routerLink
+    RouterModule,
+    MatSnackBarModule,
   ],
   templateUrl: './assessmentlist.component.html',
+  styleUrls: ['./assessmentlist.component.scss'],
 })
 export class AssessmentListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['name', 'company', 'trainerName', 'type', 'dates', 'action'];
@@ -51,34 +54,30 @@ export class AssessmentListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private dialog: MatDialog,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private snack: MatSnackBar
   ) {}
 
   ngOnInit() {
-    // Filtre custom : on filtre sur name + type + company + trainerName
+    // Filtre custom : name + type + company + trainerName
     this.dataSource.filterPredicate = (row: AssessmentRow, filter: string) => {
       const f = filter.trim().toLowerCase();
       const typeLabel = row.type === 'normal' ? 'normal' : 'avant apres';
-      return [
-        row.name || '',
-        typeLabel,
-        row.company || '',
-        row.trainerName || ''
-      ].some(v => v.toLowerCase().includes(f));
+      return [row.name || '', typeLabel, row.company || '', row.trainerName || ''].some((v) =>
+        v.toLowerCase().includes(f)
+      );
     };
 
     this.loadAssessments();
   }
 
   ngAfterViewInit(): void {
-    // Attacher le paginator une fois la vue montée (évite les cas timing)
     this.dataSource.paginator = this.paginator;
   }
 
   loadAssessments() {
-    this.assessmentService.findAll().subscribe(list => {
+    this.assessmentService.findAll().subscribe((list) => {
       this.dataSource.data = list as AssessmentRow[];
-      // si le paginator est déjà prêt, on le ré-associe
       if (this.paginator) this.dataSource.paginator = this.paginator;
     });
   }
@@ -89,12 +88,47 @@ export class AssessmentListComponent implements OnInit, AfterViewInit {
   }
 
   openWizard() {
-    const ref = this.dialog.open(AssessmentWizardDialogComponent, { width: '600px' });
-    ref.afterClosed().subscribe(result => {
+    const ref = this.dialog.open(AssessmentWizardDialogComponent, { width: '720px' });
+    ref.afterClosed().subscribe((result) => {
       if (result) {
-        // HttpClient sérialisera les Date -> ISO automatiquement
         this.assessmentService.create(result).subscribe(() => this.loadAssessments());
       }
+    });
+  }
+
+  // ✅ ÉDITER
+  openEdit(a: AssessmentRow) {
+    const ref = this.dialog.open(AssessmentWizardDialogComponent, {
+      width: '720px',
+      data: { assessment: a },
+    });
+    ref.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.assessmentService.update(a._id, result).subscribe({
+        next: () => {
+          this.snack.open('Assessment mis à jour', 'OK', { duration: 3000 });
+          this.loadAssessments();
+        },
+        error: (err) =>
+          this.snack.open(err?.error?.error || 'Erreur de mise à jour', 'Fermer', {
+            duration: 5000,
+          }),
+      });
+    });
+  }
+
+  // ✅ DUPLIQUER
+  duplicate(a: AssessmentRow) {
+    if (!confirm(`Dupliquer "${a.name}" ?`)) return;
+    this.assessmentService.duplicate(a._id).subscribe({
+      next: () => {
+        this.snack.open('Copie créée', 'OK', { duration: 3000 });
+        this.loadAssessments();
+      },
+      error: (err) =>
+        this.snack.open(err?.error?.error || 'Erreur de duplication', 'Fermer', {
+          duration: 5000,
+        }),
     });
   }
 

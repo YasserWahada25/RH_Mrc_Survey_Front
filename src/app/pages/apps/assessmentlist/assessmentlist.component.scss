@@ -1,0 +1,155 @@
+/* ===========================
+   Assessment List – Styling
+   =========================== */
+
+:host {
+  display: block;
+}
+
+/* ---------- Cards ---------- */
+.cardWithShadow {
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.mb-24 { margin-bottom: 24px; }
+.p-16  { padding: 16px !important; }
+.p-24  { padding: 24px !important; }
+
+/* ---------- Top bar (search + add) ---------- */
+.d-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flex-fill { flex: 1 1 auto; }
+
+.search-field {
+  min-width: 260px;
+}
+.search-field .mat-mdc-form-field-infix {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.search-field .mat-mdc-form-field-subscript-wrapper {
+  display: none; /* on allège */
+}
+
+.add-btn {
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
+}
+
+/* ---------- Table ---------- */
+.table-responsive {
+  width: 100%;
+  overflow: auto;
+}
+
+/* compat mat-table (legacy) & mdc */
+.mat-table,
+.mat-mdc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-header-row,
+.mat-mdc-header-row {
+  background: #f8fafc;
+}
+
+.mat-header-cell,
+.mat-mdc-header-cell {
+  color: #0f172a;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  letter-spacing: .2px;
+  padding: 16px 12px !important;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.mat-row,
+.mat-mdc-row {
+  transition: background-color .15s ease, transform .15s ease;
+}
+
+.mat-row:hover,
+.mat-mdc-row:hover {
+  background: #f9fafb;
+}
+
+.mat-cell,
+.mat-mdc-cell {
+  padding: 14px 12px !important;
+  font-size: 14px;
+  color: #111827;
+  border-bottom: 1px solid #eef2f7;
+  vertical-align: middle;
+}
+
+/* Alignement des colonnes d’action */
+.action-link {
+  white-space: nowrap;
+}
+.action-link button {
+  margin-right: 6px;
+}
+.action-link button:last-child {
+  margin-right: 0;
+}
+
+/* ---------- Badges Type ---------- */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  border: 1px solid transparent;
+}
+
+.badge-normal {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.badge-avant {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: #ddd6fe;
+}
+
+/* ---------- Typo utilitaires (si tu les utilises dans le template) ---------- */
+.f-s-16 { font-size: 16px; }
+.f-s-14 { font-size: 14px; }
+.f-w-600 { font-weight: 600; }
+
+/* ---------- Paginator ---------- */
+.mat-paginator,
+.mat-mdc-paginator {
+  border-top: 1px solid #eef2f7;
+  margin-top: 6px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .mat-header-cell, .mat-cell,
+  .mat-mdc-header-cell, .mat-mdc-cell {
+    padding: 12px 10px !important;
+  }
+  /* sur petits écrans : réduis un peu les tailles */
+  .f-s-16 { font-size: 15px; }
+  .f-s-14 { font-size: 13px; }
+}
+
+@media (max-width: 640px) {
+  .add-btn {
+    padding: 8px 12px;
+  }
+  /* on autorise le scroll horizontal de la table via .table-responsive */
+}

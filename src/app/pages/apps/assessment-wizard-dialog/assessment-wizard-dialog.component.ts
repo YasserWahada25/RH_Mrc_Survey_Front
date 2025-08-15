@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -19,8 +19,7 @@ interface Option {
 interface Task {
   description: string;
   options: Option[];
-  score: number;        // 👈 AJOUT
-
+  score: number;
 }
 
 @Component({
@@ -57,14 +56,45 @@ export class AssessmentWizardDialogComponent {
 
   types: Array<'normal' | 'avant_apres'> = ['normal', 'avant_apres'];
 
-  // Aujourd’hui à minuit (pour les comparaisons et [min])
+  // Aujourd’hui à minuit (pour [min] et comparaisons)
   readonly today: Date = (() => {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
     return d;
   })();
 
-  constructor(private dialogRef: MatDialogRef<AssessmentWizardDialogComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<AssessmentWizardDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data?: { assessment?: any }
+  ) {
+    // Préremplissage en mode ÉDITION
+    if (data?.assessment) {
+      const a = data.assessment;
+      this.local = {
+        name: a.name || '',
+        type: (a.type || 'normal') as 'normal' | 'avant_apres',
+        tasks: (a.tasks || []).map((t: any) => ({
+          description: t.description,
+          score: typeof t.score === 'number' ? t.score : 1,
+          options: (t.options || []).map((o: any) => ({
+            text: o.text,
+            isCorrect: !!o.isCorrect,
+          })),
+        })),
+        startDate: a.startDate ? new Date(a.startDate) : null,
+        endDate: a.endDate ? new Date(a.endDate) : null,
+        company: a.company || '',
+        trainerName: a.trainerName || '',
+      };
+    }
+  }
+
+  get dialogTitle() {
+    return this.data?.assessment ? 'Modifier un assessment' : 'Créer un assessment';
+  }
+  get primaryLabel() {
+    return this.data?.assessment ? 'Mettre à jour' : 'Enregistrer';
+  }
 
   private atMidnight(d: Date): Date {
     const x = new Date(d);
@@ -72,12 +102,11 @@ export class AssessmentWizardDialogComponent {
     return x;
   }
 
-  // min pour la fin = start si choisie, sinon aujourd’hui
   get minEndDate(): Date {
     return this.local.startDate ? this.atMidnight(this.local.startDate) : this.today;
   }
 
-  // validation bouton Enregistrer
+  // validation bouton Enregistrer (dates seulement pour avant_apres)
   get areDatesValid(): boolean {
     if (this.local.type !== 'avant_apres') return true;
     const s = this.local.startDate ? this.atMidnight(this.local.startDate) : null;
@@ -86,12 +115,11 @@ export class AssessmentWizardDialogComponent {
     return s >= this.today && e >= s;
   }
 
-  // erreurs affichées dans le template
+  // erreurs affichées
   get startBeforeToday(): boolean {
     const s = this.local.startDate;
     return !!s && this.atMidnight(s) < this.today;
   }
-
   get endBeforeStart(): boolean {
     const s = this.local.startDate;
     const e = this.local.endDate;
@@ -112,7 +140,7 @@ export class AssessmentWizardDialogComponent {
     this.local.tasks.push({
       description: '',
       options: [{ text: '', isCorrect: false }],
-      score: 1, 
+      score: 1,
     });
   }
   removeTask(i: number) {
@@ -126,7 +154,6 @@ export class AssessmentWizardDialogComponent {
   }
 
   finish() {
-    // HttpClient sérialisera Date -> ISO automatiquement
     this.dialogRef.close(this.local);
   }
   cancel() {
