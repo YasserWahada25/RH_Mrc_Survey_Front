@@ -1,45 +1,73 @@
-<!-- src/app/pages/apps/assessment-wizard-dialog/assessment-wizard-dialog.component.html -->
-
 <h2 mat-dialog-title>Créer un assessment</h2>
 
 <mat-dialog-content class="wizard-content">
-  <!-- Nom de l’assessment -->
+  <!-- Nom -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Nom de l’assessment</mat-label>
     <input matInput [(ngModel)]="local.name" name="name" required />
   </mat-form-field>
 
-  <!-- 👇👇👇  AJOUT : Entreprise -->
-<mat-form-field appearance="outline" class="w-100 mb-4">
-  <mat-label>Entreprise</mat-label>
-  <input matInput [(ngModel)]="local.company" name="company" required  />
-</mat-form-field>
+  <!-- Entreprise -->
+  <mat-form-field appearance="outline" class="w-100 mb-4">
+    <mat-label>Entreprise</mat-label>
+    <input matInput [(ngModel)]="local.company" name="company" required />
+  </mat-form-field>
 
-<!-- 👇👇👇  AJOUT : Nom du formateur -->
-<mat-form-field appearance="outline" class="w-100 mb-4">
-  <mat-label>Nom du formateur</mat-label>
-  <input matInput [(ngModel)]="local.trainerName" name="trainerName" required  />
-</mat-form-field>
+  <!-- Formateur -->
+  <mat-form-field appearance="outline" class="w-100 mb-4">
+    <mat-label>Nom du formateur</mat-label>
+    <input matInput [(ngModel)]="local.trainerName" name="trainerName" required />
+  </mat-form-field>
 
-  <!-- Type d’assessment -->
+  <!-- Type -->
   <mat-form-field appearance="outline" class="w-100 mb-4">
     <mat-label>Type d’assessment</mat-label>
-    <mat-select [(ngModel)]="local.type" name="type" required>
+    <mat-select [(ngModel)]="local.type" name="type" required (selectionChange)="onTypeChange()">
       <mat-option [value]="'normal'">Normal</mat-option>
       <mat-option [value]="'avant_apres'">Avant / Après</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <!-- Dates de formation -->
+  <!-- Dates via Datepicker -->
   <div *ngIf="local.type === 'avant_apres'" class="mb-4">
+    <!-- START -->
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Date début de formation</mat-label>
-      <input matInput [(ngModel)]="local.startDate" name="startDate" type="date" required />
+      <input
+        matInput
+        [matDatepicker]="dpStart"
+        [(ngModel)]="local.startDate"
+        name="startDate"
+        [min]="today"
+        required
+        placeholder="Choisir une date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+      <mat-datepicker #dpStart startView="month"></mat-datepicker>
+
+      <mat-error *ngIf="startBeforeToday">
+        La date de début ne peut pas être antérieure à aujourd’hui.
+      </mat-error>
     </mat-form-field>
 
+    <!-- END -->
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Date fin de formation</mat-label>
-      <input matInput [(ngModel)]="local.endDate" name="endDate" type="date" required />
+      <input
+        matInput
+        [matDatepicker]="dpEnd"
+        [(ngModel)]="local.endDate"
+        name="endDate"
+        [min]="minEndDate"
+        required
+        placeholder="Choisir une date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
+      <mat-datepicker #dpEnd startView="month"></mat-datepicker>
+
+      <mat-error *ngIf="endBeforeStart">
+        La date de fin doit être supérieure ou égale à la date de début.
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -56,13 +84,11 @@
       </button>
     </div>
 
-    <!-- Description -->
     <mat-form-field appearance="outline" class="w-100 mb-2">
       <mat-label>Description</mat-label>
       <input matInput [(ngModel)]="t.description" name="desc{{ti}}" required />
     </mat-form-field>
 
-    <!-- Options -->
     <div class="d-flex align-items-center mb-1">
       <div class="flex-grow-1 font-weight-semibold">Option</div>
       <div class="font-weight-semibold">Correcte ?</div>
@@ -71,19 +97,10 @@
 
     <div *ngFor="let o of t.options; let oi = index" class="row-cell mb-2 d-flex align-items-center">
       <mat-form-field appearance="outline" class="flex-grow-1 me-2">
-        <input
-          matInput
-          placeholder="Texte"
-          [(ngModel)]="o.text"
-          name="optText{{ti}}_{{oi}}"
-        />
+        <input matInput placeholder="Texte" [(ngModel)]="o.text" name="optText{{ti}}_{{oi}}" />
       </mat-form-field>
 
-      <mat-checkbox
-        [(ngModel)]="o.isCorrect"
-        name="optCorrect{{ti}}_{{oi}}"
-        style="margin-right: 12px;"
-      >
+      <mat-checkbox [(ngModel)]="o.isCorrect" name="optCorrect{{ti}}_{{oi}}" style="margin-right: 12px;">
       </mat-checkbox>
 
       <button mat-icon-button color="warn" (click)="removeOption(ti, oi)">
@@ -104,11 +121,12 @@
     mat-flat-button
     color="primary"
     (click)="finish()"
-    [disabled]="!local.name.trim() || !local.type || !local.company.trim() || !local.trainerName.trim()"
+    [disabled]="
+      !local.name.trim() || !local.type || !local.company.trim() || !local.trainerName.trim() ||
+      (local.type === 'avant_apres' && (!local.startDate || !local.endDate || !areDatesValid))
+    "
   >
     Enregistrer
   </button>
-  <button mat-stroked-button color="warn" (click)="cancel()">
-    Annuler
-  </button>
+  <button mat-stroked-button color="warn" (click)="cancel()">Annuler</button>
 </mat-dialog-actions>
