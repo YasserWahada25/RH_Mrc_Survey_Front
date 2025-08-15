@@ -19,6 +19,8 @@ interface Option {
 interface Task {
   description: string;
   options: Option[];
+  score: number;        // 👈 AJOUT
+
 }
 
 @Component({
@@ -110,6 +112,7 @@ export class AssessmentWizardDialogComponent {
     this.local.tasks.push({
       description: '',
       options: [{ text: '', isCorrect: false }],
+      score: 1, 
     });
   }
   removeTask(i: number) {

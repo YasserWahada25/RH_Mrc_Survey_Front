@@ -43,8 +43,8 @@ interface Resp {
   styleUrls: ['./assessment-response-detail.component.css'],
 })
 export class AssessmentResponseDetailComponent implements OnInit {
-  assessment!: any;
-  responses: Resp[] = [];
+  assessment!: any;          // contient tasks[], options[], score sur chaque task
+  responses: Resp[] = [];    // [{ phase:'avant'|'apres', answers:[] }]
   userInfo = { firstName: '', lastName: '', email: '' };
 
   constructor(
@@ -64,12 +64,13 @@ export class AssessmentResponseDetailComponent implements OnInit {
       next: ({ assessment, responses }) => {
         this.assessment = assessment;
         this.responses = responses;
+
         const avant = responses.find((r) => r.phase === 'avant');
         if (avant) {
           this.userInfo = {
-            firstName: avant.firstName!,
-            lastName: avant.lastName!,
-            email: avant.email!,
+            firstName: avant.firstName || '',
+            lastName: avant.lastName || '',
+            email: avant.email || '',
           };
         }
       },
@@ -80,20 +81,20 @@ export class AssessmentResponseDetailComponent implements OnInit {
     });
   }
 
-  isSelected(
-    resp: { answers: Answer[] },
-    taskId: string,
-    optionId: any 
-  ): boolean {
-    const ans = resp.answers.find(a => a.taskId == taskId || a.taskId?.toString() == taskId?.toString());
+  // ------- Sélections existantes (inchangé) -------
+  isSelected(resp: { answers: Answer[] }, taskId: string, optionId: any): boolean {
+    const ans = resp.answers.find(
+      (a) => a.taskId == taskId || a.taskId?.toString() == taskId?.toString()
+    );
     const result = !!ans && ans.selected?.toString() === optionId?.toString();
-    console.log('isSelected:', { taskId, optionId, ans, result });
     return result;
   }
 
   getSelectedOptionId(resp: any, taskId: string) {
     if (!resp) return null;
-    const ans = resp.answers.find((a: any) => a.taskId == taskId || a.taskId?.toString() == taskId?.toString());
+    const ans = resp.answers.find(
+      (a: any) => a.taskId == taskId || a.taskId?.toString() == taskId?.toString()
+    );
     return ans ? ans.selected?.toString() : null;
   }
 
@@ -101,15 +102,75 @@ export class AssessmentResponseDetailComponent implements OnInit {
     return this.responses.find((r) => r.phase === phase);
   }
 
-  sendResponses() {
-  const aid = this.route.snapshot.paramMap.get('assessmentId')!;
-  const uid = this.route.snapshot.paramMap.get('userId')!;
-  this.svc.sendResponsesPdf(aid, uid).subscribe({
-    next: () =>
-      this.snack.open('PDF des réponses envoyé par email', 'OK', { duration: 5000 }),
-    error: err =>
-      this.snack.open(`Erreur envoi PDF : ${err.message}`, 'OK', { duration: 5000 })
-  });
-}
+  // ------- Calculs Score / Pourcentage -------
+  /** Score défini sur la question ; fallback 1 si ancien enregistrement sans score */
+  getTaskScore(task: any): number {
+    const s = Number(task?.score);
+    return Number.isFinite(s) ? s : 1;
+  }
 
+  /** La réponse 'resp' est-elle correcte pour 'task' ? */
+  private isCorrectForResponse(resp: Resp | undefined, task: any): boolean {
+    if (!resp) return false;
+    const ans = resp.answers.find(
+      (a) => a.taskId == task._id || a.taskId?.toString() == task._id?.toString()
+    );
+    if (!ans) return false;
+    const selected = (ans.selected || '').toString();
+    return task.options?.some(
+      (o: any) => o.isCorrect && o._id?.toString() === selected
+    );
+  }
+
+  /** La réponse est-elle correcte pour la phase donnée ? */
+  isCorrect(phase: 'avant' | 'apres', task: any): boolean {
+    return this.isCorrectForResponse(this.getPhaseResponse(phase), task);
+  }
+
+  /** Score obtenu sur une question pour la phase (score ou 0) */
+  getQuestionScore(phase: 'avant' | 'apres', task: any): number {
+    return this.isCorrect(phase, task) ? this.getTaskScore(task) : 0;
+  }
+
+  /** Score max total (somme des scores des questions) */
+  get maxScore(): number {
+    if (!this.assessment?.tasks?.length) return 0;
+    return this.assessment.tasks.reduce(
+      (sum: number, t: any) => sum + this.getTaskScore(t),
+      0
+    );
+  }
+
+  /** Score total obtenu pour une phase */
+  getTotalScore(phase: 'avant' | 'apres'): number {
+    if (!this.assessment?.tasks?.length) return 0;
+    return this.assessment.tasks.reduce(
+      (sum: number, t: any) => sum + this.getQuestionScore(phase, t),
+      0
+    );
+  }
+
+  /** Pourcentage (règle de 3) pour une phase */
+  getPercent(phase: 'avant' | 'apres'): number {
+    const max = this.maxScore;
+    if (max <= 0) return 0;
+    const total = this.getTotalScore(phase);
+    return Math.round((total / max) * 100);
+  }
+
+  // ------- Envoi PDF (inchangé) -------
+  sendResponses() {
+    const aid = this.route.snapshot.paramMap.get('assessmentId')!;
+    const uid = this.route.snapshot.paramMap.get('userId')!;
+    this.svc.sendResponsesPdf(aid, uid).subscribe({
+      next: () =>
+        this.snack.open('PDF des réponses envoyé par email', 'OK', {
+          duration: 5000,
+        }),
+      error: (err) =>
+        this.snack.open(`Erreur envoi PDF : ${err.message}`, 'OK', {
+          duration: 5000,
+        }),
+    });
+  }
 }

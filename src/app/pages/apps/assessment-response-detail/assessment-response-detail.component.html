@@ -11,8 +11,8 @@
         </div>
       </div>
       <div class="dates">
-        Début : {{ assessment.startDate | date : "dd/MM/yyyy" }} — Fin :
-        {{ assessment.endDate | date : "dd/MM/yyyy" }}
+        Début : {{ assessment.startDate | date: 'dd/MM/yyyy' }} — Fin :
+        {{ assessment.endDate | date: 'dd/MM/yyyy' }}
       </div>
     </div>
   </mat-card>
@@ -25,14 +25,27 @@
     <div *ngFor="let t of assessment.tasks; let i = index" class="question">
       <p>
         <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
       </p>
-      <mat-radio-group [value]="getSelectedOptionId(getPhaseResponse('avant'), t._id)" [disabled]="true">
-        <mat-radio-button
-          *ngFor="let o of t.options"
-          [value]="o._id">
+
+      <mat-radio-group
+        [value]="getSelectedOptionId(getPhaseResponse('avant'), t._id)"
+        [disabled]="true"
+      >
+        <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
           {{ o.text }}
         </mat-radio-button>
       </mat-radio-group>
+
+      <div class="score-line">
+        Score (Avant) :
+        <strong>{{ getQuestionScore('avant', t) }}</strong>
+        / {{ getTaskScore(t) }}
+        <mat-icon *ngIf="isCorrect('avant', t)" color="primary"
+          >check_circle</mat-icon
+        >
+        <mat-icon *ngIf="!isCorrect('avant', t)" color="warn">cancel</mat-icon>
+      </div>
     </div>
   </div>
 
@@ -44,14 +57,27 @@
     <div *ngFor="let t of assessment.tasks; let i = index" class="question">
       <p>
         <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
       </p>
-      <mat-radio-group [value]="getSelectedOptionId(getPhaseResponse('apres'), t._id)" [disabled]="true">
-        <mat-radio-button
-          *ngFor="let o of t.options"
-          [value]="o._id">
+
+      <mat-radio-group
+        [value]="getSelectedOptionId(getPhaseResponse('apres'), t._id)"
+        [disabled]="true"
+      >
+        <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
           {{ o.text }}
         </mat-radio-button>
       </mat-radio-group>
+
+      <div class="score-line">
+        Score (Après) :
+        <strong>{{ getQuestionScore('apres', t) }}</strong>
+        / {{ getTaskScore(t) }}
+        <mat-icon *ngIf="isCorrect('apres', t)" color="primary"
+          >check_circle</mat-icon
+        >
+        <mat-icon *ngIf="!isCorrect('apres', t)" color="warn">cancel</mat-icon>
+      </div>
     </div>
   </div>
 
@@ -63,6 +89,7 @@
     <div *ngFor="let t of assessment.tasks; let i = index" class="question">
       <p>
         <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
       </p>
       <ul>
         <li *ngFor="let o of t.options">
@@ -72,6 +99,31 @@
       </ul>
     </div>
   </div>
+
+  <!-- Résumé des scores -->
+  <mat-card class="summary-card" style="margin-top: 16px;">
+    <h2 style="margin:0 0 12px 0;">Résumé des scores</h2>
+    <div class="summary-grid">
+      <div class="row">
+        <div class="cell label">Score maximum total</div>
+        <div class="cell value">{{ maxScore }}</div>
+      </div>
+      <div class="row">
+        <div class="cell label">Avant</div>
+        <div class="cell value">
+          {{ getTotalScore('avant') }} / {{ maxScore }}
+          ({{ getPercent('avant') }}%)
+        </div>
+      </div>
+      <div class="row">
+        <div class="cell label">Après</div>
+        <div class="cell value">
+          {{ getTotalScore('apres') }} / {{ maxScore }}
+          ({{ getPercent('apres') }}%)
+        </div>
+      </div>
+    </div>
+  </mat-card>
 
   <div class="actions" style="text-align: center; margin-top: 20px">
     <button mat-raised-button color="primary" (click)="sendResponses()">
