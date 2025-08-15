@@ -1,3 +1,4 @@
+// src/app/components/assessment-detail/assessment-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -42,8 +43,10 @@ export class AssessmentDetailComponent implements OnInit {
   // Invitations UI
   inviteesAvant: Invitee[] = [];
   inviteesApres: Invitee[] = [];
-  avantEmailsInput = '';   // champ libre
-  apresEmailsInput = '';   // champ libre, prérempli avec emails AVANT
+  inviteesNormal: Invitee[] = [];
+  avantEmailsInput = '';
+  apresEmailsInput = '';
+  normalEmailsInput = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -63,7 +66,6 @@ export class AssessmentDetailComponent implements OnInit {
       if (!this.adminMode) {
         this.determinePhase();
       } else {
-        // admin : charger les invites pour affichage
         this.loadInvitees();
       }
     });
@@ -71,9 +73,19 @@ export class AssessmentDetailComponent implements OnInit {
 
   private loadInvitees() {
     const id = this.assessment._id;
+
+    if (this.assessment.type === 'normal') {
+      this.svc.listInvitees(id, 'normal').subscribe(list => {
+        this.inviteesNormal = list;
+        const uniq = Array.from(new Set(list.map(x => x.email)));
+        this.normalEmailsInput = uniq.join(', ');
+      });
+      return;
+    }
+
+    // avant_apres
     this.svc.listInvitees(id, 'avant').subscribe(list => {
       this.inviteesAvant = list;
-      // Pré-remplir APRÈS avec les emails AVANT (modifiable à volonté)
       const uniqueEmails = Array.from(new Set(list.map(x => x.email)));
       this.apresEmailsInput = uniqueEmails.join(', ');
     });
@@ -91,6 +103,7 @@ export class AssessmentDetailComponent implements OnInit {
     return Array.from(new Set(arr));
   }
 
+  // --- ENVOIS ADMIN ---
   sendAvantInvites() {
     const emails = this.parseEmails(this.avantEmailsInput);
     if (!emails.length) {
@@ -116,15 +129,31 @@ export class AssessmentDetailComponent implements OnInit {
       this.snackBar.open('Ajoutez au moins un email pour la phase APRÈS.', 'Fermer', { duration: 3500 });
       return;
     }
-    // ⚠️ Aucun blocage : on autorise l’envoi APRÈS à n’importe qui.
     this.svc.inviteByEmail(this.assessment._id, 'apres', emails).subscribe({
       next: () => {
         this.snackBar.open('Invitations APRÈS envoyées.', 'Fermer', { duration: 3000 });
-        // on ne vide pas forcément le champ pour permettre d’ajouter d’autres emails
         this.loadInvitees();
       },
       error: (err) => {
         const msg = err?.error?.error || 'Erreur lors de l’envoi des invitations APRÈS.';
+        this.snackBar.open(msg, 'Fermer', { duration: 5000 });
+      }
+    });
+  }
+
+  sendNormalInvites() {
+    const emails = this.parseEmails(this.normalEmailsInput);
+    if (!emails.length) {
+      this.snackBar.open('Ajoutez au moins un email (phase unique).', 'Fermer', { duration: 3500 });
+      return;
+    }
+    this.svc.inviteByEmail(this.assessment._id, 'normal', emails).subscribe({
+      next: () => {
+        this.snackBar.open('Invitations envoyées (phase unique).', 'Fermer', { duration: 3000 });
+        this.loadInvitees();
+      },
+      error: (err) => {
+        const msg = err?.error?.error || 'Erreur lors de l’envoi des invitations.';
         this.snackBar.open(msg, 'Fermer', { duration: 5000 });
       }
     });

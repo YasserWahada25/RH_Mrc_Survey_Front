@@ -38,6 +38,7 @@ export interface Invitee {
   hasAvant: boolean;
   hasApres: boolean;
   sentAt?: string;
+  hasNormal?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
