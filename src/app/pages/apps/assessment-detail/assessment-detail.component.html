@@ -1,6 +1,6 @@
 <mat-card class="assessment-card" *ngIf="assessment">
   <mat-card-content>
-    <!-- 🧠 EN-TÊTE -->
+    <!-- EN-TÊTE -->
     <div class="assessment-header">
       <h1 class="assessment-title">{{ assessment.name }}</h1>
       <p class="assessment-type">
@@ -9,8 +9,7 @@
 
       <ng-container *ngIf="assessment.type === 'avant_apres' && assessment.startDate && assessment.endDate">
         <p class="assessment-dates">
-          📅 Formation : du {{ assessment.startDate | date: 'dd/MM/yyyy' }} au
-          {{ assessment.endDate | date: 'dd/MM/yyyy' }}
+          📅 Formation : du {{ assessment.startDate | date:'dd/MM/yyyy' }} au {{ assessment.endDate | date:'dd/MM/yyyy' }}
         </p>
       </ng-container>
 
@@ -19,71 +18,67 @@
       </ng-container>
     </div>
 
-    <!-- 👨‍💼 MODE ADMIN -->
-    <ng-container *ngIf="adminMode; else userForm">
-      <!-- ========== Envoi par email ========== -->
-      <div class="section">
-        <h3>Invitations</h3>
+    <!-- ZONE INVITATIONS (ADMIN) -->
+    <ng-container *ngIf="adminMode">
+      <h2 class="invit-title">Invitations</h2>
 
-        <!-- 1) Premier envoi : PHASE AVANT -->
-        <div class="invite-block">
-          <div class="invite-title">1) Phase AVANT</div>
-          <button mat-raised-button color="accent" (click)="sendPhaseAvant()">
+      <!-- Phase AVANT -->
+      <div class="invite-block">
+        <div class="invite-title">1) Phase AVANT</div>
+        <div class="invite-row">
+          <textarea
+            [(ngModel)]="avantEmailsInput"
+            placeholder="Saisir des emails séparés par virgules, espaces ou retours à la ligne"
+            class="invite-textarea"
+          ></textarea>
+          <button mat-raised-button color="primary" class="invite-btn" (click)="sendAvantInvites()">
             Envoyer invitations (phase AVANT)
           </button>
         </div>
 
-        <!-- 2) Deuxième envoi : PHASE APRÈS (liste + ✅) -->
-        <div class="invite-block" *ngIf="assessment.type === 'avant_apres'">
-          <div class="invite-title">
-            2) Phase APRÈS
-            <span class="hint">(aux mêmes emails que la phase AVANT)</span>
-          </div>
+        <ul class="invite-list" *ngIf="inviteesAvant?.length">
+          <li *ngFor="let i of inviteesAvant">
+            <mat-icon class="ok" *ngIf="i.hasAvant">check_circle</mat-icon>
+            <mat-icon class="pending" *ngIf="!i.hasAvant">radio_button_unchecked</mat-icon>
+            {{ i.email }}
+            <span class="phase-chip">AVANT</span>
+            <span class="used-chip" *ngIf="i.used">lien utilisé</span>
+          </li>
+        </ul>
+      </div>
 
-          <div *ngIf="loadingInvitees">Chargement des destinataires…</div>
-          <div *ngIf="!loadingInvitees && !inviteesAvant.length" class="muted">
-            Aucune invitation envoyée pour la phase AVANT pour le moment.
-          </div>
-
-          <ul class="emails-list" *ngIf="inviteesAvant.length">
-            <li *ngFor="let it of inviteesAvant">
-              <span class="status">{{ it.hasAvant ? '✅' : '•' }}</span>
-              <span class="email">{{ it.email }}</span>
-            </li>
-          </ul>
-
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="sendPhaseApres()"
-            [disabled]="!inviteesAvant.length"
-          >
+      <!-- Phase APRÈS -->
+      <div class="invite-block">
+        <div class="invite-title">
+          2) Phase APRÈS <span class="hint">(vous pouvez réutiliser les mêmes emails ou en ajouter d'autres)</span>
+        </div>
+        <div class="invite-row">
+          <textarea
+            [(ngModel)]="apresEmailsInput"
+            placeholder="Saisir des emails séparés par virgules, espaces ou retours à la ligne"
+            class="invite-textarea"
+          ></textarea>
+          <button mat-raised-button color="accent" class="invite-btn" (click)="sendApresInvites()">
             Envoyer invitations (phase APRÈS)
           </button>
         </div>
+
+        <ul class="invite-list" *ngIf="inviteesApres?.length">
+          <li *ngFor="let i of inviteesApres">
+            <mat-icon class="ok" *ngIf="i.hasApres">check_circle</mat-icon>
+            <mat-icon class="pending" *ngIf="!i.hasApres">radio_button_unchecked</mat-icon>
+            {{ i.email }}
+            <span class="phase-chip apres">APRÈS</span>
+            <span class="used-chip" *ngIf="i.used">lien utilisé</span>
+          </li>
+        </ul>
       </div>
 
-      <!-- Aperçu questions (lecture seule) -->
-      <div class="questions-list">
-        <ng-container *ngFor="let t of assessment.tasks; let i = index">
-          <mat-card class="question-card">
-            <mat-card-header>
-              <mat-card-title>Q{{ i + 1 }}. {{ t.description }}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <mat-radio-group [disabled]="true" class="options-group">
-                <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
-                  {{ o.text }}
-                </mat-radio-button>
-              </mat-radio-group>
-            </mat-card-content>
-          </mat-card>
-        </ng-container>
-      </div>
+      <mat-divider class="mt-24 mb-16"></mat-divider>
     </ng-container>
 
-    <!-- 👤 MODE UTILISATEUR -->
-    <ng-template #userForm>
+    <!-- FORMULAIRE UTILISATEUR (si non admin) -->
+    <ng-container *ngIf="!adminMode">
       <form (ngSubmit)="onSubmit()">
         <div class="questions-list">
           <ng-container *ngFor="let t of assessment.tasks; let i = index">
@@ -94,11 +89,10 @@
               <mat-card-content>
                 <mat-radio-group
                   [(ngModel)]="answers[t._id]"
-                  name="ans{{ i }}"
+                  name="ans{{i}}"
                   class="options-group"
                   [disabled]="disabledForm"
                 >
-                  <!-- ❗️ on envoie l'ID de l'option -->
                   <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
                     {{ o.text }}
                   </mat-radio-button>
@@ -108,11 +102,16 @@
           </ng-container>
         </div>
         <div class="submit-container">
-          <button mat-raised-button color="primary" type="submit" [disabled]="disabledForm">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="disabledForm"
+          >
             Soumettre
           </button>
         </div>
       </form>
-    </ng-template>
+    </ng-container>
   </mat-card-content>
 </mat-card>
