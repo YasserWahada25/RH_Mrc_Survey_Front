@@ -6,8 +6,6 @@ import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent }  from './layouts/full/full.component';
 
-// Pages
-import { FormulaireDetailComponent }    from './pages/apps/formulaire-detail/formulaire-detail.component';
 import { AssessmentGuestComponent }     from './pages/apps/assessment-guest/assessment-guest.component';
 
 export const routes: Routes = [
@@ -104,18 +102,7 @@ export const routes: Routes = [
           import('./pages/theme-pages/theme-pages.routes').then(m => m.ThemePagesRoutes)
       },
 
-      // Formulaire detail (hors quiz)
-      {
-        path: 'formulaire/:id',
-        component: FormulaireDetailComponent,
-        data: {
-          title: 'Détail Formulaire',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Formulaire' }
-          ]
-        }
-      }
+
     ]
   },
 

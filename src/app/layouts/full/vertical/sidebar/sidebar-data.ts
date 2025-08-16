@@ -77,21 +77,8 @@ export const navItems: NavItem[] = [
     iconName: 'chart-donut-3',
     route: 'apps/rapport-assessment',
   },
-  {
-    displayName: 'Formulaires',
-    iconName: 'file-invoice',
-    route: 'apps/formulaires',
-  },
-  {
-    displayName: 'Réponses',
-    iconName: 'message-2',
-    route: 'apps/reponses',
-  },
-  {
-    displayName: 'Rapport Formulaire',
-    iconName: 'chart-donut-3',
-    route: 'apps/rapport-formulaire',
-  },
+
+
   {
     displayName: 'ToDo',
     iconName: 'edit',

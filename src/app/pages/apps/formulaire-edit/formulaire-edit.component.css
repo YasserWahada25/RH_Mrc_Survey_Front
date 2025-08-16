@@ -1,6 +1,0 @@
-/* limite la hauteur et active le scroll vertical */
-.dialog-scroll {
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
-  padding-right: 8px; /* évite que le contenu soit masqué sous la scrollbar */
-}
