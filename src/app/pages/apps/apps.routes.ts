@@ -26,6 +26,8 @@ import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/d
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 import { AssessmentDetailComponent } from './assessment-detail/assessment-detail.component';
 import { GuestLayoutComponent } from './assessment-detail/guest-layout/guest-layout.component';
+import { RapportAssessmentComponent } from './rapport-assessment/rapport-assessment.component';
+
 export const AppsRoutes: Routes = [
   // --- 1) Route invitée (guest) pour répondre ---
   {
@@ -185,6 +187,18 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+ {
+  path: 'rapport-assessment',
+  component: RapportAssessmentComponent,
+  data: {
+    title: 'Rapport Assessment',
+    urls: [
+      { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      { title: 'Rapport Assessment' },
+    ],
+  },
+},
+
       {
         path: 'formulaires',
         component: FormulaireListComponent,

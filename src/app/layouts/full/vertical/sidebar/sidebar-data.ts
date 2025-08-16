@@ -73,6 +73,11 @@ export const navItems: NavItem[] = [
     route: 'apps/assessment-responses',
   },
   {
+    displayName: 'Rapport Assessment',
+    iconName: 'chart-donut-3',
+    route: 'apps/rapport-assessment',
+  },
+  {
     displayName: 'Formulaires',
     iconName: 'file-invoice',
     route: 'apps/formulaires',

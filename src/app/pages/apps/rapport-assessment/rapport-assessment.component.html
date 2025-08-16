@@ -1,0 +1,133 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="filters">
+      <mat-form-field appearance="outline" class="filter">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="typeSelected" (selectionChange)="applyTypeFilter()">
+          <mat-option [value]="''" disabled>Choisir…</mat-option>
+          <mat-option value="normal">Normal (1 phase)</mat-option>
+          <mat-option value="avant_apres">Avant / Après (2 phases)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter" *ngIf="typeSelected">
+        <mat-label>Assessment</mat-label>
+        <mat-select [(ngModel)]="assessmentIdSelected" (selectionChange)="onAssessmentChange()">
+          <mat-option *ngFor="let a of assessmentsFiltered" [value]="a._id">
+            {{ a.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="loadingAssessments" class="center">
+      <mat-progress-spinner diameter="36" mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+  </mat-card-content>
+</mat-card>
+
+<!-- === CONTENU STATS === -->
+<ng-container *ngIf="assessment">
+  <mat-card class="cardWithShadow kpi-card">
+    <mat-card-content>
+      <div class="kpi-grid" *ngIf="!loadingStats; else statsLoading">
+        <div class="kpi">
+          <div class="kpi-label">Participants</div>
+          <div class="kpi-value">{{ kpiParticipants }}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Complétés</div>
+          <div class="kpi-value">{{ kpiCompleted }}</div>
+        </div>
+
+        <!-- KPIs spécifiques au type -->
+        <ng-container *ngIf="assessment.type === 'normal'; else twoPhases">
+          <div class="kpi">
+            <div class="kpi-label">% moyen</div>
+            <div class="kpi-value">{{ kpiAvgNormalPct }}%</div>
+          </div>
+        </ng-container>
+
+        <ng-template #twoPhases>
+          <div class="kpi">
+            <div class="kpi-label">Moy. Avant</div>
+            <div class="kpi-value">{{ kpiAvgAvantPct }}%</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Moy. Après</div>
+            <div class="kpi-value">{{ kpiAvgApresPct }}%</div>
+          </div>
+        </ng-template>
+      </div>
+
+      <ng-template #statsLoading>
+        <div class="center p-16">
+          <mat-progress-spinner diameter="36" mode="indeterminate"></mat-progress-spinner>
+        </div>
+      </ng-template>
+
+      <div *ngIf="!loadingStats && !respondents.length" class="muted mt-12">
+        Aucun répondant pour cet assessment pour le moment.
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- === CHARTS === -->
+  <div class="charts-grid" *ngIf="!loadingStats && respondents.length">
+    <!-- Donut : distribution (normal) / amélioration (2 phases) -->
+    <mat-card class="cardWithShadow">
+      <mat-card-header>
+        <mat-card-title class="m-b-0">
+          {{ assessment.type === 'normal' ? 'Distribution des pourcentages' : 'Amélioration Avant → Après' }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="b-t-1">
+        <apx-chart
+          *ngIf="donutDistributionOpts"
+          [series]="donutDistributionOpts.series"
+          [chart]="donutDistributionOpts.chart"
+          [labels]="donutDistributionOpts.labels"
+          [legend]="donutDistributionOpts.legend"
+          [dataLabels]="donutDistributionOpts.dataLabels">
+        </apx-chart>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Bar (seulement 2 phases) -->
+    <mat-card class="cardWithShadow" *ngIf="assessment.type === 'avant_apres'">
+      <mat-card-header>
+        <mat-card-title class="m-b-0">Moyennes par phase</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="b-t-1">
+        <apx-chart
+          *ngIf="barAvantApresAvgOpts"
+          [series]="barAvantApresAvgOpts.series"
+          [chart]="barAvantApresAvgOpts.chart"
+          [plotOptions]="barAvantApresAvgOpts.plotOptions"
+          [xaxis]="barAvantApresAvgOpts.xaxis"
+          [yaxis]="barAvantApresAvgOpts.yaxis"
+          [dataLabels]="barAvantApresAvgOpts.dataLabels">
+        </apx-chart>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pie : correct / incorrect -->
+    <mat-card class="cardWithShadow">
+      <mat-card-header>
+        <mat-card-title class="m-b-0">Réponses correctes vs incorrectes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="b-t-1">
+        <apx-chart
+          *ngIf="pieCorrectWrongOpts"
+          [series]="pieCorrectWrongOpts.series"
+          [chart]="pieCorrectWrongOpts.chart"
+          [labels]="pieCorrectWrongOpts.labels"
+          [legend]="pieCorrectWrongOpts.legend"
+          [dataLabels]="pieCorrectWrongOpts.dataLabels">
+        </apx-chart>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container>
