@@ -41,9 +41,12 @@ import { MaterialModule } from './material.module';
 // Forms
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// Calendar
+// Calendar (angular-calendar)
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+// Angular Material Date Adapter
+import { provideNativeDateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 
 // Jwt Interceptor
 import { JwtInterceptor } from './services/jwt.interceptor';
@@ -67,6 +70,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideClientHydration(),
     provideAnimationsAsync(),
+
+    // ✅ Adaptateur natif Angular Material pour tous les datepickers
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
 
     // Ajout du JwtInterceptor comme HTTP_INTERCEPTOR
     {
@@ -92,7 +99,7 @@ export const appConfig: ApplicationConfig = {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient],
         },
-          defaultLanguage: 'fr'
+        defaultLanguage: 'fr'
       })
     ),
   ],

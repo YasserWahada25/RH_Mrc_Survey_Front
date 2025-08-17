@@ -1,0 +1,183 @@
+<ng-container *ngIf="assessment && responses.length; else loading">
+  <mat-card class="info-card">
+    <div class="info-header">
+      <div class="user-info">
+        <div class="user-name">
+          <strong>{{ userInfo.firstName }} {{ userInfo.lastName }}</strong>
+          <span class="email">: {{ userInfo.email }}</span>
+        </div>
+        <div class="assessment-name">
+          {{ assessment.name }}
+        </div>
+      </div>
+      <div class="dates" *ngIf="assessment.startDate || assessment.endDate">
+        <ng-container *ngIf="assessment.startDate">
+          Début : {{ assessment.startDate | date: 'dd/MM/yyyy' }}
+        </ng-container>
+        <ng-container *ngIf="assessment.endDate">
+          — Fin : {{ assessment.endDate | date: 'dd/MM/yyyy' }}
+        </ng-container>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-divider></mat-divider>
+
+  <!-- ===== AVANT ===== -->
+  <div *ngIf="hasPhase('avant')" class="section">
+    <h2>Réponses début de la formation</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
+      </p>
+
+      <mat-radio-group
+        [value]="getSelectedOptionId(getPhaseResponse('avant'), t._id)"
+        [disabled]="true"
+      >
+        <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
+          {{ o.text }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div class="score-line">
+        Score (Avant) :
+        <strong>{{ getQuestionScore('avant', t) }}</strong>
+        / {{ getTaskScore(t) }}
+        <mat-icon *ngIf="isCorrect('avant', t)" color="primary">check_circle</mat-icon>
+        <mat-icon *ngIf="!isCorrect('avant', t)" color="warn">cancel</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider *ngIf="hasPhase('avant') && hasPhase('apres')"></mat-divider>
+
+  <!-- ===== APRÈS ===== -->
+  <div *ngIf="hasPhase('apres')" class="section">
+    <h2>Réponses fin de la formation</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
+      </p>
+
+      <mat-radio-group
+        [value]="getSelectedOptionId(getPhaseResponse('apres'), t._id)"
+        [disabled]="true"
+      >
+        <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
+          {{ o.text }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div class="score-line">
+        Score (Après) :
+        <strong>{{ getQuestionScore('apres', t) }}</strong>
+        / {{ getTaskScore(t) }}
+        <mat-icon *ngIf="isCorrect('apres', t)" color="primary">check_circle</mat-icon>
+        <mat-icon *ngIf="!isCorrect('apres', t)" color="warn">cancel</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider *ngIf="(hasPhase('avant') || hasPhase('apres')) && hasPhase('normal')"></mat-divider>
+
+  <!-- ===== NORMAL (une seule phase) ===== -->
+  <div *ngIf="hasPhase('normal')" class="section">
+    <h2>Réponses</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
+      </p>
+
+      <mat-radio-group
+        [value]="getSelectedOptionId(getPhaseResponse('normal'), t._id)"
+        [disabled]="true"
+      >
+        <mat-radio-button *ngFor="let o of t.options" [value]="o._id">
+          {{ o.text }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div class="score-line">
+        Score :
+        <strong>{{ getQuestionScore('normal', t) }}</strong>
+        / {{ getTaskScore(t) }}
+        <mat-icon *ngIf="isCorrect('normal', t)" color="primary">check_circle</mat-icon>
+        <mat-icon *ngIf="!isCorrect('normal', t)" color="warn">cancel</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- ===== Correction ===== -->
+  <div class="section">
+    <h2>Correction</h2>
+    <div *ngFor="let t of assessment.tasks; let i = index" class="question">
+      <p>
+        <strong>Q{{ i + 1 }}.</strong> {{ t.description }}
+        <span class="q-score-max"> (Score max: {{ getTaskScore(t) }})</span>
+      </p>
+      <ul>
+        <li *ngFor="let o of t.options">
+          <mat-icon *ngIf="o.isCorrect">check_circle</mat-icon>
+          {{ o.text }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Résumé des scores ===== -->
+  <mat-card class="summary-card" style="margin-top: 16px;">
+    <h2 style="margin:0 0 12px 0;">Résumé des scores</h2>
+
+    <!-- Cas Avant/Après -->
+    <div class="summary-grid" *ngIf="hasPhase('avant') || hasPhase('apres'); else normalOnly">
+      <div class="row">
+        <div class="cell label">Score maximum total</div>
+        <div class="cell value">{{ maxScore }}</div>
+      </div>
+      <div class="row" *ngIf="hasPhase('avant')">
+        <div class="cell label">Avant</div>
+        <div class="cell value">
+          {{ getTotalScore('avant') }} / {{ maxScore }} ({{ getPercent('avant') }}%)
+        </div>
+      </div>
+      <div class="row" *ngIf="hasPhase('apres')">
+        <div class="cell label">Après</div>
+        <div class="cell value">
+          {{ getTotalScore('apres') }} / {{ maxScore }} ({{ getPercent('apres') }}%)
+        </div>
+      </div>
+    </div>
+
+    <!-- Cas Normal -->
+    <ng-template #normalOnly>
+      <div class="summary-grid">
+        <div class="row">
+          <div class="cell label">Score maximum total</div>
+          <div class="cell value">{{ maxScore }}</div>
+        </div>
+        <div class="row" *ngIf="hasPhase('normal')">
+          <div class="cell label">Total</div>
+          <div class="cell value">
+            {{ getTotalScore('normal') }} / {{ maxScore }} ({{ getPercent('normal') }}%)
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </mat-card>
+
+  <div class="actions" style="text-align: center; margin-top: 20px">
+    <button mat-raised-button color="primary" (click)="sendResponses()">
+      Envoyer PDF des réponses
+    </button>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <p>Chargement des données…</p>
+</ng-template>

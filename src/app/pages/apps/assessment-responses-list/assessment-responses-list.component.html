@@ -1,0 +1,80 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <table mat-table [dataSource]="dataSource" class="w-100 response-table">
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Email</th>
+        <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+      </ng-container>
+
+      <!-- Assessment -->
+      <ng-container matColumnDef="assessmentName">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Assessment</th>
+        <td mat-cell *matCellDef="let row">{{ row.assessmentName }}</td>
+      </ng-container>
+
+      <!-- Type -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Type</th>
+        <td mat-cell *matCellDef="let row">
+          <span
+            [ngClass]="{
+              'badge badge-normal': row.assessmentType === 'normal',
+              'badge badge-avant': row.assessmentType !== 'normal'
+            }"
+          >
+            {{ row.assessmentType === 'normal' ? 'Normal' : 'Avant / Après' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Progression -->
+      <ng-container matColumnDef="progress">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Progression</th>
+        <td mat-cell *matCellDef="let row">
+          <span [ngClass]="progressClass(row)" matTooltip="Nombre de phases soumises">
+            {{ progressLabel(row) }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Actions</th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            mat-icon-button
+            color="primary"
+            matTooltip="Voir le détail des réponses"
+            [routerLink]="[row.assessmentId, row.userId]"
+            class="btn-action"
+          >
+            <mat-icon>visibility</mat-icon>
+          </button>
+
+          <!-- Bouton delete (placeholder) -->
+          <button
+            mat-icon-button
+            color="warn"
+            matTooltip="Supprimer (à implémenter)"
+            class="btn-action"
+            disabled
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="body-row"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+    <div *ngIf="loading" style="padding:12px;color:#6b7280;">Chargement…</div>
+    <div *ngIf="!loading && !dataSource.data.length" style="padding:12px;color:#6b7280;">
+      Aucune réponse trouvée.
+    </div>
+  </mat-card-content>
+</mat-card>

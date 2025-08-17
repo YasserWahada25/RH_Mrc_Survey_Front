@@ -1,3 +1,5 @@
+// src/app/pages/apps/apps.routes.ts
+
 import { Routes } from '@angular/router';
 
 import { AppChatComponent } from './chat/chat.component';
@@ -8,19 +10,32 @@ import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { AppNotesComponent } from './notes/notes.component';
 import { PermissionComponent } from './permission/permission.component';
-
 import { DepartementComponent } from './departement/departement.component';
-import { FormulaireListComponent } from './formulairelist/formulairelist.component';
-import { FormulaireDetailComponent } from './formulaire-detail/formulaire-detail.component';
-import { AppReponsesListComponent } from './reponses/reponse-list/reponses-list.component';
 import { OwnerCreditRequestsComponent } from './owner-credit-requests/owner-credit-requests.component';
-import { RapportDoughnutPieComponent } from './rapport-formulaire/doughnut-pie/doughnut-pie.component';
 import { AssessmentListComponent } from './assessmentlist/assessmentlist.component';
 import { GenerateLinkComponent } from './generate-link/generate-link.component';
 import { QuizResultsListRHComponent } from './quiz-results-listRH/quiz-results-listRH.component';
 import { AuthGuard } from '../../services/auth-guard.service';
+import { AssessmentDetailComponent } from './assessment-detail/assessment-detail.component';
+import { GuestLayoutComponent } from './assessment-detail/guest-layout/guest-layout.component';
+import { RapportAssessmentComponent } from './rapport-assessment/rapport-assessment.component';
+
 
 export const AppsRoutes: Routes = [
+  // --- 1) Route invitée (guest) pour répondre ---
+  {
+    path: 'take-assessment/:id',
+    component: GuestLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: AssessmentDetailComponent,
+        data: { guest: true },
+      },
+    ],
+  },
+
+  // --- 2) Routes principales de l’application ---
   {
     path: '',
     canActivateChild: [AuthGuard],
@@ -87,6 +102,7 @@ export const AppsRoutes: Routes = [
           },
         ],
       },
+      
       {
         path: 'permission',
         component: PermissionComponent,
@@ -110,41 +126,31 @@ export const AppsRoutes: Routes = [
         },
       },
       {
-        path: 'formulaires',
-        component: FormulaireListComponent,
+        path: 'assessment/:id',
+        component: AssessmentDetailComponent,
         data: {
-          title: 'Formulaires',
+          title: 'Détail Assessment',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Formulaires' },
+            { title: 'Détail Assessment' },
           ],
         },
       },
       {
-        path: 'formulaires/:id',
-        component: FormulaireDetailComponent,
-        data: {
-          title: 'Détail Formulaire',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Détail Formulaire' },
-          ],
-        },
+        path: 'assessment-responses',
+        loadComponent: () =>
+          import(
+            './assessment-responses-list/assessment-responses-list.component'
+          ).then((m) => m.AssessmentResponsesListComponent),
       },
+      // ← Nouvelle route pour le détail d’une réponse
+
       {
-        path: 'reponses',
-        component: AppReponsesListComponent,
-        data: {
-          title: 'Réponses',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Réponses' },
-          ],
-        },
-      },
-      {
-        path: 'reponses/:formId/:responseId',
-        component: FormulaireDetailComponent,
+        path: 'assessment-responses/:assessmentId/:userId',
+        loadComponent: () =>
+          import(
+            './assessment-response-detail/assessment-response-detail.component'
+          ).then((m) => m.AssessmentResponseDetailComponent),
         data: {
           title: 'Détail Réponse',
           urls: [
@@ -153,17 +159,19 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'rapport-formulaire',
-        component: RapportDoughnutPieComponent,
-        data: {
-          title: 'Rapport Formulaire',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Rapport Formulaire' },
-          ],
-        },
-      },
+
+ {
+  path: 'rapport-assessment',
+  component: RapportAssessmentComponent,
+  data: {
+    title: 'Rapport Assessment',
+    urls: [
+      { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      { title: 'Rapport Assessment' },
+    ],
+  },
+},
+
       {
         path: 'quiz-results',
         component: QuizResultsListRHComponent,

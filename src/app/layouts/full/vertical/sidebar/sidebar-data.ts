@@ -11,6 +11,7 @@ export const navItems: NavItem[] = [
   { navCap: 'Apps' },
 
   {
+
     displayName: 'Credit Request List',
     iconName: 'layout',
     route: 'apps/CreditRequestOwner',
@@ -37,32 +38,30 @@ export const navItems: NavItem[] = [
 
   },
   {
+
     displayName: 'Employee',
     iconName: 'brand-ctemplar',
     route: 'apps/employee',
   },
   {
+
     displayName: 'Assessment',
     iconName: 'file-invoice',
     route: 'apps/assessment',
   },
   {
-    displayName: 'Formulaires',
-    iconName: 'file-invoice',
-    route: 'apps/formulaires',
-  },
-  {
-    displayName: 'Réponses',
-    iconName: 'message-2',
-    route: 'apps/reponses',
-  },
-  {
-    displayName: 'Rapport Formulaire',
-    iconName: 'chart-donut-3',
-    route: 'apps/rapport-formulaire',
+    displayName: 'Réponses Assessment',
+    iconName: 'file-search',
+    route: 'apps/assessment-responses',
   },
 
+  {
+    displayName: 'Rapport Assessment',
+    iconName: 'chart-donut-3',
+    route: 'apps/rapport-assessment',
+  },
   { navCap: 'Compte' },
+
   {
     displayName: 'Account Setting',
     iconName: 'user-circle',
