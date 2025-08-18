@@ -10,7 +10,7 @@
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Responsable</mat-label>
       <mat-select [(ngModel)]="responsable" name="responsable" required>
-        <mat-option *ngFor="let u of users" [value]="u._id">
+        <mat-option *ngFor="let u of allowedUsers" [value]="u._id">
           {{ u.nom }} ({{ u.email }})
         </mat-option>
       </mat-select>
