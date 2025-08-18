@@ -5,21 +5,46 @@
     <!-- Name Field -->
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>{{ 'USER_DIALOG.NAME_LABEL' | translate }}</mat-label>
-      <input matInput name="nom" [(ngModel)]="local_data.nom" required />
+      <input matInput name="nom" [(ngModel)]="local_data.nom" required #nomCtrl="ngModel" />
+      <mat-error *ngIf="nomCtrl.invalid && (nomCtrl.touched || nomCtrl.dirty)">
+        {{ 'USER_DIALOG.NAME_LABEL' | translate }} est requis.
+      </mat-error>
     </mat-form-field>
 
     <!-- Email Field -->
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>{{ 'USER_DIALOG.EMAIL_LABEL' | translate }}</mat-label>
-      <input matInput name="email" [(ngModel)]="local_data.email" type="email" required />
+      <input
+        matInput
+        name="email"
+        [(ngModel)]="local_data.email"
+        type="email"
+        required
+        [pattern]="emailPattern"
+        #emailCtrl="ngModel"
+        (blur)="emailCtrl.control?.markAsTouched()"
+      />
+      <mat-error *ngIf="emailCtrl.invalid && (emailCtrl.touched || emailCtrl.dirty)">
+        <ng-container *ngIf="emailCtrl.errors?.['required']">Email requis.</ng-container>
+        <ng-container *ngIf="!emailCtrl.errors?.['required']">Format d’email invalide.</ng-container>
+      </mat-error>
     </mat-form-field>
 
     <!-- Password Field -->
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>{{ 'USER_DIALOG.PASSWORD_LABEL' | translate }}</mat-label>
-      <input matInput name="mot_de_passe" [(ngModel)]="local_data.mot_de_passe" type="password" required />
+      <input
+        matInput
+        name="mot_de_passe"
+        [(ngModel)]="local_data.mot_de_passe"
+        type="password"
+        required
+        #pwdCtrl="ngModel"
+      />
+      <mat-error *ngIf="pwdCtrl.invalid && (pwdCtrl.touched || pwdCtrl.dirty)">
+        Mot de passe requis.
+      </mat-error>
     </mat-form-field>
-    
 
     <!-- Role Field -->
     <mat-form-field appearance="outline" class="w-100">
@@ -27,7 +52,6 @@
       <mat-select [(ngModel)]="local_data.type" name="type" required [disabled]="isResponsable">
         <mat-option value="employe">Employé</mat-option>
         <mat-option value="responsable">Responsable</mat-option>
-        <mat-option value="rh_admin">RH Admin</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -45,7 +69,6 @@
         <span class="mat-body-2">JPG/PNG/GIF — max 800KB</span>
       </div>
     </div>
-
 
     <!-- Action Buttons -->
     <div class="d-flex justify-content-end m-t-16">

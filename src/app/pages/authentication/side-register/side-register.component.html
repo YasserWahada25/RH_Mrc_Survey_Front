@@ -24,6 +24,7 @@
           <div class="mx-auto" style="max-width: 100%;">
             <h4 class="f-w-700 f-s-20 m-0">{{ 'WELCOME' | translate }}</h4>
             <span class="f-s-12 d-block mat-body-1 m-t-4">{{ 'YOUR_ADMIN_DASHBOARD' | translate }}</span>
+
             <form class="m-t-16" [formGroup]="form" (ngSubmit)="submit()">
               <!-- Nom -->
               <mat-label class="mat-subtitle-2 f-s-12 f-w-600 m-b-8 d-block">
@@ -64,10 +65,14 @@
                 {{ 'FORM.EMAIL' | translate }}
               </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
-                <input matInput type="email" formControlName="email" class="f-s-12" />
+                <input
+                  matInput
+                  type="email"
+                  formControlName="email"
+                  class="f-s-12"
+                  (blur)="f['email'].markAsTouched()" />
                 <mat-error *ngIf="f['email'].touched && f['email'].invalid" class="f-s-10">
-                  <div *ngIf="f['email'].errors?.['required']">{{ 'FORM.REQUIRED_EMAIL' | translate }}</div>
-                  <div *ngIf="f['email'].errors?.['email']">{{ 'FORM.INVALID_EMAIL' | translate }}</div>
+                  <div>{{ getEmailErrorMessage() }}</div>
                 </mat-error>
               </mat-form-field>
 
@@ -76,15 +81,28 @@
                 {{ 'FORM.MOT_DE_PASSE' | translate }}
               </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
-                <input [type]="hidePassword ? 'password' : 'text'" matInput formControlName="password" class="f-s-12" />
-                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword"
+                <input
+                  [type]="hidePassword ? 'password' : 'text'"
+                  matInput
+                  formControlName="password"
+                  class="f-s-12"
+                  (input)="onPasswordInput($event)" />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  (click)="hidePassword = !hidePassword"
                   [attr.aria-label]="'Toggle password visibility'">
                   <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </button>
 
-                <!-- Hint des règles -->
+                <!-- Règles dynamiques -->
                 <mat-hint align="start" class="f-s-10 text-muted">
-                  Au moins 8 caractères, 1 majuscule et 1 caractère spécial.
+                  <span [style.color]="hasMinLength ? 'green' : 'red'">• Min 8 caractères</span>
+                  &nbsp;|&nbsp;
+                  <span [style.color]="hasUppercase ? 'green' : 'red'">• 1 Majuscule</span>
+                  &nbsp;|&nbsp;
+                  <span [style.color]="hasSpecialChar ? 'green' : 'red'">• 1 Caractère spécial</span>
                 </mat-hint>
 
                 <!-- Erreurs -->
@@ -102,9 +120,16 @@
                 {{ 'FORM.CONFIRMER_MDP' | translate }}
               </mat-label>
               <mat-form-field appearance="outline" class="w-100 compact-field" color="primary">
-                <input [type]="hideConfirm ? 'password' : 'text'" matInput formControlName="confirmPassword"
+                <input
+                  [type]="hideConfirm ? 'password' : 'text'"
+                  matInput
+                  formControlName="confirmPassword"
                   class="f-s-12" />
-                <button mat-icon-button matSuffix type="button" (click)="hideConfirm = !hideConfirm"
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  (click)="hideConfirm = !hideConfirm"
                   [attr.aria-label]="'Toggle confirm visibility'">
                   <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </button>
@@ -138,7 +163,10 @@
               </div>
 
               <!-- Bouton submit -->
-              <button mat-flat-button color="primary" class="w-100 compact-button m-t-8"
+              <button
+                mat-flat-button
+                color="primary"
+                class="w-100 compact-button m-t-8"
                 [disabled]="!form.valid || !!logoError">
                 <span class="f-s-12">{{ 'FORM.SIGN_UP' | translate }}</span>
               </button>
