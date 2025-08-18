@@ -1,38 +1,43 @@
 <div class="row">
-  <div class="col-lg-2 col-sm-4 col-6">
+  <!-- CARTE 1 : Crédits Quiz Disque (visible seulement pour owner & rh_admin) -->
+  <div class="col-lg-2 col-sm-4 col-6" *ngIf="isRhAdmin || isOwner">
     <mat-card class="text-center bg-light-primary shadow-none quiz-card">
       <mat-card-content class="p-32 position-relative">
-        
-      <button
-        *ngIf="isRhAdmin"
-        mat-raised-button
-        color="primary"
-        class="request-button"
-        (click)="openRequestDialog()">
-        Demander +
-      </button>
+
+        <!-- Bouton Demander + uniquement pour rh_admin -->
+        <button
+          *ngIf="isRhAdmin"
+          mat-raised-button
+          color="primary"
+          class="request-button"
+          (click)="openRequestDialog()">
+          Demander +
+        </button>
 
         <div class="content-fallback" style="text-align: center;">
           <h3 style="color: #3f51b5; font-weight: 600; margin-bottom: 15px;">Quiz Disque</h3>
-          
-          <div style="margin: 0 auto 15px; width: 50px; height: 50px; border-radius: 50%; 
+
+          <div style="margin: 0 auto 15px; width: 50px; height: 50px; border-radius: 50%;
                       background-color: #e0e0e0; display: flex; align-items: center; justify-content: center;">
-            <img src="/assets/images/pngs/credit-card.png" alt="credits" width="40" height="40" style="display: block;" onerror="this.style.display='none'">
+            <img src="/assets/images/pngs/credit-card.png" alt="credits" width="40" height="40"
+                 style="display: block;" onerror="this.style.display='none'">
           </div>
-          
+
           <h4 style="color: #2e7d32; font-weight: 600; margin-bottom: 5px; font-size: 14px;">
             Crédits Disponibles
           </h4>
-        <h6 style="color: #2e7d32; font-weight: 600; font-size: 24px; margin: 0;">
-          {{ credits === -1 ? '+∞' : credits }}
-        </h6>
 
+          <!-- ∞ pour owner, nombre réel pour rh_admin -->
+          <h6 style="color: #2e7d32; font-weight: 600; font-size: 24px; margin: 0;">
+            {{ credits === -1 ? '+∞' : credits }}
+          </h6>
         </div>
 
       </mat-card-content>
     </mat-card>
   </div>
-   <!-- CARTE 2 : Utilisateurs (total) -->
+
+  <!-- CARTE 2 : Utilisateurs (total) -->
   <div class="col-lg-2 col-sm-4 col-6">
     <mat-card class="card-base card-users">
       <mat-card-content class="card-content">
@@ -53,6 +58,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-
 </div>
-

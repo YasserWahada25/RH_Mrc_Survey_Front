@@ -5,7 +5,7 @@ import { AuthService } from '../../../services/authentification.service';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { CreditRequestDialogComponent } from './credit-request-dialog/credit-request-dialog.component';
-import { UserService } from '../../../services/user.service'; // ⬅️ AJOUT
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-top-cards',
@@ -18,41 +18,48 @@ export class AppTopCardsComponent implements OnInit {
   credits: number = 0;
   rhAdminId: string = '';
   isRhAdmin: boolean = false;
+  isOwner: boolean = false;
 
-  // ⬅️ AJOUT : compteur utilisateurs
+  // compteur utilisateurs
   usersCount: number | null = null;
 
   constructor(
     private creditRequestService: CreditRequestService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private userService: UserService          // ⬅️ AJOUT
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     const currentUser = this.authService.getCurrentUser();
 
-    // --- Quiz credits ---
-    if (currentUser && currentUser.type === 'rh_admin') {
+    // --- Quiz credits & droits d'affichage de la carte ---
+    if (currentUser?.type === 'rh_admin') {
       this.rhAdminId = currentUser.id;
       this.isRhAdmin = true;
+      this.credits = 0; // valeur par défaut le temps du chargement
       this.loadCredits();
+    } else if (currentUser?.type === 'owner') {
+      this.isOwner = true;
+      this.credits = -1; // affiche +∞
     } else {
-      this.credits = -1; // +∞
+      // autres rôles : la carte est masquée par *ngIf dans le template
+      this.isRhAdmin = false;
+      this.isOwner = false;
     }
 
     // --- Users count ---
     if (currentUser?.type === 'rh_admin' || currentUser?.type === 'owner') {
-      this.loadUsersCountAll();          // GET /api/users
+      this.loadUsersCountAll();
     } else if (currentUser?.type === 'responsable' || currentUser?.type === 'employe') {
-      this.loadUsersCountAccessible();   // GET /api/users/accessible  (fallback en cas de 403)
+      this.loadUsersCountAccessible();
     } else {
       this.usersCount = null;
     }
   }
 
   // ===== Quiz credits =====
-  loadCredits(): void {
+  private loadCredits(): void {
     this.creditRequestService.getCredits(this.rhAdminId).subscribe({
       next: (res) => { this.credits = res.nombre_credits; },
       error: (err) => { console.error('Erreur chargement crédits', err); }
@@ -71,7 +78,7 @@ export class AppTopCardsComponent implements OnInit {
     });
   }
 
-  submitRequest(requestCredits: number) {
+  private submitRequest(requestCredits: number) {
     if (requestCredits < 1) {
       alert('Veuillez saisir un nombre valide de crédits');
       return;
@@ -103,9 +110,8 @@ export class AppTopCardsComponent implements OnInit {
     this.userService.getAccessibleUsers().subscribe({
       next: (users) => this.usersCount = users.length,
       error: (err) => {
-        // ➕ AJOUT : fallback silencieux pour les 403 (responsable / employé)
         if (err?.status === 403) {
-          this.loadUsersCountFromPresence(); // lit /api/users/presence
+          this.loadUsersCountFromPresence();
           return;
         }
         console.error('Erreur chargement utilisateurs (accessible)', err);
@@ -114,11 +120,9 @@ export class AppTopCardsComponent implements OnInit {
     });
   }
 
-  // ➕ AJOUT : fallback via /api/users/presence (autorisé pour tout user authentifié)
   private loadUsersCountFromPresence(): void {
     this.userService.getPresence().subscribe({
       next: (data: any) => {
-        // compat : { online:[], offline:[] } ou { counts:{online,offline}, online:[], offline:[] }
         const online = Array.isArray(data?.online) ? data.online.length : (data?.counts?.online ?? 0);
         const offline = Array.isArray(data?.offline) ? data.offline.length : (data?.counts?.offline ?? 0);
         this.usersCount = (online || 0) + (offline || 0);
