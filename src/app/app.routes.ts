@@ -18,7 +18,7 @@ export const routes: Routes = [
     component: AssessmentGuestComponent
   },
 
-  // 1) Routes sans layout (auth, landing page)
+  // 1) Routes sans layout (auth, landing page, liens publics)
   {
     path: '',
     component: BlankComponent,
@@ -46,7 +46,14 @@ export const routes: Routes = [
           import('./pages/theme-pages/landingpage/landingpage.routes')
             .then(m => m.LandingPageRoutes),
       },
-      // (Supprimé : toute route "formulaire" et son composant)
+
+      // ✅ Route publique pour ouvrir un quiz DISC via le lien email
+      {
+        path: 'quiz-disc/:token',
+        loadComponent: () =>
+          import('./pages/apps/quiz-disc-public/quiz-disc-public.component')
+            .then(m => m.QuizDiscPublicComponent),
+      },
     ],
   },
 
@@ -71,11 +78,6 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/ui-components/ui-components.routes').then(m => m.UiComponentsRoutes),
       },
-      // {
-      //   path: 'forms',
-      //   loadChildren: () =>
-      //     import('./pages/forms/forms.routes').then(m => m.FormsRoutes),
-      // },
       {
         path: 'charts',
         loadChildren: () =>
@@ -91,22 +93,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/widgets/widgets.routes').then(m => m.WidgetsRoutes),
       },
-      // {
-      //   path: 'tables',
-      //   loadChildren: () =>
-      //     import('./pages/tables/tables.routes').then(m => m.TablesRoutes),
-      // },
-      // {
-      //   path: 'datatable',
-      //   loadChildren: () =>
-      //     import('./pages/datatable/datatable.routes').then(m => m.DatatablesRoutes),
-      // },
       {
         path: 'theme-pages',
         loadChildren: () =>
           import('./pages/theme-pages/theme-pages.routes').then(m => m.ThemePagesRoutes),
       },
-      // (Supprimé : /formulaire/:id et tout ce qui est lié aux questions/réponses)
     ],
   },
 
